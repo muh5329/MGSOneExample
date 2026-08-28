@@ -1,0 +1,80 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/core/bootstrap.gd" id="1_bootstrap"]
+[ext_resource type="Resource" path="res://data/debug/development_debug_config.tres" id="2_debug"]
+
+[node name="Bootstrap" type="Node"]
+script = ExtResource("1_bootstrap")
+debug_config = ExtResource("2_debug")
+
+[node name="LevelRoot" type="Node" parent="."]
+unique_name_in_owner = true
+
+[node name="Interface" type="CanvasLayer" parent="."]
+process_mode = 3
+
+[node name="FailureLabel" type="Label" parent="Interface"]
+unique_name_in_owner = true
+visible = false
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 900.0
+offset_bottom = 100.0
+theme_override_colors/font_color = Color(1, 0.35, 0.3, 1)
+theme_override_font_sizes/font_size = 22
+
+[node name="DebugLabel" type="Label" parent="Interface"]
+unique_name_in_owner = true
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 520.0
+offset_bottom = 44.0
+theme_override_colors/font_color = Color(0.35, 1, 0.65, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+
+[node name="PausePanel" type="ColorRect" parent="Interface"]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.015, 0.025, 0.03, 0.82)
+mouse_filter = 2
+
+[node name="PauseText" type="Label" parent="Interface/PausePanel"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -76.0
+offset_right = 150.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.75, 1, 0.9, 1)
+theme_override_font_sizes/font_size = 28
+text = "PAUSED"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="Interface/PausePanel"]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = 8.0
+offset_right = 100.0
+offset_bottom = 54.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 18
+text = "Resume"

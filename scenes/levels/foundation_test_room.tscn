@@ -1,0 +1,80 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/actors/foundation_placeholder.gd" id="1_player"]
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+size = Vector3(18, 0.2, 12)
+
+[sub_resource type="BoxShape3D" id="FloorShape"]
+size = Vector3(18, 0.2, 12)
+
+[sub_resource type="CapsuleMesh" id="PlayerMesh"]
+radius = 0.45
+height = 1.8
+
+[sub_resource type="CapsuleShape3D" id="PlayerShape"]
+radius = 0.45
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="FloorMaterial"]
+albedo_color = Color(0.12, 0.19, 0.18, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="PlayerMaterial"]
+albedo_color = Color(0.78, 0.94, 0.62, 1)
+roughness = 0.7
+
+[sub_resource type="StandardMaterial3D" id="FacingMaterial"]
+albedo_color = Color(1, 0.43, 0.2, 1)
+
+[node name="FoundationTestRoom" type="Node3D"]
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-55, -35, 0)
+light_energy = 1.1
+shadow_enabled = true
+
+[node name="Floor" type="StaticBody3D" parent="."]
+collision_layer = 33
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("FloorMesh")
+material_override = SubResource("FloorMaterial")
+
+[node name="Collision" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("FloorShape")
+
+[node name="PlayerPlaceholder" type="CharacterBody3D" parent="." groups=["player"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_player")
+
+[node name="Collision" type="CollisionShape3D" parent="PlayerPlaceholder"]
+shape = SubResource("PlayerShape")
+
+[node name="Mesh" type="MeshInstance3D" parent="PlayerPlaceholder"]
+mesh = SubResource("PlayerMesh")
+material_override = SubResource("PlayerMaterial")
+
+[node name="FacingMarker" type="MeshInstance3D" parent="PlayerPlaceholder"]
+position = Vector3(0, 0.3, -0.55)
+scale = Vector3(0.18, 0.18, 0.45)
+mesh = SubResource("PlayerMesh")
+material_override = SubResource("FacingMaterial")
+
+[node name="Camera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.819152, 0.573576, 0, -0.573576, 0.819152, 0, 11, 13)
+current = true
+fov = 52.0
+
+[node name="Instructions" type="Label" parent="."]
+offset_left = 24.0
+offset_top = 650.0
+offset_right = 1050.0
+offset_bottom = 700.0
+theme_override_colors/font_color = Color(0.78, 0.94, 0.86, 1)
+theme_override_font_sizes/font_size = 18
+text = "Move: WASD / left stick   Pause: Esc / Start   Debug: F3"
+
