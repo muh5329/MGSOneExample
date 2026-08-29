@@ -1,5 +1,13 @@
 # Critic Report
 
+## 2026-08-29 — Build Step 07 implementation review
+
+- Scope review: health owns bounded damage/healing and death truth; `GameState` owns phase/pause; the mission coordinator owns stable-ID capture timing, restore order, death/restart, objective, and extraction. It does not claim disk saves, AI state, alert behavior, or final death/HUD art.
+- Evidence: clean import/startup, all seven headless suites, and a 1280×720 lab render cover damage bursts/invulnerability, heal bounds, single death, illegal phases, pause/death ordering, unarmed and repeated CP0/CP1 restarts, exact inventory/weapon/door/pickup/objective restoration, transient cleanup, stable-ID errors, objective/death order, duplicate extraction, and readable mission state.
+- Findings: no automated contract blocker found. Lethal observers see dead state atomically, snapshots validate before mutation, failed/duplicate events do not grant progress, completed missions reject damage, and repeated restarts reproduce the same authored state without stale modal/combat gates.
+- Remaining risk: guards and global alerts do not exist yet, so their reset contract is exercised with registered probes rather than production AI. Final death feedback, controller feel, and the full manual acceptance playthrough remain Builds 08–14 work.
+- Disposition: Build Step 07 contract complete with explicit later guard/alert and presentation integration; no AI, alert, save-file, or final UI milestone is claimed.
+
 ## 2026-08-28 — Build Step 06 implementation review
 
 - Scope review: inventory owns quantities, definitions, equipment IDs, pickup transactions, access/use requests, panel interaction, and snapshot composition; it does not own weapon magazines, health arithmetic, door state, mission restart timing, or final UI art.

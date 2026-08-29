@@ -2,6 +2,14 @@
 
 Append newest entries directly below this introduction. Keep each entry to six lines or fewer.
 
+### 2026-08-29 — Root task — Health, checkpoints, and mission state
+
+- Delivered: reusable health/I1 receiver, player hitbox/death gates, explicit global phases, stable-ID CP0/CP1 snapshots, deterministic restart, O1/D2/X1 outcome flow, live mission status, and an integrated lab.
+- Contracts: health methods/signals, phase table, version-1 snapshot/restore order, stable failure payloads, transient reset groups, full-health restart policy, and persistence exclusions are in `INTERFACES.md`.
+- Verified: clean import/startup; all seven headless suites; damage bursts, healing bounds, pause/death ordering, weaponless/repeated CP restarts, exact persistent restore, transient cleanup, invalid IDs, and objective/extraction duplicates on Godot 4.7.
+- Remaining: Builds 08–09 supply production guard/alert reset consumers; Builds 12/14 own final death/HUD presentation and hands-on mission acceptance playthroughs.
+- Docs: updated README, STATUS, CODE_MAP, INTERFACES, DECISIONS, CRITIC_REPORT, and HANDOFF.
+
 ### 2026-08-28 — Root task — Inventory, items, and menus
 
 - Delivered: immutable W1/A1/I1/K1 data, authoritative quantity/equipment transactions, success-only pickups, ammo/access/item-effect seams, dual hold panels, snapshots, mission integration, and inventory lab.

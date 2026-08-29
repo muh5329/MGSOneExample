@@ -1,6 +1,6 @@
 # Subsystem Interfaces
 
-Updated: 2026-08-28
+Updated: 2026-08-29
 
 This is the shared contract ledger. Foundation names below are accepted. Agents may refine signatures, but must update all consumers and this file in the same change.
 
@@ -17,7 +17,7 @@ This is the shared contract ledger. Foundation names below are accepted. Agents 
 
 ### Pause and global services
 
-- `GameState` is the sole pause/mission-phase authority. `set_paused(bool)` updates `SceneTree.paused`, emits `pause_changed(bool)`, and transitions the public `MissionPhase` enum.
+- `GameState` is the sole pause/mission-phase authority. `set_paused(bool) -> bool` atomically updates `SceneTree.paused`, emits `pause_changed(bool)`, and transitions the public `MissionPhase` enum; direct `set_phase(PAUSED)` calls are rejected so phase and tree pause cannot diverge.
 - Always-interactive menu roots use `PROCESS_MODE_ALWAYS`; gameplay remains pausable/inheritable.
 - `EventBus.emit_noise(NoiseEvent3D)` emits `noise_emitted(event)`. `NoiseEvent3D` contains source, world position, nonnegative loudness, and category. Perception consumes the signal; producers do not locate guards.
 - No settings autoload exists yet. Build Step 12 may add one when persistence has a real consumer.
@@ -38,7 +38,7 @@ Canonical masks: player body `1|3`, enemy body `1|2`, hitscan `1|4`, interaction
 
 ### Groups and resource identity
 
-- `player` is the only global group with a current consumer. Add `guards`, `damageable`, `interactable`, `camera_zones`, or `checkpoint_targets` with the first real consumer rather than speculatively.
+- `player` identifies the player. Restart consumers use `checkpoint_reset_targets` for nodes exposing `reset_transient_state(checkpoint_id)` and `checkpoint_disposable` for ephemeral nodes removed on restart; later guards/alerts register only when implemented.
 - Commit Godot-generated `.uid` sidecars for source scripts/resources. Do not hand-author, copy, or renumber UIDs; resolve moves through the editor or update all path consumers in the same change.
 
 ### Player movement
@@ -85,6 +85,20 @@ Canonical masks: player body `1|3`, enemy body `1|2`, hitscan `1|4`, interaction
 - `get_checkpoint_snapshot` contains `quantities`, `equipped_weapon_id`, `equipped_item_id`, and the combat-owned `weapon_runtime`; `restore_checkpoint_snapshot` validates the entire payload before mutation. Build 07 owns when these snapshots are captured/restored.
 - `InventoryPanels` opens while Q/LB or E/RB is held, uses `ui_up`/`ui_down` with deterministic held repeat, commits selection on release, and quick-uses with G/Y. An open panel exits aim, sets only the player `MENU` lock, cancels reload through the weapon control gate, disables interaction input, and restores those gates on close. Pause/death/completion/restart close without committing; panels do not pause the world or mutate quantities.
 
+### Health, mission phases, checkpoints, and outcome
+
+- Entry points are `HealthComponent` in `scenes/components/health_component.tscn`, the player's `%Health` child/damage hitbox, and `MissionStateCoordinator` in `scenes/components/mission_state_coordinator.tscn`. The integrated lab is `scenes/levels/health_game_state_test_room.tscn`.
+- `HealthComponent` exposes `maximum_health`, `current_health`, `is_dead`, `damage_enabled`, and `invulnerability_remaining`. `receive_damage(amount, HitContext3D)`, `heal(amount, source)`, `can_receive_item_effect`, and `receive_item_effect` return success without mutating invalid, invulnerable, full-health, or dead targets. Lethal state is committed before observers run, and `died` emits once per life.
+- Health signals are `health_changed(previous, current, maximum)`, `damaged(applied, context)`, `healed(applied, source)`, `died(context)`, `revived(current, maximum)`, and `invulnerability_changed(active, remaining)`. `get_checkpoint_snapshot(force_full_health)`, `validate_checkpoint_snapshot`, and `restore_checkpoint_snapshot` are the stable health boundary.
+- The player forwards `receive_damage`, `can_receive_item_effect`, and `receive_item_effect` to `%Health`; hitscan finds that receiver by walking from the layer-4 `DamageHitbox` to the player root. I1 heals 50 through the same item-effect seam and is not consumed on rejection.
+- `GameState.MissionPhase` transitions are explicit: `INITIALIZING → PLAYING`; `PLAYING → PAUSED | PLAYER_DEAD | COMPLETED`; `PAUSED → PLAYING` only through `set_paused(false)`; `PLAYER_DEAD → RESTARTING`; and `RESTARTING → PLAYING` or `PLAYER_DEAD` on a failed restore. `COMPLETED` is terminal until `reset_for_new_mission`. Invalid requests return false and emit `transition_rejected(current, requested, reason)`.
+- The mission coordinator registers unique marker, checkpoint, door, and pickup IDs. CP0 is `CP0_INSERTION`; CP1 is `CP1_SWITCH_ENTRY` and activates only after D1 is unlocked. Duplicate/missing IDs and invalid payloads emit `snapshot_failure(checkpoint_id, subsystem, stable_id, reason)`.
+- Snapshot version 1 contains `checkpoint_id`, player `Transform3D` and stance, a full-health restart snapshot, the inventory/equipment/weapon-runtime snapshot, objective completion/consumption, all registered door and pickup states keyed by stable ID, and transient policy `RESET_TO_AUTHORED_STATE`. CP captures are in-memory only; CP1 records the first valid crossing and repeated activation does not overwrite it.
+- Restore validates the complete payload before mutation, enters `RESTARTING`, emits `transient_reset_requested`, resets `checkpoint_reset_targets`, removes `checkpoint_disposable` nodes, restores objective → doors → pickups → inventory/weapon → player transform/stance/health → camera, enters `PLAYING`, and then releases terminal controls. UI panels close without committing; aim/reload are cancelled; future guards and alerts must reset to authored patrol/NORMAL through the transient contract.
+- Player death enters `PLAYER_DEAD` once, exits pause if necessary, applies the `DEATH` movement lock, disables combat/inventory/interaction, and automatically requests restart after 1.5 seconds. Snapshot validation failure leaves the player dead and reports the exact subsystem/ID rather than partially restoring.
+- O1 completion and X1 extraction are separate. O1 succeeds only during `PLAYING` while alive and opens D2; X1 rejects until O1 is complete. Successful extraction enters `COMPLETED`, disables further player damage and controls, and emits `mission_completed` once.
+- Persistence exclusions are deliberate: no disk save, campaign state, mid-checkpoint health deficit, transient cooldown/reload time, alert/suspicion, projectiles/effects, or live guard state is serialized. Guards/alerts own their authored reset implementation in Builds 08–09.
+
 ### Level and interaction
 
 - Mission entry point: `scenes/levels/substation_6.tscn`. Runtime room nodes expose the exact `R0_DRAINAGE`–`R6_CONTROL` IDs through the `mission_rooms` group and `room_id` metadata; `room_volumes` emit room entry without owning global mission state.
@@ -92,7 +106,7 @@ Canonical masks: player body `1|3`, enemy body `1|2`, hitscan `1|4`, interaction
 - `InteractionFocus3D` queries only layers 5 and 7 inside 2.0 m. It resolves overlap by priority descending, anchor distance ascending, then lexical interaction ID; hold interactions emit normalized progress and apply only the player's `SCRIPTED` lock plus the camera interaction gate.
 - `Door3D` owns open/closed/locked state. `set_access_query(Callable)` supplies an external `(actor, access_level) -> bool` decision; `set_locked`/`set_open` synchronize visible state, world/perception collision, and the doorway `NavigationLink3D`. Locked interactions expose their reason rather than silently failing.
 - `MissionMarker3D` emits `mission_event(event_id, actor, payload)` for the placed pickup, objective, and extraction IDs. `MissionTrigger3D` emits checkpoint/room events. The level does not mutate inventory or complete mission phases.
-- `GrayboxMissionHarness` remains a replaceable objective/checkpoint/extraction integration aid. Inventory now owns K1 access plus W1/A1/I1/K1 transactions; Build 07 replaces the remaining mission-state harness without changing level geometry or inventory contracts.
+- `MissionStateCoordinator` is the production objective/checkpoint/extraction owner. The former `GrayboxMissionHarness` script is retained only as an unused historical lab aid; Substation 6 no longer instantiates it.
 - Navigation uses edge-connected authored regions expanded for the 0.4 m player/guard radius, subtracts cover footprints with 0.48 m clearance, and splits every door corridor across a link. Closed doors occupy layers 1 and 6 and disable their link; open doors clear both effects. `Substation6.get_mission_navigation_map()` exposes the shared map RID for route validation.
 
 ## Accepted Subsystem Boundaries

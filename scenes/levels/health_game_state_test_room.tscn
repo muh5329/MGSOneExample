@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/levels/substation_6.tscn" id="1_mission"]
+
+[node name="HealthGameStateTestRoom" type="Node"]
+
+[node name="Substation6" parent="." instance=ExtResource("1_mission")]
+
+[node name="Instructions" type="Label" parent="Substation6/Interface"]
+offset_left = 24.0
+offset_top = 188.0
+offset_right = 920.0
+offset_bottom = 238.0
+theme_override_colors/font_color = Color(0.78, 0.86, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+text = "STEP 07 LAB  //  CP0/CP1 snapshots, ration healing, lethal damage, restart, objective + extraction"

@@ -4,6 +4,7 @@ extends Node3D
 const DOOR_SCENE := preload("res://scenes/components/door_3d.tscn")
 const MARKER_SCENE := preload("res://scenes/components/mission_marker_3d.tscn")
 const PICKUP_SCENE := preload("res://scenes/components/inventory_pickup_3d.tscn")
+const GAME_PHASE_NAMES := ["INITIALIZING", "PLAYING", "PAUSED", "PLAYER_DEAD", "COMPLETED", "RESTARTING"]
 
 @onready var geometry_root: Node3D = %Geometry
 @onready var mission_root: Node3D = %MissionObjects
@@ -14,11 +15,12 @@ const PICKUP_SCENE := preload("res://scenes/components/inventory_pickup_3d.tscn"
 @onready var camera_rig: GameplayCameraRig = %GameplayCameraRig
 @onready var interaction_focus: InteractionFocus3D = %InteractionFocus
 @onready var inventory: InventoryComponent = player.get_node("Inventory") as InventoryComponent
-@onready var harness: GrayboxMissionHarness = %GrayboxMissionHarness
+@onready var mission_state: MissionStateCoordinator = %MissionStateCoordinator
 @onready var inventory_panels: InventoryPanels = %InventoryPanels
 @onready var room_label: Label = %RoomLabel
 @onready var prompt_label: Label = %PromptLabel
 @onready var status_label: Label = %StatusLabel
+@onready var health_label: Label = %HealthLabel
 
 var _materials: Dictionary = {}
 var _navigation_rects: Array[Rect2] = []
@@ -50,6 +52,12 @@ func _process(_delta: float) -> void:
 		prompt_label.text = "[F / A]  %s" % snapshot.prompt
 	else:
 		prompt_label.text = "%s  —  %s" % [snapshot.prompt, snapshot.reason]
+	health_label.text = "HEALTH  %d / %d    CHECKPOINT  %s    PHASE  %s" % [
+		roundi(player.health.current_health),
+		roundi(player.health.maximum_health),
+		mission_state.active_checkpoint_id,
+		GAME_PHASE_NAMES[int(get_node("/root/GameState").phase)],
+	]
 
 
 func _create_materials() -> void:
@@ -239,10 +247,23 @@ func _build_mission_objects() -> void:
 		room_trigger.triggered.connect(_on_room_entered)
 
 	for marker in [pistol, ammo, ration, access_card, objective, extraction]:
-		harness.register_marker(marker)
-	harness.register_trigger(cp0)
-	harness.register_trigger(cp1)
-	harness.configure(access_door, shortcut_door, extraction, camera_rig, inventory, player)
+		mission_state.register_marker(marker)
+	mission_state.register_trigger(cp0)
+	mission_state.register_trigger(cp1)
+	for door in [supply_door, access_door, shortcut_door]:
+		mission_state.register_door(door)
+	mission_state.configure(
+		access_door,
+		shortcut_door,
+		objective,
+		extraction,
+		camera_rig,
+		inventory,
+		player,
+		player.health,
+		interaction_focus
+	)
+	mission_state.initialize_mission(&"CP0_INSERTION")
 	supply_door.state_changed.connect(_on_door_state_changed)
 	access_door.state_changed.connect(_on_door_state_changed)
 	shortcut_door.state_changed.connect(_on_door_state_changed)
@@ -253,7 +274,7 @@ func _configure_runtime_contracts() -> void:
 	interaction_focus.set_camera_rig(camera_rig)
 	interaction_focus.prompt_changed.connect(_on_prompt_changed)
 	interaction_focus.hold_progressed.connect(_on_hold_progressed)
-	harness.status_changed.connect(_on_status_changed)
+	mission_state.status_changed.connect(_on_status_changed)
 	camera_rig.set_tracked_actor(player)
 	var weapon := player.get_node("VisualRoot/WeaponController") as WeaponController
 	inventory_panels.configure(inventory, player, camera_rig, weapon, interaction_focus, player)

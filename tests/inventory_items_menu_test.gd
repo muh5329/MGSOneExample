@@ -203,14 +203,14 @@ func _validate_panels_and_mode_nesting(
 	game_state.call(&"set_phase", 3)
 	if panels.active_panel != InventoryPanels.PanelKind.NONE or inventory.control_enabled:
 		failures.append("Death phase did not close panels and reject inventory controls.")
-	game_state.call(&"set_phase", 1)
+	game_state.call(&"reset_for_new_mission")
 	if not inventory.control_enabled:
 		failures.append("Returning to PLAYING did not restore inventory request authority.")
 
 
 func _finish() -> void:
 	get_root().get_node("GameState").call(&"set_paused", false)
-	get_root().get_node("GameState").call(&"set_phase", 1)
+	get_root().get_node("GameState").call(&"reset_for_new_mission")
 	if failures.is_empty():
 		print("INVENTORY PASS: transactions, pickups, equipment, ration/access, panels, pause/death, repeat, and snapshots are valid.")
 		quit(0)

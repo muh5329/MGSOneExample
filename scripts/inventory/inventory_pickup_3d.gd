@@ -9,11 +9,13 @@ signal pickup_transaction(result: Dictionary)
 @export var auto_equip: bool = false
 
 var inventory: InventoryComponent
+var _authored_quantity: int = 0
 
 
 func _ready() -> void:
 	marker_kind = MarkerKind.PICKUP
 	one_shot = false
+	_authored_quantity = quantity
 	super._ready()
 
 
@@ -54,4 +56,33 @@ func interact(actor: Node) -> bool:
 		set_consumed(true)
 	else:
 		availability_changed.emit(is_available(actor), get_unavailable_reason(actor))
+	return true
+
+
+func get_checkpoint_snapshot() -> Dictionary:
+	return {
+		&"pickup_id": event_id,
+		&"entry_id": inventory_entry_id,
+		&"quantity": quantity,
+		&"consumed": is_consumed(),
+	}
+
+
+func validate_checkpoint_snapshot(snapshot: Dictionary) -> bool:
+	var snapshot_quantity := int(snapshot.get(&"quantity", -1))
+	return (
+		StringName(snapshot.get(&"pickup_id", &"")) == event_id
+		and StringName(snapshot.get(&"entry_id", &"")) == inventory_entry_id
+		and snapshot_quantity >= 0
+		and snapshot_quantity <= _authored_quantity
+		and typeof(snapshot.get(&"consumed", null)) == TYPE_BOOL
+		and bool(snapshot.get(&"consumed", false)) == (snapshot_quantity <= 0)
+	)
+
+
+func restore_checkpoint_snapshot(snapshot: Dictionary) -> bool:
+	if not validate_checkpoint_snapshot(snapshot):
+		return false
+	quantity = int(snapshot.quantity)
+	set_consumed(bool(snapshot.consumed))
 	return true

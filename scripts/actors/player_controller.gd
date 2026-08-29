@@ -32,6 +32,7 @@ enum ControlLock {
 @onready var visual_root: Node3D = %VisualRoot
 @onready var interaction_origin: Marker3D = %InteractionOrigin
 @onready var aim_origin: Marker3D = %AimOrigin
+@onready var health: HealthComponent = %Health
 
 var stance: Stance = Stance.STANDING
 var facing_direction: Vector3 = Vector3.FORWARD
@@ -121,6 +122,18 @@ func request_stance(next_stance: Stance) -> bool:
 
 func get_control_locks() -> int:
 	return _control_locks
+
+
+func receive_damage(amount: float, context: HitContext3D = null) -> bool:
+	return health.receive_damage(amount, context)
+
+
+func can_receive_item_effect(effect_id: StringName, amount: float) -> bool:
+	return health.can_receive_item_effect(effect_id, amount)
+
+
+func receive_item_effect(effect_id: StringName, amount: float, context: Dictionary) -> bool:
+	return health.receive_item_effect(effect_id, amount, context)
 
 
 static func camera_relative_direction(input_vector: Vector2, camera_basis: Basis) -> Vector3:

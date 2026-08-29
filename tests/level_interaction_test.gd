@@ -156,8 +156,8 @@ func _validate_progression_seams(level: Substation6) -> void:
 		failures.append("Opening D1 did not synchronize collision, occlusion, and navigation.")
 	if objective.hold_duration != 1.25:
 		failures.append("Objective terminal does not own the specified 1.25-second hold duration.")
-	if not objective.interact(level.player) or not level.harness.objective_complete:
-		failures.append("Objective event did not reach the replaceable mission harness.")
+	if not objective.interact(level.player) or not level.mission_state.objective_complete:
+		failures.append("Objective event did not reach the authoritative mission coordinator.")
 	await process_frame
 	if not d2.is_open or d2.is_locked or not d2.navigation_link.enabled:
 		failures.append("Objective completion did not expose the D2 shortcut state seam.")

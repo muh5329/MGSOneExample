@@ -2,6 +2,14 @@
 
 Keep only decisions that affect more than one subsystem. Newest entries first.
 
+## 2026-08-29 — Health, Checkpoint, and Mission Authority
+
+- `HealthComponent` is the reusable damage/heal authority; lethal state commits before signals, death emits once per life, and the player forwards combat and item-effect requests without duplicating health arithmetic.
+- `GameState` enforces the only legal mission-phase table and synchronizes pause with `SceneTree.paused`; mission owners request death, restart, and completion rather than directly assigning phases.
+- Checkpoints are validated versioned dictionaries keyed by authored IDs, never node-path serialization. CP health intentionally normalizes to full for restart; inventory/equipment/weapon magazine, K1, door, pickup, and objective state persist exactly.
+- Restart validates before mutation, resets transient group consumers, restores persistent subsystem-owned snapshots in documented order, resets camera/UI/combat gates, then returns to play. Builds 08–09 must register guard/alert authored resets rather than expanding the snapshot with live AI internals.
+- O1 completion and X1 extraction remain distinct, with alive/PLAYING gates and terminal duplicate protection. No disk saves, live alert/guard state, or transient projectiles/effects are in Build 07 scope.
+
 ## 2026-08-28 — Inventory and Equipment Integration Contract
 
 - Per-player `InventoryComponent` is the single authority for registered quantities and equipped entry IDs; immutable definitions preserve selection order even at zero quantity. Weapon magazine/timers remain combat-owned and are composed into inventory checkpoint snapshots rather than duplicated.

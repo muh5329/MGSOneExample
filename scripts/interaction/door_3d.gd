@@ -69,6 +69,34 @@ func toggle(actor: Node = null) -> bool:
 	return set_open(true)
 
 
+func get_checkpoint_snapshot() -> Dictionary:
+	return {
+		&"door_id": door_id,
+		&"is_open": is_open,
+		&"is_locked": is_locked,
+		&"locked_reason": locked_reason,
+	}
+
+
+func validate_checkpoint_snapshot(snapshot: Dictionary) -> bool:
+	return (
+		StringName(snapshot.get(&"door_id", &"")) == door_id
+		and typeof(snapshot.get(&"is_open", null)) == TYPE_BOOL
+		and typeof(snapshot.get(&"is_locked", null)) == TYPE_BOOL
+		and not (bool(snapshot.is_open) and bool(snapshot.is_locked))
+	)
+
+
+func restore_checkpoint_snapshot(snapshot: Dictionary) -> bool:
+	if not validate_checkpoint_snapshot(snapshot):
+		return false
+	is_locked = bool(snapshot.is_locked)
+	is_open = bool(snapshot.is_open)
+	locked_reason = StringName(snapshot.get(&"locked_reason", locked_reason))
+	_apply_state()
+	return true
+
+
 func _can_interact(actor: Node) -> bool:
 	return not is_locked or _has_access(actor)
 

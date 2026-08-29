@@ -273,12 +273,24 @@ func get_checkpoint_snapshot() -> Dictionary:
 		&"quantities": _quantities.duplicate(true),
 		&"equipped_weapon_id": equipped_weapon_id,
 		&"equipped_item_id": equipped_item_id,
-		&"weapon_runtime": _weapon_controller.get_runtime_snapshot() if _weapon_controller != null else {},
+		&"weapon_runtime": (
+			_weapon_controller.get_runtime_snapshot()
+			if _weapon_controller != null and _weapon_controller.definition != null
+			else {}
+		),
 	}
 
 
-func restore_checkpoint_snapshot(snapshot: Dictionary) -> Dictionary:
-	var restored_quantities: Dictionary = snapshot.get(&"quantities", {})
+func validate_checkpoint_snapshot(snapshot: Dictionary) -> Dictionary:
+	var quantities_value: Variant = snapshot.get(&"quantities", null)
+	if not quantities_value is Dictionary:
+		return _result(TransactionCode.SNAPSHOT_INVALID, &"quantities", 0)
+	var restored_quantities: Dictionary = quantities_value
+	if restored_quantities.size() != definitions.size():
+		return _result(TransactionCode.SNAPSHOT_INVALID, &"quantities", restored_quantities.size())
+	for entry in definitions:
+		if not restored_quantities.has(entry.entry_id):
+			return _result(TransactionCode.SNAPSHOT_INVALID, entry.entry_id, 0)
 	for key in restored_quantities:
 		var entry := get_definition(StringName(key))
 		var quantity := int(restored_quantities[key])
@@ -290,24 +302,70 @@ func restore_checkpoint_snapshot(snapshot: Dictionary) -> Dictionary:
 		return _result(TransactionCode.SNAPSHOT_INVALID, next_weapon, 0)
 	if not _valid_equipped_id(next_item, InventoryEntryDefinition.EntryKind.CONSUMABLE, restored_quantities):
 		return _result(TransactionCode.SNAPSHOT_INVALID, next_item, 0)
+	var weapon_runtime_value: Variant = snapshot.get(&"weapon_runtime", {})
+	if not weapon_runtime_value is Dictionary:
+		return _result(TransactionCode.SNAPSHOT_INVALID, &"weapon_runtime", 0)
+	var weapon_runtime: Dictionary = weapon_runtime_value
+	if not next_weapon.is_empty() and weapon_runtime.is_empty():
+		return _result(TransactionCode.SNAPSHOT_INVALID, next_weapon, 0)
+	if not weapon_runtime.is_empty():
+		if _weapon_controller == null or not weapon_runtime.has(&"equipped"):
+			return _result(TransactionCode.SNAPSHOT_INVALID, &"weapon_runtime", 0)
+		var runtime_weapon_id := StringName(weapon_runtime.get(&"weapon_id", &""))
+		var runtime_entry := _get_weapon_entry_for_definition_id(runtime_weapon_id)
+		if runtime_entry == null:
+			return _result(TransactionCode.SNAPSHOT_INVALID, runtime_weapon_id, 0)
+		var magazine := int(weapon_runtime.get(&"magazine", -1))
+		if magazine < 0 or magazine > runtime_entry.weapon_definition.magazine_capacity:
+			return _result(TransactionCode.SNAPSHOT_INVALID, runtime_entry.entry_id, magazine)
+		if bool(weapon_runtime.equipped):
+			if next_weapon != runtime_entry.entry_id:
+				return _result(TransactionCode.SNAPSHOT_INVALID, next_weapon, 0)
+		elif not next_weapon.is_empty():
+			return _result(TransactionCode.SNAPSHOT_INVALID, next_weapon, 0)
+	return _result(TransactionCode.SUCCESS, &"", 0)
+
+
+func restore_checkpoint_snapshot(snapshot: Dictionary) -> Dictionary:
+	var validation := validate_checkpoint_snapshot(snapshot)
+	if not bool(validation.accepted):
+		return validation
+	var restored_quantities: Dictionary = snapshot.quantities
+	var next_weapon := StringName(snapshot.get(&"equipped_weapon_id", &""))
+	var next_item := StringName(snapshot.get(&"equipped_item_id", &""))
+	var weapon_runtime: Dictionary = snapshot.get(&"weapon_runtime", {})
+	if _weapon_controller != null:
+		if weapon_runtime.is_empty():
+			if not _weapon_controller.request_unequip():
+				return _result(TransactionCode.SNAPSHOT_INVALID, &"weapon_runtime", 0)
+		else:
+			var runtime_entry := _get_weapon_entry_for_definition_id(StringName(weapon_runtime.weapon_id))
+			if (
+				runtime_entry == null
+				or not _weapon_controller.request_equip(runtime_entry.weapon_definition, int(weapon_runtime.magazine))
+				or not _weapon_controller.restore_runtime(weapon_runtime)
+			):
+				return _result(TransactionCode.SNAPSHOT_INVALID, &"weapon_runtime", 0)
 	for entry in definitions:
 		_quantities[entry.entry_id] = int(restored_quantities.get(entry.entry_id, 0))
 	equipped_weapon_id = next_weapon
 	equipped_item_id = next_item
-	if _weapon_controller != null:
-		var weapon_runtime: Dictionary = snapshot.get(&"weapon_runtime", {})
-		if equipped_weapon_id.is_empty():
-			_weapon_controller.request_unequip()
-		else:
-			var weapon_entry := get_definition(equipped_weapon_id)
-			_weapon_controller.request_equip(weapon_entry.weapon_definition)
-			if not weapon_runtime.is_empty():
-				_weapon_controller.restore_runtime(weapon_runtime)
 	equipped_weapon_changed.emit(equipped_weapon_id, get_definition(equipped_weapon_id).weapon_definition if not equipped_weapon_id.is_empty() else null)
 	equipped_item_changed.emit(equipped_item_id)
 	var result := _result(TransactionCode.SUCCESS, &"", 0)
 	_emit_transaction(result)
 	return result
+
+
+func _get_weapon_entry_for_definition_id(weapon_id: StringName) -> InventoryEntryDefinition:
+	for entry in definitions:
+		if (
+			entry.kind == InventoryEntryDefinition.EntryKind.WEAPON
+			and entry.weapon_definition != null
+			and entry.weapon_definition.weapon_id == weapon_id
+		):
+			return entry
+	return null
 
 
 func _rebuild_catalog() -> void:

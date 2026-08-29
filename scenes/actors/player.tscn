@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://scripts/actors/player_controller.gd" id="1_controller"]
 [ext_resource type="Resource" path="res://data/player/default_player_movement_config.tres" id="2_config"]
 [ext_resource type="PackedScene" path="res://scenes/components/weapon_controller.tscn" id="3_weapon"]
 [ext_resource type="PackedScene" path="res://scenes/components/inventory_component.tscn" id="4_inventory"]
+[ext_resource type="PackedScene" path="res://scenes/components/health_component.tscn" id="5_health"]
 
 [sub_resource type="CapsuleShape3D" id="PlayerShape"]
 resource_local_to_scene = true
@@ -67,3 +68,16 @@ position = Vector3(0, 1.512, -0.12)
 
 [node name="Inventory" parent="." instance=ExtResource("4_inventory")]
 unique_name_in_owner = true
+
+[node name="Health" parent="." instance=ExtResource("5_health")]
+unique_name_in_owner = true
+
+[node name="DamageHitbox" type="Area3D" parent="."]
+collision_layer = 8
+collision_mask = 0
+monitoring = false
+monitorable = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DamageHitbox"]
+position = Vector3(0, 0.9, 0)
+shape = SubResource("PlayerShape")
