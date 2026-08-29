@@ -2,6 +2,13 @@
 
 Keep only decisions that affect more than one subsystem. Newest entries first.
 
+## 2026-08-29 — Guard and Perception Integration Contract
+
+- Guards own authored-route navigation, local perception/suspicion/memory, local decision states, health/death, and telegraphed damage submission; they do not own the global alert phase, radar presentation, player/UI/camera state, or checkpoint serialization.
+- Vision uses a cone broad phase followed by target-height rays on layers 4/6. Hearing consumes immutable typed noise-event positions with category/range and layer-6 occlusion scaling, so neither system silently tracks information it did not observe.
+- Confirmed sight or identified gunshot evidence emits a guard report. Build 09 is the sole authority that converts reports into shared phases and sends explicit last-known-position broadcasts back through `receive_alert_broadcast`.
+- Radar consumes value-only guard snapshots rather than state-machine objects. Checkpoint restart invokes each guard's authored transient reset to revive and resume patrol, preserving the version-1 mission snapshot shape.
+
 ## 2026-08-29 — Health, Checkpoint, and Mission Authority
 
 - `HealthComponent` is the reusable damage/heal authority; lethal state commits before signals, death emits once per life, and the player forwards combat and item-effect requests without duplicating health arithmetic.

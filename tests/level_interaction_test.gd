@@ -187,6 +187,7 @@ func _validate_progression_seams(level: Substation6) -> void:
 		supply_door.set_open(true)
 		await physics_frame
 		await physics_frame
+		await physics_frame
 		var open_supply_route := NavigationServer3D.map_get_path(
 			navigation_map,
 			Vector3(-10.0, 0.02, 8.0),

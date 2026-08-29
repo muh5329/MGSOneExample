@@ -1,5 +1,13 @@
 # Critic Report
 
+## 2026-08-29 — Build Step 08 implementation review
+
+- Scope review: guards own local movement, perception, suspicion/memory, decision recovery, health, combat requests, reports, value snapshots, and authored reset; global alert phases/radar, squad policy, cover tactics, final animation, and final feedback remain later builds.
+- Evidence: clean import/startup and all eight headless suites cover cone edges/verticality, multi-height solid occlusion, standing/crouched range, delta-invariant buildup/drain, immutable noise location plus range/occlusion, vision/gunshot reports, missing information/path fallbacks, bounded search/return, telegraphed cadence damage, target/guard death, pause, reset, sanitized radar data, and exact G1–G4 binding.
+- Findings: no automated contract blocker found. Actual visibility and public snapshots remain false behind blockers; brief exposure stays suspicious; attacks require refreshed visible information; and live AI state never enters mission snapshots or survives restart.
+- Remaining risk: no global alert coordinator exists yet, so inter-guard broadcast policy and ALERT/EVASION/SEARCH presentation wait for Build 09. Hands-on patrol fairness, doorway yielding, chase feel, debug readability, and four-guard performance in full acceptance playthroughs remain Builds 09/13/14 work.
+- Disposition: Build Step 08 local guard/perception contract complete with explicit alert/radar and integration follow-up; no global stealth-state or presentation milestone is claimed.
+
 ## 2026-08-29 — Build Step 07 implementation review
 
 - Scope review: health owns bounded damage/healing and death truth; `GameState` owns phase/pause; the mission coordinator owns stable-ID capture timing, restore order, death/restart, objective, and extraction. It does not claim disk saves, AI state, alert behavior, or final death/HUD art.

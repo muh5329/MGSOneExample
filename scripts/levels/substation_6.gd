@@ -4,6 +4,7 @@ extends Node3D
 const DOOR_SCENE := preload("res://scenes/components/door_3d.tscn")
 const MARKER_SCENE := preload("res://scenes/components/mission_marker_3d.tscn")
 const PICKUP_SCENE := preload("res://scenes/components/inventory_pickup_3d.tscn")
+const GUARD_SCENE := preload("res://scenes/actors/guard.tscn")
 const GAME_PHASE_NAMES := ["INITIALIZING", "PLAYING", "PAUSED", "PLAYER_DEAD", "COMPLETED", "RESTARTING"]
 
 @onready var geometry_root: Node3D = %Geometry
@@ -11,6 +12,7 @@ const GAME_PHASE_NAMES := ["INITIALIZING", "PLAYING", "PAUSED", "PLAYER_DEAD", "
 @onready var camera_zone_root: Node3D = %CameraZones
 @onready var route_root: Node3D = %PatrolRoutes
 @onready var spawn_root: Node3D = %SpawnPoints
+@onready var guard_root: Node3D = %Guards
 @onready var player: PlayerController = %Player
 @onready var camera_rig: GameplayCameraRig = %GameplayCameraRig
 @onready var interaction_focus: InteractionFocus3D = %InteractionFocus
@@ -36,6 +38,7 @@ func _ready() -> void:
 	_build_navigation()
 	_build_camera_zones()
 	_build_spawns_and_patrols()
+	_build_guards()
 	_build_mission_objects()
 	_configure_runtime_contracts()
 
@@ -211,10 +214,25 @@ func _build_spawns_and_patrols() -> void:
 	_add_spawn(&"R4_DEBUG", Vector3(20.0, 0.02, 29.0), &"debug")
 	_add_spawn(&"R5_DEBUG", Vector3(29.0, 0.02, -31.0), &"debug")
 	_add_spawn(&"R6_DEBUG", Vector3(-15.0, 0.02, -24.0), &"debug")
-	_add_patrol(&"G1", [Vector3(-20, 0.02, -7), Vector3(-2, 0.02, -7), Vector3(-2, 0.02, 8), Vector3(-20, 0.02, 8)], 0, 2.0)
+	_add_patrol(&"G1", [Vector3(-20, 0.02, -7), Vector3(-2, 0.02, -7), Vector3(-2, 0.02, 8), Vector3(-20, 0.02, 8)], 0, 2.0, Vector3.FORWARD)
 	_add_patrol(&"G2", [Vector3(14, 0.02, 15), Vector3(14, 0.02, 29), Vector3(26, 0.02, 29), Vector3(26, 0.02, 18)], 3, 1.5)
 	_add_patrol(&"G3", [Vector3(10, 0.02, -32), Vector3(10, 0.02, -16), Vector3(30, 0.02, -16), Vector3(30, 0.02, -32)], -1, 0.0)
 	_add_patrol(&"G4", [Vector3(17, 0.02, -31), Vector3(17, 0.02, -17), Vector3(23, 0.02, -17), Vector3(23, 0.02, -31)], -1, 0.0)
+
+
+func _build_guards() -> void:
+	var navigation_map := get_mission_navigation_map()
+	for guard_id in [&"G1", &"G2", &"G3", &"G4"]:
+		var route := route_root.get_node_or_null(NodePath(String(guard_id))) as PatrolRoute3D
+		if route == null:
+			push_error("Missing authored patrol route for guard %s." % guard_id)
+			continue
+		var guard := GUARD_SCENE.instantiate() as GuardActor
+		guard.name = String(guard_id)
+		guard.guard_id = guard_id
+		guard_root.add_child(guard)
+		if not guard.configure(guard_id, route, player, navigation_map):
+			push_error("Could not configure guard %s." % guard_id)
 
 
 func _build_mission_objects() -> void:
@@ -525,9 +543,16 @@ func _add_spawn(id: StringName, position: Vector3, kind: StringName) -> void:
 	spawn_root.add_child(spawn)
 
 
-func _add_patrol(id: StringName, points: Array[Vector3], wait_index: int, wait_seconds: float) -> void:
-	var route := Node3D.new()
+func _add_patrol(
+		id: StringName,
+		points: Array[Vector3],
+		wait_index: int,
+		wait_seconds: float,
+		wait_look_direction: Vector3 = Vector3.ZERO
+) -> void:
+	var route := PatrolRoute3D.new()
 	route.name = String(id)
+	route.route_id = id
 	route.add_to_group(&"guard_patrol_routes")
 	route.set_meta(&"guard_id", id)
 	for index in points.size():
@@ -535,6 +560,8 @@ func _add_patrol(id: StringName, points: Array[Vector3], wait_index: int, wait_s
 		point.name = "P%d" % (index + 1)
 		point.position = points[index]
 		point.set_meta(&"wait_seconds", wait_seconds if index == wait_index else 0.0)
+		if index == wait_index and not wait_look_direction.is_zero_approx():
+			point.set_meta(&"look_direction", wait_look_direction.normalized())
 		route.add_child(point)
 	route_root.add_child(route)
 

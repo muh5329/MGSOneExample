@@ -1,0 +1,131 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/enemy_ai_test_room.gd" id="1_room"]
+[ext_resource type="PackedScene" path="res://scenes/actors/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/actors/guard.tscn" id="3_guard"]
+[ext_resource type="Script" path="res://scripts/stealth/patrol_route_3d.gd" id="4_route"]
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+size = Vector3(20, 0.2, 20)
+
+[sub_resource type="StandardMaterial3D" id="FloorMaterial"]
+albedo_color = Color(0.08, 0.12, 0.14, 1)
+roughness = 0.9
+
+[sub_resource type="BoxShape3D" id="FloorShape"]
+size = Vector3(20, 0.2, 20)
+
+[sub_resource type="BoxMesh" id="OccluderMesh"]
+size = Vector3(4, 3, 4)
+
+[sub_resource type="StandardMaterial3D" id="OccluderMaterial"]
+albedo_color = Color(0.25, 0.32, 0.34, 1)
+roughness = 0.78
+
+[sub_resource type="BoxShape3D" id="OccluderShape"]
+size = Vector3(4, 3, 4)
+
+[sub_resource type="Environment" id="LabEnvironment"]
+background_mode = 1
+background_color = Color(0.015, 0.025, 0.03, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.42, 0.55, 0.58, 1)
+ambient_light_energy = 0.7
+
+[node name="EnemyAITestRoom" type="Node3D"]
+script = ExtResource("1_room")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("LabEnvironment")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-58, -25, 0)
+light_energy = 1.2
+shadow_enabled = true
+
+[node name="Floor" type="StaticBody3D" parent="."]
+position = Vector3(0, -0.1, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("FloorMesh")
+material_override = SubResource("FloorMaterial")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("FloorShape")
+
+[node name="CentralOccluder" type="StaticBody3D" parent="."]
+position = Vector3(0, 1.5, 0)
+collision_layer = 33
+collision_mask = 0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CentralOccluder"]
+mesh = SubResource("OccluderMesh")
+material_override = SubResource("OccluderMaterial")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CentralOccluder"]
+shape = SubResource("OccluderShape")
+
+[node name="Navigation" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="LabRoute" type="Node3D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("4_route")
+route_id = &"LAB_ROUTE"
+
+[node name="P1" type="Marker3D" parent="LabRoute"]
+position = Vector3(-7, 0.02, -7)
+metadata/wait_seconds = 1.0
+
+[node name="P2" type="Marker3D" parent="LabRoute"]
+position = Vector3(7, 0.02, -7)
+
+[node name="P3" type="Marker3D" parent="LabRoute"]
+position = Vector3(7, 0.02, 7)
+
+[node name="P4" type="Marker3D" parent="LabRoute"]
+position = Vector3(-7, 0.02, 7)
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+unique_name_in_owner = true
+position = Vector3(0, 0.02, 7)
+
+[node name="Guard" parent="." instance=ExtResource("3_guard")]
+unique_name_in_owner = true
+position = Vector3(-7, 0.02, -7)
+guard_id = &"LAB_GUARD"
+
+[node name="Camera3D" type="Camera3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.819152, 0.573576, 0, -0.573576, 0.819152, 0, 17, 18)
+current = true
+
+[node name="Interface" type="CanvasLayer" parent="."]
+
+[node name="Title" type="Label" parent="Interface"]
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 760.0
+offset_bottom = 58.0
+theme_override_colors/font_color = Color(0.55, 1, 0.78, 1)
+theme_override_font_sizes/font_size = 24
+text = "ENEMY AI + PERCEPTION LAB"
+
+[node name="StatusLabel" type="Label" parent="Interface"]
+unique_name_in_owner = true
+offset_left = 24.0
+offset_top = 64.0
+offset_right = 900.0
+offset_bottom = 120.0
+theme_override_colors/font_color = Color(1, 0.82, 0.38, 1)
+theme_override_font_sizes/font_size = 16
+
+[node name="Controls" type="Label" parent="Interface"]
+offset_left = 24.0
+offset_top = 128.0
+offset_right = 900.0
+offset_bottom = 184.0
+theme_override_colors/font_color = Color(0.7, 0.82, 0.8, 1)
+text = "WASD move  •  C crouch  •  F emit movement noise  •  R emit gunshot\nF10 toggles guard cone, sight ray, path, state, suspicion, and timer debug"

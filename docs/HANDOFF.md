@@ -2,6 +2,14 @@
 
 Append newest entries directly below this introduction. Keep each entry to six lines or fewer.
 
+### 2026-08-29 — Root task — Enemy AI and perception
+
+- Delivered: reusable G1–G4 guard composition, authored patrol waits/looks, occlusion-aware sampled sight, typed-event hearing, suspicion/memory, explicit chase/attack/search recovery, health/reset, animation outputs, sanitized snapshots, and a focused lab/debug overlay.
+- Contracts: guard target adapter, masks/formulas/tuning, state graph, report/broadcast methods, typed combat request, radar snapshot, debug gate, and authored checkpoint reset are in `INTERFACES.md`; global alert/radar authority remains Build 09.
+- Verified: clean import/startup plus all eight headless suites; partial/blocked/crouched sight, delta invariance, diversion/gunshot hearing, lost paths/information, bounded search, fair attack timing, death/pause/restart, and exact four-guard mission binding on Godot 4.7.
+- Remaining: Build 09 coordinates global ALERT/EVASION/SEARCH and radar; Builds 10–12 replace placeholder animation/audio/UI; Build 14 owns hands-on full-mission fairness/performance playthroughs.
+- Docs: updated root README, STATUS, CODE_MAP, INTERFACES, DECISIONS, CRITIC_REPORT, LEVEL_METRICS, and HANDOFF.
+
 ### 2026-08-29 — Root task — Health, checkpoints, and mission state
 
 - Delivered: reusable health/I1 receiver, player hitbox/death gates, explicit global phases, stable-ID CP0/CP1 snapshots, deterministic restart, O1/D2/X1 outcome flow, live mission status, and an integrated lab.

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="GuardConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/stealth/guard_config.gd" id="1_config"]
+
+[resource]
+script = ExtResource("1_config")
+patrol_speed = 2.4
+suspicious_speed = 1.6
+pursuit_speed = 4.0
+standing_vision_range = 18.0
+crouched_vision_range = 13.0
+horizontal_cone_degrees = 70.0
+vertical_cone_degrees = 70.0
+sight_confirmation_time = 0.8
+suspicion_decay_time = 1.5
+minimum_suspicion_stimulus = 0.25
+movement_hearing_radius = 5.0
+attack_range = 12.0
+attack_telegraph_duration = 0.35
+attack_cadence = 0.75
+attack_damage = 20.0

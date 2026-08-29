@@ -5,7 +5,7 @@ Updated: 2026-08-28
 ## Entry and authoring model
 
 - Mission entry scene: `res://scenes/levels/substation_6.tscn`; the bootstrap loads it by default.
-- Geometry, collision, navigation rectangles, mission placements, patrol points, and camera volumes are authored in `scripts/levels/substation_6.gd`. Visible boxes and collision bodies are separate nodes even when they share a metric definition.
+- Geometry, collision, navigation rectangles, mission placements, patrol points, guard bindings, and camera volumes are authored in `scripts/levels/substation_6.gd`. Visible boxes and collision bodies are separate nodes even when they share a metric definition.
 - Focus/access behavior can be exercised alone in `res://scenes/levels/interaction_test_room.tscn`. The movement and camera labs remain separate regression scenes.
 
 ## Metric kit
@@ -38,6 +38,6 @@ There is no editor-baked artifact to become stale. `_build_navigation()` creates
 1. Update the visible/collision metric and its navigation footprint together in `substation_6.gd`.
 2. Preserve a 4.0 m authored opening and position the door pivot at the gap center.
 3. Run `godot --headless --path . --script res://tests/level_interaction_test.gd`; it verifies polygon coverage, link/collision state, and a live CP0-to-O1 path.
-4. Exercise the affected route with the 0.4 m player capsule and, once available, a guard agent before accepting art replacement.
+4. Run `godot --headless --path . --script res://tests/enemy_ai_perception_test.gd`, then exercise the affected route with the 0.4 m player and guard capsules before accepting art replacement.
 
 Intentionally inaccessible geometry is limited to the outside of room shells, the tops/interiors of cargo/pipe/transformer occluders, the R4 locker shell, and the R6 console back. The R5 trench is currently a readable low-route floor treatment, not a crouch-only depression; future art may deepen it only if both capsule and camera tests remain green.

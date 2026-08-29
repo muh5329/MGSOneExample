@@ -59,6 +59,9 @@ unique_name_in_owner = true
 [node name="SpawnPoints" type="Node3D" parent="."]
 unique_name_in_owner = true
 
+[node name="Guards" type="Node3D" parent="."]
+unique_name_in_owner = true
+
 [node name="Player" parent="." instance=ExtResource("2_player")]
 unique_name_in_owner = true
 position = Vector3(-46, 0.02, 0)

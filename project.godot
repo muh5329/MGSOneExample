@@ -40,6 +40,10 @@ defaults/default_environment="res://scenes/core/default_environment.tres"
 [global_group]
 
 player="The active player-controlled actor."
+guards="Living or dead guard actors exposing sanitized AI snapshots."
+guard_patrol_routes="Authored ordered patrol routes with wait/look metadata."
+guard_debug_visuals="Development-only guard perception and decision debug views."
+checkpoint_reset_targets="Transient runtime systems restored to authored checkpoint state."
 
 [input]
 

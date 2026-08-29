@@ -11,6 +11,8 @@ const DEFAULT_LEVEL_PATH := "res://scenes/levels/substation_6.tscn"
 @onready var resume_button: Button = %ResumeButton
 @onready var debug_label: Label = %DebugLabel
 
+var _guard_debug_visible: bool = true
+
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -31,6 +33,12 @@ func _process(_delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed(&"debug_toggle") and OS.is_debug_build():
 		debug_label.visible = not debug_label.visible
+		_guard_debug_visible = (
+			debug_label.visible
+			and debug_config != null
+			and debug_config.show_guard_perception
+		)
+		get_tree().call_group(&"guard_debug_visuals", &"set_debug_visible", _guard_debug_visible)
 		get_viewport().set_input_as_handled()
 
 
@@ -70,3 +78,9 @@ func _update_debug_visibility() -> void:
 		and debug_config.enabled
 		and debug_config.show_fps
 	)
+	_guard_debug_visible = (
+		debug_label.visible
+		and debug_config != null
+		and debug_config.show_guard_perception
+	)
+	get_tree().call_group(&"guard_debug_visuals", &"set_debug_visible", _guard_debug_visible)

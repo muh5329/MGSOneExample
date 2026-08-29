@@ -7,6 +7,8 @@ Updated: 2026-08-29
 - `project.godot` — project configuration, semantic inputs, autoloads, and collision-layer names.
 - `scenes/core/bootstrap.tscn` + `scripts/core/bootstrap.gd` — main entry point, camera-lab bootstrap, and explicit initial-level failure reporting.
 - `scenes/actors/player.tscn` + `scripts/actors/player_controller.gd` — reusable capsule player, camera-relative motor, stance, control locks, damage hitbox/health forwarding, animation outputs, and movement noise.
+- `scenes/actors/guard.tscn` + `scripts/actors/guard_actor.gd` — reusable guard body composing navigation, perception, health/damage, explicit local decision states, telegraphed damage requests, alert report/broadcast seams, snapshots, authored reset, and animation outputs.
+- `scripts/stealth/guard_perception_3d.gd`, `patrol_route_3d.gd`, and `guard_debug_draw_3d.gd` — cone/sample/raycast sight, typed-event hearing, suspicion/memory, patrol wait/look data, and toggleable cones/rays/path/state debug; tuning is `data/guards/default_guard_config.tres`.
 - `data/player/default_player_movement_config.tres` — player speed, acceleration, body, slope, gravity, and noise tuning.
 - `scenes/camera/gameplay_camera_rig.tscn` + `scripts/camera/gameplay_camera_rig.gd` — sole gameplay-camera owner, deterministic zone handoff/blending, contextual aim, aim rays, obstruction response, impulses, and debug output.
 - `scripts/camera/camera_zone_3d.gd` + `camera_zone_data.gd` — authored mathematical camera volumes and reusable framing/priority/blend data.
@@ -21,6 +23,7 @@ Updated: 2026-08-29
 - `scenes/components/health_component.tscn` + `scripts/health/health_component.gd` — reusable bounded damage/heal receiver with typed context, optional invulnerability, duplicate-death protection, item-effect support, and checkpoint state.
 - `scenes/components/mission_state_coordinator.tscn` + `scripts/core/mission_state_coordinator.gd` — stable-ID CP0/CP1 capture/restore, death/restart orchestration, transient reset routing, objective state, and extraction validation.
 - `scenes/levels/health_game_state_test_room.tscn` — integrated Build 07 lab over Substation 6 with live health, checkpoint, phase, ration, death/restart, objective, and extraction feedback.
+- `scenes/levels/enemy_ai_test_room.tscn` — focused Build 08 occlusion, noise-diversion, suspicion, pursuit/search, combat-telegraph, and debug lab.
 - `scenes/levels/camera_aim_test_room.tscn` — focused camera/aim regression lab; `locomotion_test_room.tscn` remains the movement lab and uses the shared rig.
 - `scenes/levels/substation_6.tscn` + `scripts/levels/substation_6.gd` — current bootstrap level; seven-room mission graybox, modular collision/occlusion geometry, ten camera zones, authored navigation, patrol/spawn markers, and exact mission-object placements.
 - `scenes/components/interactable_3d.tscn`, `interaction_focus_3d.tscn`, `door_3d.tscn`, and `mission_marker_3d.tscn` — reusable deterministic interaction, hold, door-state, and mission-event seams.
@@ -35,6 +38,7 @@ Updated: 2026-08-29
 - `tests/weapon_combat_test.gd` — definition, state/cadence, aim direction, owner exclusion, near-wall, damage context/death, feedback/noise, dry fire, reload cancellation/transaction, pause, and restore checks.
 - `tests/inventory_items_menu_test.gd` — capacities, failures, duplicate/partial pickups, equipment/reload, ration/access, stable ordering, menu locks/repeat, pause/death, and exact snapshot checks.
 - `tests/health_game_state_test.gd` — health bounds/invulnerability/death, phase legality, pause consistency, stable-ID snapshots, repeated restarts, transient resets, objective ordering, and extraction checks.
+- `tests/enemy_ai_perception_test.gd` — cone/verticality, solid occlusion, step-independent suspicion, crouch range, event hearing, report/state recovery, attack telegraph, death/pause/reset, radar boundary, and exact mission-guard checks.
 - `docs/VERTICAL_SLICE.md` — authoritative mission flow, placements, tuning, and acceptance scripts.
 
 ## Layout
