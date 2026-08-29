@@ -1,7 +1,11 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=18 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/locomotion_test_room.gd" id="1_room"]
 [ext_resource type="PackedScene" path="res://scenes/actors/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/camera/gameplay_camera_rig.tscn" id="3_rig"]
+[ext_resource type="Script" path="res://scripts/camera/camera_zone_3d.gd" id="4_zone"]
+[ext_resource type="Resource" path="res://data/camera/lab_zone_west.tres" id="5_west"]
+[ext_resource type="Resource" path="res://data/camera/lab_zone_east.tres" id="6_east"]
 
 [sub_resource type="StandardMaterial3D" id="FloorMaterial"]
 albedo_color = Color(0.085, 0.14, 0.135, 1)
@@ -225,16 +229,18 @@ shape = SubResource("ObstacleShape")
 unique_name_in_owner = true
 position = Vector3(0, 0.02, 5.5)
 
-[node name="CameraSouthEast" type="Camera3D" parent="."]
-unique_name_in_owner = true
-position = Vector3(12, 15, 16)
-current = true
-fov = 54.0
+[node name="WestZone" type="Area3D" parent="." groups=["camera_zones"]]
+position = Vector3(-5.75, 3, 0)
+script = ExtResource("4_zone")
+data = ExtResource("5_west")
 
-[node name="CameraNorthWest" type="Camera3D" parent="."]
+[node name="EastZone" type="Area3D" parent="." groups=["camera_zones"]]
+position = Vector3(5.75, 3, 0)
+script = ExtResource("4_zone")
+data = ExtResource("6_east")
+
+[node name="GameplayCameraRig" parent="." instance=ExtResource("3_rig")]
 unique_name_in_owner = true
-position = Vector3(-14, 13, -14)
-fov = 54.0
 
 [node name="Interface" type="CanvasLayer" parent="."]
 
@@ -278,5 +284,5 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_font_sizes/font_size = 17
-text = "Move: WASD / left stick   Crouch: C / L3   Swap fixed camera: F / A   Pause: Esc / Start"
+text = "Move: WASD / left stick   Crouch: C / L3   Cross center for fixed-camera handoff   Pause: Esc / Start"
 horizontal_alignment = 1

@@ -14,8 +14,11 @@ const REQUIRED_RESOURCES: Array[String] = [
 	"res://scenes/core/default_environment.tres",
 	"res://scenes/levels/foundation_test_room.tscn",
 	"res://scenes/levels/locomotion_test_room.tscn",
+	"res://scenes/levels/camera_aim_test_room.tscn",
 	"res://scenes/actors/player.tscn",
+	"res://scenes/camera/gameplay_camera_rig.tscn",
 	"res://data/player/default_player_movement_config.tres",
+	"res://data/camera/default_camera_aim_settings.tres",
 	"res://data/debug/development_debug_config.tres",
 	"res://data/debug/release_debug_config.tres",
 ]
@@ -92,7 +95,9 @@ func _validate_scene_instantiation() -> void:
 		"res://scenes/core/bootstrap.tscn",
 		"res://scenes/levels/foundation_test_room.tscn",
 		"res://scenes/levels/locomotion_test_room.tscn",
+		"res://scenes/levels/camera_aim_test_room.tscn",
 		"res://scenes/actors/player.tscn",
+		"res://scenes/camera/gameplay_camera_rig.tscn",
 	]:
 		var resource := load(path) as PackedScene
 		if resource == null:

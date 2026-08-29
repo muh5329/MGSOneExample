@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CameraZoneData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/camera/camera_zone_data.gd" id="1_zone_data"]
+
+[resource]
+script = ExtResource("1_zone_data")
+zone_id = &"LAB_NO_AIM"
+priority = 20
+blend_duration = 0.2
+aim_allowed = false
+volume_size = Vector3(4, 6, 4)
+camera_offset = Vector3(6, 8, 8)
+look_target_offset = Vector3(0, 0.9, 0)
+tracking_extents = Vector2(1, 1)
+field_of_view = 58.0
+

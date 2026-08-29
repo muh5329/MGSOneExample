@@ -52,10 +52,21 @@ Canonical masks: player body `1|3`, enemy body `1|2`, hitscan `1|4`, interaction
 - Movement noise is normalized from actual grounded planar speed, stance, and `surface_noise_multiplier`; periodic events use category `player_movement` and also route through `/root/EventBus` when present.
 - Default capsule is radius 0.4 m, 1.8 m standing and 1.2 m crouched. Default speed/acceleration/deceleration/turn are 4.5 m/s standing, 2.6 m/s crouched, 24/30 m/s², and 720°/s in `data/player/default_player_movement_config.tres`.
 
+### Camera and first-person aim
+
+- Entry point: `scenes/camera/gameplay_camera_rig.tscn`; `GameplayCameraRig` owns the only current gameplay `Camera3D`. Call `set_tracked_actor(Node3D)` after instantiation and `reset_camera_state()` after a checkpoint/scene reset.
+- `CameraZone3D` nodes use `CameraZoneData` resources with `zone_id`, priority, blend duration, mathematical volume size, aim allowance, camera/look offsets, tracking extents, and FOV. Highest priority wins; the current zone wins equal-priority overlap; otherwise lexical `zone_id` is the stable tie-break. The latest zone is deferred while aiming.
+- Equipment calls `set_weapon_equipped(bool)`. Modal and interaction owners call `set_modal_active(bool)` and `set_interaction_active(bool)`; either exits aim. `request_aim(bool)` returns success and rejects entry with a public reason when no weapon is equipped, the zone disallows aim, a modal/interaction is active, or the forward near-wall check is blocked.
+- `CameraMode` is `EXPLORATION` or `AIM`. Entering aim calls the player's `set_aim_movement_locked(true)`, preserves stance, captures entry facing, and clamps yaw to ±70° and pitch to -45°/+35° by default. Exit unlocks only the aim reason, restores the exploration camera, and applies the latest deferred zone.
+- Weapons call `get_aim_origin()`, `get_aim_direction()`, or `get_aim_ray(max_distance)`. The ray dictionary has `origin`, normalized `direction`, and `end`; `query_aim_hit(max_distance, collision_mask)` is optional convenience, and weapons should pass the canonical hitscan mask `1|4`.
+- Public state/signals are `mode`, `active_zone`, `is_transitioning`, `aim_is_obstructed`, `mode_changed`, `active_zone_changed`, `transition_state_changed`, `aim_rejected`, `aim_obstruction_changed`, and `reticle_visibility_requested`. Other systems may drive `add_camera_impulse(...)` but never set `Camera3D.current`.
+- `CameraAimSettings` owns `exploration_fov`, `aim_fov`, `aim_near_plane`, mouse/controller sensitivity, controller dead zone, horizontal/vertical inversion, yaw/pitch limits, near-wall distance, minimum zone hold, obstruction margin, and minimum camera distance. Build Step 12 may persist/modify this resource through a settings service without changing the rig API.
+- Authored angles are the primary obstruction solution. Runtime exploration rays may pull the camera toward its look target; first-person entry rejects a blocked origin and active aim reports near obstruction. No automatic transparency/cutaway policy exists.
+
 ## Accepted Subsystem Boundaries
 
 - Player movement exposes velocity, stance, movement-noise level, control-enabled state, and aim-mode requests.
-- Camera owns the active view mode and exposes aim origin/direction; weapons do not inspect camera node paths.
+- Camera owns the active view mode and exposes aim origin/direction through `GameplayCameraRig`; weapons do not inspect camera node paths.
 - Interaction targets expose prompt text, availability, and an `interact(actor)` operation.
 - Damage receivers accept a value plus hit context and emit health/death changes.
 - Inventory owns quantities and equipment state and emits change signals; UI never mutates its dictionaries directly.

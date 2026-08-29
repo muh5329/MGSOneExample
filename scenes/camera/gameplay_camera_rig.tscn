@@ -1,0 +1,44 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/camera/gameplay_camera_rig.gd" id="1_rig"]
+[ext_resource type="Resource" path="res://data/camera/default_camera_aim_settings.tres" id="2_settings"]
+
+[sub_resource type="ImmediateMesh" id="AimRayMesh"]
+
+[sub_resource type="StandardMaterial3D" id="AimRayMaterial"]
+shading_mode = 0
+vertex_color_use_as_albedo = true
+no_depth_test = true
+
+[node name="GameplayCameraRig" type="Node3D"]
+script = ExtResource("1_rig")
+settings = ExtResource("2_settings")
+
+[node name="GameplayCamera" type="Camera3D" parent="."]
+unique_name_in_owner = true
+current = true
+fov = 54.0
+near = 0.05
+
+[node name="DebugAimRay" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+top_level = true
+visible = false
+mesh = SubResource("AimRayMesh")
+material_override = SubResource("AimRayMaterial")
+
+[node name="DebugInterface" type="CanvasLayer" parent="."]
+
+[node name="DebugLabel" type="Label" parent="DebugInterface"]
+unique_name_in_owner = true
+visible = false
+offset_left = 24.0
+offset_top = 158.0
+offset_right = 1100.0
+offset_bottom = 188.0
+theme_override_colors/font_color = Color(0.35, 1, 0.65, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 16
+

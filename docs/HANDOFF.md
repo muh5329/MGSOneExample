@@ -2,6 +2,14 @@
 
 Append newest entries directly below this introduction. Keep each entry to six lines or fewer.
 
+### 2026-08-28 — Root task — Camera and first-person aim
+
+- Delivered: reusable sole-owner rig, zone data/volumes, deterministic blends/fallback, rooted bounded aim, obstruction safeguards, settings/impulses/debug hooks, camera lab, and locomotion-lab integration.
+- Contracts: `GameplayCameraRig`, `CameraZone3D/Data`, aim gates/ray API, signals, settings fields, priority rules, and authoring constraints are recorded in `INTERFACES.md`.
+- Verified: clean import/startup; smoke, movement, and camera tests; 1280×720 rendered-frame inspection; and `git diff --check` on Godot 4.7.
+- Remaining: hands-on mouse/controller feel, final-volume rapid crossings, near-wall presentation, and all Substation 6 angles need Build 04/14 integration playtesting.
+- Docs: updated README, STATUS, CODE_MAP, INTERFACES, DECISIONS, CRITIC_REPORT, and HANDOFF.
+
 ### 2026-08-28 — Root task — Player movement
 
 - Delivered: reusable player/config, camera-relative locomotion, crouch clearance, composable locks, animation/noise outputs, and locomotion lab.

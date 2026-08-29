@@ -2,6 +2,13 @@
 
 Keep only decisions that affect more than one subsystem. Newest entries first.
 
+## 2026-08-28 — Camera and Aim Integration Contract
+
+- One `GameplayCameraRig` owns the current gameplay camera. Authored mathematical volumes select by priority, preserve the current equal-priority overlap, and use lexical zone ID only as a final deterministic tie-break.
+- First-person aim is contextual and rooted: equipment/modal/interaction owners provide narrow gates, the camera sets only the player's AIM lock, and zone changes wait until aim exits.
+- Weapons consume camera-owned origin/direction APIs rather than camera node paths. Settings are resource-backed now and may gain persistence later without changing this boundary.
+- Level-authored angles and occluded handoffs are the first obstruction solution; runtime pull-in and near-wall rejection are safety nets, not replacements for valid mission framing.
+
 ## 2026-08-28 — Player Movement Integration Contract
 
 - Camera-relative direction latches the supplied camera basis while movement input remains held; camera transitions affect the next input gesture after neutral, avoiding an involuntary reversal.

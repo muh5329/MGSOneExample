@@ -1,6 +1,6 @@
 extends Node
 
-const DEFAULT_LEVEL_PATH := "res://scenes/levels/locomotion_test_room.tscn"
+const DEFAULT_LEVEL_PATH := "res://scenes/levels/camera_aim_test_room.tscn"
 
 @export_file("*.tscn") var initial_level_path: String = DEFAULT_LEVEL_PATH
 @export var debug_config: DebugConfig
