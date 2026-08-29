@@ -12,7 +12,7 @@ extends Node3D
 
 func _ready() -> void:
 	var inventory := player.get_node("Inventory") as InventoryComponent
-	var weapon := player.get_node("VisualRoot/WeaponController") as WeaponController
+	var weapon := player.get_node("WeaponController") as WeaponController
 	weapon.set_combat_owner(player)
 	weapon.set_aim_provider(camera_rig)
 	camera_rig.set_tracked_actor(player)

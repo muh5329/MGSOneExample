@@ -1,5 +1,13 @@
 # Critic Report
 
+## 2026-08-29 — Build Step 10 implementation review
+
+- Scope review: visual adapters translate existing semantic signals and own only model/animation presentation, stable sockets, configuration validation, and import/provenance rules. Actor roots retain physics, navigation, perception, health, inventory, weapon timing/ammunition/damage, AI, and mission authority; no final external art, audio/VFX, or root motion is claimed.
+- Evidence: clean import/startup, all ten headless suites, runtime proof swap and full visual-child removal, `git diff --check`, and 1280×720 mission/enemy-lab renders cover player/guard scene loading, identity scale, payload replacement, socket identity, optional fallback, required errors, stance/aim/alert/damage/death readability, and unchanged physics/navigation/perception/health/combat references.
+- Findings: no automated contract blocker found. Weapon runtime no longer lives under the removable visual tree; external hierarchy/bone names are absent from gameplay; a missing optional animator remains functional; required nodes/clips/sockets are explicit errors; and the original proof payload swaps without changing collider, layer/mask, navigation, perception, health, or sockets.
+- Remaining risk: procedural motion is deliberately simple, and automated/rendered inspection cannot prove feel across every active camera transition or a future third-party rig. Each imported model still needs hands-on animation, socket, material, clipping, attribution, performance, and full-mission reimport validation in Builds 11–14.
+- Disposition: Build Step 10 animation/model replacement contract complete with explicit future-asset and integration-playtest follow-up; no final character art, motion-capture, game-feel, or release milestone is claimed.
+
 ## 2026-08-29 — Build Step 09 implementation review
 
 - Scope review: one coordinator owns global alert truth, report/broadcast policy, recovery timers, shared-information expiry, feedback hooks, and reset; radar owns approved-map/contact transformation and restrictions. Local perception/decision logic, progression, mission phase, final HUD/audio/VFX, and reinforcement simulation remain outside this build.

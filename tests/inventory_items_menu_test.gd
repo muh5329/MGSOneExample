@@ -21,7 +21,7 @@ func _run() -> void:
 	await process_frame
 	var player := room.player
 	var inventory := player.get_node("Inventory") as InventoryComponent
-	var weapon := player.get_node("VisualRoot/WeaponController") as WeaponController
+	var weapon := player.get_node("WeaponController") as WeaponController
 	var panels := room.panels
 	var health := room.health_recipient
 	_reset_inventory(inventory)

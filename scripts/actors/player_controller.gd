@@ -5,6 +5,7 @@ signal stance_changed(previous: Stance, current: Stance)
 signal control_enabled_changed(enabled: bool)
 signal movement_noise_changed(intensity: float)
 signal movement_noise_emitted(event: NoiseEvent3D)
+signal aim_state_changed(active: bool)
 signal animation_parameters_updated(
 	local_planar_velocity: Vector2,
 	speed_ratio: float,
@@ -29,7 +30,6 @@ enum ControlLock {
 
 @onready var body_origin: Marker3D = %BodyOrigin
 @onready var body_collision: CollisionShape3D = %BodyCollision
-@onready var visual_root: Node3D = %VisualRoot
 @onready var interaction_origin: Marker3D = %InteractionOrigin
 @onready var aim_origin: Marker3D = %AimOrigin
 @onready var health: HealthComponent = %Health
@@ -97,7 +97,10 @@ func set_control_enabled(enabled: bool) -> void:
 
 
 func set_aim_movement_locked(locked: bool) -> void:
+	var was_locked := _control_locks & ControlLock.AIM != 0
 	set_control_lock(ControlLock.AIM, locked)
+	if locked != was_locked:
+		aim_state_changed.emit(locked)
 
 
 func set_surface_noise_multiplier(multiplier: float) -> void:
@@ -292,7 +295,6 @@ func _apply_stance_geometry(next_stance: Stance) -> void:
 	capsule.height = maxf(height, config.capsule_radius * 2.0)
 	body_origin.position.y = height * 0.5
 	body_collision.position.y = height * 0.5
-	visual_root.scale.y = height / config.standing_height
 	interaction_origin.position.y = height * 0.72
 	aim_origin.position.y = height * 0.84
 

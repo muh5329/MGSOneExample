@@ -84,7 +84,7 @@ func configure(
 	if _game_state == null:
 		_emit_snapshot_failure(&"", &"game_state", &"autoload", &"MISSING_DEPENDENCY")
 		return false
-	_weapon = actor.get_node_or_null("VisualRoot/WeaponController") as WeaponController
+	_weapon = actor.get_node_or_null("WeaponController") as WeaponController
 	if _weapon != null:
 		_weapon.set_combat_owner(actor)
 		_weapon.set_aim_provider(_camera_rig)

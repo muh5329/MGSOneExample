@@ -2,6 +2,13 @@
 
 Keep only decisions that affect more than one subsystem. Newest entries first.
 
+## 2026-08-29 — Actor Visual and External Model Boundary
+
+- Actor roots retain identity scale and own collision, navigation, perception, health, inventory, and combat. `VisualRoot/ModelRoot/ModelPayload` is the only swappable model/rig payload; locomotion stays gameplay-driven and in-place.
+- `ActorVisualAdapter3D` translates value-only movement/stance/aim/weapon/health/guard signals into shared animation semantics and presentation actions. Missing optional clips use procedural fallback, while configured required clips/nodes/sockets fail with explicit validation errors.
+- Weapon, muzzle, head, eyes, and effect-origin attachments use adapter-owned stable markers rather than gameplay references to skeleton bones or imported hierarchy. The weapon runtime moved to the player actor root and retains a fallback muzzle when visuals are absent.
+- Every distributed external asset must carry checked-in source/license metadata and pass the documented scale, axes, materials, texture, LOD, socket, reimport, collision, and rendered-readability checks.
+
 ## 2026-08-29 — Facility Alert and Radar Authority
 
 - `AlertCoordinator` is the single facility-alert authority. DETECTED remains a feedback event; durable global phases are NORMAL, SUSPICIOUS, ALERT, EVASION, and SEARCH with 12-second ALERT minimum, 3-second contact-loss grace, 8-second EVASION, and 20-second SEARCH recovery.

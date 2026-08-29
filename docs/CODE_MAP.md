@@ -6,8 +6,10 @@ Updated: 2026-08-29
 
 - `project.godot` — project configuration, semantic inputs, autoloads, and collision-layer names.
 - `scenes/core/bootstrap.tscn` + `scripts/core/bootstrap.gd` — main entry point, camera-lab bootstrap, and explicit initial-level failure reporting.
-- `scenes/actors/player.tscn` + `scripts/actors/player_controller.gd` — reusable capsule player, camera-relative motor, stance, control locks, damage hitbox/health forwarding, animation outputs, and movement noise.
-- `scenes/actors/guard.tscn` + `scripts/actors/guard_actor.gd` — reusable guard body composing navigation, perception, health/damage, explicit local decision states, telegraphed damage requests, alert report/broadcast seams, snapshots, authored reset, and animation outputs.
+- `scenes/actors/player.tscn` + `scripts/actors/player_controller.gd` — reusable capsule player, camera-relative motor, stance/aim semantics, control locks, root-owned combat/health, damage hitbox forwarding, animation outputs, and movement noise.
+- `scenes/actors/guard.tscn` + `scripts/actors/guard_actor.gd` — reusable guard body composing navigation, perception, health/damage, explicit local decision states, telegraphed damage requests, alert report/broadcast seams, snapshots, authored reset, and model-independent animation outputs.
+- `scripts/visual/actor_visual_adapter_3d.gd` + `scenes/visuals/*.tscn` — semantic player/guard presentation adapter, procedural placeholder poses, stable weapon/muzzle/head/eyes/effect sockets, required/optional animation validation, swappable model payloads, and the original proof-swap guard.
+- `docs/MODEL_PIPELINE.md` + `assets/metadata/` — Blender/glTF/import/reimport rules, root-motion decision, clip/material/texture/LOD budgets, socket checklist, and source/license provenance records.
 - `scripts/stealth/guard_perception_3d.gd`, `patrol_route_3d.gd`, and `guard_debug_draw_3d.gd` — cone/sample/raycast sight, typed-event hearing, suspicion/memory, patrol wait/look data, and toggleable cones/rays/path/state debug; tuning is `data/guards/default_guard_config.tres`.
 - `scenes/components/alert_coordinator.tscn` + `scripts/stealth/alert_coordinator.gd` — sole facility-alert authority, validated/deduplicated position reports, bounded shared knowledge, guard broadcasts, ALERT/EVASION/SEARCH recovery timers, feedback hooks, telemetry, and transient reset.
 - `scenes/ui/tactical_radar.tscn` + `scripts/ui/tactical_radar.gd` — player-centered north-up world conversion, approved wall segments, exact/coarse/intermittent guard contacts, cone restrictions, clamp/cull policy, disabled/jammed/hidden non-leakage, and debug telemetry.
@@ -42,6 +44,7 @@ Updated: 2026-08-29
 - `tests/health_game_state_test.gd` — health bounds/invulnerability/death, phase legality, pause consistency, stable-ID snapshots, repeated restarts, transient resets, objective ordering, and extraction checks.
 - `tests/enemy_ai_perception_test.gd` — cone/verticality, solid occlusion, step-independent suspicion, crouch range, event hearing, report/state recovery, attack telegraph, death/pause/reset, radar boundary, and exact mission-guard checks.
 - `tests/alert_radar_stealth_test.gd` — report validation/deduplication, simultaneous observers, reporter death, sight hold, recovery/reacquisition, pause/reset, shared-information expiry, north-up conversion, contact restrictions/bounds, radar non-leakage, and exact mission integration.
+- `tests/animation_model_pipeline_test.gd` — semantic presentation inputs, procedural state readability, stable sockets, optional fallback/required errors, proof model swap, and visual-removal gameplay isolation.
 - `docs/VERTICAL_SLICE.md` — authoritative mission flow, placements, tuning, and acceptance scripts.
 
 ## Layout
@@ -55,6 +58,7 @@ scenes/
   components/           # reusable gameplay components
   levels/               # mission and test rooms
   ui/                   # HUD, menus, settings
+  visuals/              # replaceable actor visual roots and model payloads
 scripts/
   actors/
   camera/
@@ -65,6 +69,7 @@ scripts/
   inventory/
   stealth/
   ui/
+  visual/
 tests/                  # headless tests and focused verification scenes
 docs/                   # concise cross-agent truth
 plans/                  # subsystem ownership briefs

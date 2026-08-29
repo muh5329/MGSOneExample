@@ -99,7 +99,7 @@ func _validate_mission_checkpoint_contract() -> void:
 	var player := level.player
 	var health := player.health
 	var inventory := level.inventory
-	var weapon := player.get_node("VisualRoot/WeaponController") as WeaponController
+	var weapon := player.get_node("WeaponController") as WeaponController
 	var coordinator := level.mission_state
 	var d0 := level.mission_root.get_node("D0_SUPPLY_CAGE") as Door3D
 	var d1 := level.mission_root.get_node("D1_ACCESS") as Door3D

@@ -1,31 +1,16 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scripts/actors/guard_actor.gd" id="1_guard"]
 [ext_resource type="Resource" path="res://data/guards/default_guard_config.tres" id="2_config"]
 [ext_resource type="Script" path="res://scripts/stealth/guard_perception_3d.gd" id="3_perception"]
 [ext_resource type="PackedScene" path="res://scenes/components/health_component.tscn" id="4_health"]
 [ext_resource type="Script" path="res://scripts/stealth/guard_debug_draw_3d.gd" id="5_debug"]
+[ext_resource type="PackedScene" path="res://scenes/visuals/guard_visual_root.tscn" id="6_visual"]
 
 [sub_resource type="CapsuleShape3D" id="GuardShape"]
 resource_local_to_scene = true
 radius = 0.4
 height = 1.8
-
-[sub_resource type="CapsuleMesh" id="GuardMesh"]
-radius = 0.4
-height = 1.8
-
-[sub_resource type="StandardMaterial3D" id="GuardMaterial"]
-albedo_color = Color(0.55, 0.18, 0.16, 1)
-roughness = 0.82
-
-[sub_resource type="BoxMesh" id="FacingMesh"]
-size = Vector3(0.2, 0.15, 0.48)
-
-[sub_resource type="StandardMaterial3D" id="FacingMaterial"]
-albedo_color = Color(1, 0.76, 0.18, 1)
-emission_enabled = true
-emission = Color(0.35, 0.18, 0.01, 1)
 
 [node name="Guard" type="CharacterBody3D"]
 collision_layer = 4
@@ -39,17 +24,7 @@ unique_name_in_owner = true
 position = Vector3(0, 0.9, 0)
 shape = SubResource("GuardShape")
 
-[node name="VisualRoot" type="Node3D" parent="."]
-
-[node name="BodyMesh" type="MeshInstance3D" parent="VisualRoot"]
-position = Vector3(0, 0.9, 0)
-mesh = SubResource("GuardMesh")
-material_override = SubResource("GuardMaterial")
-
-[node name="FacingMarker" type="MeshInstance3D" parent="VisualRoot"]
-position = Vector3(0, 1.0, -0.5)
-mesh = SubResource("FacingMesh")
-material_override = SubResource("FacingMaterial")
+[node name="VisualRoot" parent="." instance=ExtResource("6_visual")]
 
 [node name="NavigationAgent" type="NavigationAgent3D" parent="."]
 unique_name_in_owner = true

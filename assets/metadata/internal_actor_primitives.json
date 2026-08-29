@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "asset_ids": [
+    "INTERNAL_PLAYER_PRIMITIVE_V1",
+    "INTERNAL_GUARD_PRIMITIVE_V1",
+    "INTERNAL_GUARD_PROOF_SWAP_V1"
+  ],
+  "title": "Shadow Circuit primitive actor shells and proof-swap model",
+  "creator": "Shadow Circuit project",
+  "source": "Original geometry authored directly in Godot scenes in this repository",
+  "acquired_or_created": "2026-08-29",
+  "license": "Project-owned original content",
+  "redistribution_allowed": true,
+  "derivatives_allowed": true,
+  "attribution_required": false,
+  "external_dependencies": [],
+  "modifications": "Procedural materials, silhouettes, facing markers, damage overlays, and alert indicators",
+  "consumers": [
+    "scenes/visuals/player_primitive_model.tscn",
+    "scenes/visuals/guard_primitive_model.tscn",
+    "scenes/visuals/proof_swap_guard_model.tscn"
+  ]
+}

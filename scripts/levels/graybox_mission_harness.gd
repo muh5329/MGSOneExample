@@ -29,7 +29,7 @@ func configure(
 	_extraction = extraction
 	_camera_rig = camera_rig
 	_inventory = inventory
-	var weapon := actor.get_node_or_null("VisualRoot/WeaponController") as WeaponController
+	var weapon := actor.get_node_or_null("WeaponController") as WeaponController
 	if weapon != null:
 		weapon.set_combat_owner(actor)
 		weapon.set_aim_provider(_camera_rig)

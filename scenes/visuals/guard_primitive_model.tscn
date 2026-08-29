@@ -1,0 +1,95 @@
+[gd_scene load_steps=12 format=3]
+
+[sub_resource type="StandardMaterial3D" id="GuardSuit"]
+albedo_color = Color(0.42, 0.09, 0.08, 1)
+roughness = 0.86
+
+[sub_resource type="StandardMaterial3D" id="GuardArmor"]
+albedo_color = Color(0.68, 0.18, 0.11, 1)
+roughness = 0.64
+
+[sub_resource type="StandardMaterial3D" id="GuardDark"]
+albedo_color = Color(0.11, 0.08, 0.08, 1)
+roughness = 0.78
+
+[sub_resource type="StandardMaterial3D" id="FacingMaterial"]
+albedo_color = Color(1, 0.68, 0.08, 1)
+emission_enabled = true
+emission = Color(0.5, 0.2, 0.01, 1)
+
+[sub_resource type="StandardMaterial3D" id="AlertMaterial"]
+albedo_color = Color(1, 0.78, 0.18, 1)
+emission_enabled = true
+emission = Color(0.5, 0.2, 0.02, 1)
+
+[sub_resource type="StandardMaterial3D" id="DamageMaterial"]
+transparency = 1
+albedo_color = Color(1, 0.05, 0.02, 0.38)
+emission_enabled = true
+emission = Color(0.72, 0.01, 0, 1)
+
+[sub_resource type="BoxMesh" id="TorsoMesh"]
+size = Vector3(0.68, 0.9, 0.44)
+
+[sub_resource type="BoxMesh" id="ArmorMesh"]
+size = Vector3(0.86, 0.28, 0.5)
+
+[sub_resource type="BoxMesh" id="HeadMesh"]
+size = Vector3(0.48, 0.42, 0.48)
+
+[sub_resource type="BoxMesh" id="LimbMesh"]
+size = Vector3(0.24, 0.68, 0.27)
+
+[sub_resource type="BoxMesh" id="FacingMesh"]
+size = Vector3(0.2, 0.16, 0.54)
+
+[sub_resource type="PrismMesh" id="IndicatorMesh"]
+size = Vector3(0.34, 0.36, 0.18)
+
+[node name="ModelPayload" type="Node3D"]
+metadata/source_asset_id = "INTERNAL_GUARD_PRIMITIVE_V1"
+
+[node name="Body" type="Node3D" parent="."]
+
+[node name="Torso" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 1.0, 0)
+mesh = SubResource("TorsoMesh")
+material_override = SubResource("GuardSuit")
+
+[node name="Shoulders" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 1.3, 0)
+mesh = SubResource("ArmorMesh")
+material_override = SubResource("GuardArmor")
+
+[node name="Head" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.58, 0)
+mesh = SubResource("HeadMesh")
+material_override = SubResource("GuardDark")
+
+[node name="LeftLeg" type="MeshInstance3D" parent="."]
+position = Vector3(-0.19, 0.35, 0)
+mesh = SubResource("LimbMesh")
+material_override = SubResource("GuardSuit")
+
+[node name="RightLeg" type="MeshInstance3D" parent="."]
+position = Vector3(0.19, 0.35, 0)
+mesh = SubResource("LimbMesh")
+material_override = SubResource("GuardSuit")
+
+[node name="FacingMarker" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.02, -0.52)
+mesh = SubResource("FacingMesh")
+material_override = SubResource("FacingMaterial")
+
+[node name="AlertIndicator" type="MeshInstance3D" parent="."]
+visible = false
+position = Vector3(0, 2.12, 0)
+mesh = SubResource("IndicatorMesh")
+material_override = SubResource("AlertMaterial")
+
+[node name="DamageFlash" type="MeshInstance3D" parent="."]
+visible = false
+position = Vector3(0, 1.0, 0)
+scale = Vector3(1.08, 1.08, 1.08)
+mesh = SubResource("TorsoMesh")
+material_override = SubResource("DamageMaterial")

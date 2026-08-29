@@ -304,7 +304,7 @@ func _configure_runtime_contracts() -> void:
 	if not tactical_radar.configure(player, alert_coordinator, guards, _radar_map_segments):
 		push_error("Tactical radar could not bind its approved mission sources.")
 	camera_rig.set_tracked_actor(player)
-	var weapon := player.get_node("VisualRoot/WeaponController") as WeaponController
+	var weapon := player.get_node("WeaponController") as WeaponController
 	inventory_panels.configure(inventory, player, camera_rig, weapon, interaction_focus, player)
 	camera_rig.refresh_zones()
 	camera_rig.reset_camera_state()

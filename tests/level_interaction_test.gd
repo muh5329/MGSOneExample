@@ -126,7 +126,7 @@ func _validate_progression_seams(level: Substation6) -> void:
 	var pistol_ammo := level.mission_root.get_node("A1_PISTOL_AMMO") as MissionMarker3D
 	var objective := level.mission_root.get_node("O1_RELAY_TERMINAL") as MissionMarker3D
 	var extraction := level.mission_root.get_node("X1_DRAINAGE_GATE") as MissionMarker3D
-	var weapon := level.player.get_node("VisualRoot/WeaponController") as WeaponController
+	var weapon := level.player.get_node("WeaponController") as WeaponController
 	var inventory := level.player.get_node("Inventory") as InventoryComponent
 	if d1.interactable.is_available(level.player):
 		failures.append("D1 is available before the LEVEL_1 access query succeeds.")

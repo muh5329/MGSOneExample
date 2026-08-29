@@ -2,6 +2,14 @@
 
 Append newest entries directly below this introduction. Keep each entry to six lines or fewer.
 
+### 2026-08-29 — Root task — Animation and external model pipeline
+
+- Delivered: replaceable player/guard model payloads, procedural state-readable shells, semantic adapter, stable attachment sockets, root-owned weapon runtime, explicit validation, original proof swap, and provenance records.
+- Contracts: continuous/action semantics, visual-root boundary, sockets, fallback muzzle, root-motion policy, clip/import/material/texture/LOD/reimport rules, and licensing schema are in `INTERFACES.md` and `MODEL_PIPELINE.md`.
+- Verified: clean import/startup, all ten headless suites, `git diff --check`, runtime swap/removal isolation, and 1280×720 mission/enemy-lab renders on Godot 4.7.
+- Remaining: future external art must use the checked-in checklist; Build 11 owns audio/VFX/game feel, Build 12 final UI, and Build 14 full hands-on acceptance/readability/performance.
+- Docs: updated README, STATUS, CODE_MAP, INTERFACES, DECISIONS, CRITIC_REPORT, HANDOFF; added MODEL_PIPELINE and asset provenance metadata.
+
 ### 2026-08-29 — Root task — Alert, radar, and stealth feedback
 
 - Delivered: sole facility phase authority, validated/deduplicated reports, bounded guard broadcasts, recoverable ALERT/EVASION/SEARCH, north-up tactical radar, state restrictions, feedback hooks, telemetry, and authored reset.

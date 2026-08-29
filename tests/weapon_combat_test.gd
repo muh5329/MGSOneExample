@@ -28,7 +28,7 @@ func _run() -> void:
 
 	var player := room.get_node("Player") as PlayerController
 	var camera_rig := room.get_node("GameplayCameraRig") as GameplayCameraRig
-	var weapon := player.get_node("VisualRoot/WeaponController") as WeaponController
+	var weapon := player.get_node("WeaponController") as WeaponController
 	var ammo_source := room.get_node("AmmoSource") as CombatTestAmmoSource
 	var static_target := room.get_node("StaticTarget") as CombatTestReceiver3D
 	var moving_target := room.get_node("MovingTarget") as CombatTestReceiver3D

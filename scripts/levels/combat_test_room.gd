@@ -4,7 +4,7 @@ const PISTOL := preload("res://data/weapons/w1_service_pistol.tres")
 
 @onready var player: PlayerController = %Player
 @onready var camera_rig: GameplayCameraRig = %GameplayCameraRig
-@onready var weapon: WeaponController = player.get_node("VisualRoot/WeaponController") as WeaponController
+@onready var weapon: WeaponController = player.get_node("WeaponController") as WeaponController
 @onready var ammo_source: CombatTestAmmoSource = %AmmoSource
 @onready var static_target: CombatTestReceiver3D = %StaticTarget
 @onready var moving_target: CombatTestReceiver3D = %MovingTarget

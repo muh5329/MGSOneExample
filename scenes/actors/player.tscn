@@ -1,31 +1,16 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scripts/actors/player_controller.gd" id="1_controller"]
 [ext_resource type="Resource" path="res://data/player/default_player_movement_config.tres" id="2_config"]
 [ext_resource type="PackedScene" path="res://scenes/components/weapon_controller.tscn" id="3_weapon"]
 [ext_resource type="PackedScene" path="res://scenes/components/inventory_component.tscn" id="4_inventory"]
 [ext_resource type="PackedScene" path="res://scenes/components/health_component.tscn" id="5_health"]
+[ext_resource type="PackedScene" path="res://scenes/visuals/player_visual_root.tscn" id="6_visual"]
 
 [sub_resource type="CapsuleShape3D" id="PlayerShape"]
 resource_local_to_scene = true
 radius = 0.4
 height = 1.8
-
-[sub_resource type="CapsuleMesh" id="PlayerMesh"]
-radius = 0.4
-height = 1.8
-
-[sub_resource type="StandardMaterial3D" id="PlayerMaterial"]
-albedo_color = Color(0.52, 0.78, 0.62, 1)
-roughness = 0.78
-
-[sub_resource type="BoxMesh" id="FacingMesh"]
-size = Vector3(0.18, 0.16, 0.42)
-
-[sub_resource type="StandardMaterial3D" id="FacingMaterial"]
-albedo_color = Color(1, 0.42, 0.18, 1)
-emission_enabled = true
-emission = Color(0.35, 0.07, 0.01, 1)
 
 [node name="Player" type="CharacterBody3D" groups=["player"]]
 collision_layer = 2
@@ -43,18 +28,7 @@ unique_name_in_owner = true
 position = Vector3(0, 0.9, 0)
 shape = SubResource("PlayerShape")
 
-[node name="VisualRoot" type="Node3D" parent="."]
-unique_name_in_owner = true
-
-[node name="BodyMesh" type="MeshInstance3D" parent="VisualRoot"]
-position = Vector3(0, 0.9, 0)
-mesh = SubResource("PlayerMesh")
-material_override = SubResource("PlayerMaterial")
-
-[node name="FacingMarker" type="MeshInstance3D" parent="VisualRoot"]
-position = Vector3(0, 1.0, -0.48)
-mesh = SubResource("FacingMesh")
-material_override = SubResource("FacingMaterial")
+[node name="VisualRoot" parent="." instance=ExtResource("6_visual")]
 
 [node name="InteractionOrigin" type="Marker3D" parent="."]
 unique_name_in_owner = true
@@ -64,7 +38,7 @@ position = Vector3(0, 1.296, 0)
 unique_name_in_owner = true
 position = Vector3(0, 1.512, -0.12)
 
-[node name="WeaponController" parent="VisualRoot" instance=ExtResource("3_weapon")]
+[node name="WeaponController" parent="." instance=ExtResource("3_weapon")]
 
 [node name="Inventory" parent="." instance=ExtResource("4_inventory")]
 unique_name_in_owner = true

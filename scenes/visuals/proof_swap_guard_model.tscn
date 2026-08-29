@@ -1,0 +1,94 @@
+[gd_scene load_steps=11 format=3]
+
+[sub_resource type="StandardMaterial3D" id="ProofPrimary"]
+albedo_color = Color(0.1, 0.31, 0.54, 1)
+metallic = 0.18
+roughness = 0.52
+
+[sub_resource type="StandardMaterial3D" id="ProofAccent"]
+albedo_color = Color(0.2, 0.78, 0.92, 1)
+emission_enabled = true
+emission = Color(0.02, 0.24, 0.36, 1)
+
+[sub_resource type="StandardMaterial3D" id="ProofDark"]
+albedo_color = Color(0.04, 0.08, 0.13, 1)
+roughness = 0.7
+
+[sub_resource type="StandardMaterial3D" id="DamageMaterial"]
+transparency = 1
+albedo_color = Color(1, 0.05, 0.02, 0.38)
+emission_enabled = true
+emission = Color(0.72, 0.01, 0, 1)
+
+[sub_resource type="CylinderMesh" id="BodyMesh"]
+top_radius = 0.24
+bottom_radius = 0.4
+height = 0.92
+
+[sub_resource type="PrismMesh" id="HeadMesh"]
+size = Vector3(0.52, 0.42, 0.5)
+
+[sub_resource type="CylinderMesh" id="LegMesh"]
+top_radius = 0.1
+bottom_radius = 0.14
+height = 0.68
+
+[sub_resource type="PrismMesh" id="FacingMesh"]
+size = Vector3(0.28, 0.22, 0.58)
+
+[sub_resource type="BoxMesh" id="IndicatorMesh"]
+size = Vector3(0.24, 0.24, 0.24)
+
+[sub_resource type="CylinderMesh" id="DamageMesh"]
+top_radius = 0.3
+bottom_radius = 0.46
+height = 1.0
+
+[node name="ProofSwapGuardModel" type="Node3D"]
+metadata/source_asset_id = "INTERNAL_GUARD_PROOF_SWAP_V1"
+
+[node name="Body" type="Node3D" parent="."]
+
+[node name="Torso" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 1.0, 0)
+mesh = SubResource("BodyMesh")
+material_override = SubResource("ProofPrimary")
+
+[node name="ChestStripe" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 1.14, -0.33)
+scale = Vector3(1.5, 0.22, 0.22)
+mesh = SubResource("IndicatorMesh")
+material_override = SubResource("ProofAccent")
+
+[node name="Head" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.58, 0)
+mesh = SubResource("HeadMesh")
+material_override = SubResource("ProofDark")
+
+[node name="LeftLeg" type="MeshInstance3D" parent="."]
+position = Vector3(-0.18, 0.35, 0)
+mesh = SubResource("LegMesh")
+material_override = SubResource("ProofPrimary")
+
+[node name="RightLeg" type="MeshInstance3D" parent="."]
+position = Vector3(0.18, 0.35, 0)
+mesh = SubResource("LegMesh")
+material_override = SubResource("ProofPrimary")
+
+[node name="FacingMarker" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.0, -0.53)
+mesh = SubResource("FacingMesh")
+material_override = SubResource("ProofAccent")
+
+[node name="AlertIndicator" type="MeshInstance3D" parent="."]
+visible = false
+position = Vector3(0, 2.12, 0)
+rotation = Vector3(0, 0, 0.785398)
+mesh = SubResource("IndicatorMesh")
+material_override = SubResource("ProofAccent")
+
+[node name="DamageFlash" type="MeshInstance3D" parent="."]
+visible = false
+position = Vector3(0, 1.0, 0)
+mesh = SubResource("DamageMesh")
+material_override = SubResource("DamageMaterial")

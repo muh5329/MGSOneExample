@@ -37,7 +37,7 @@ const REASONS: Dictionary = {
 }
 
 @export var definitions: Array[InventoryEntryDefinition] = []
-@export var weapon_controller_path: NodePath = ^"../VisualRoot/WeaponController"
+@export var weapon_controller_path: NodePath = ^"../WeaponController"
 
 var equipped_weapon_id: StringName = &""
 var equipped_item_id: StringName = &""

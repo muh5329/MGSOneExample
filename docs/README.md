@@ -9,6 +9,8 @@ Read these files before changing code:
 5. [`DECISIONS.md`](DECISIONS.md) — decisions that must not be silently reversed.
 6. Your assigned file under [`../plans/`](../plans/).
 
+Model or animation work must also follow [`MODEL_PIPELINE.md`](MODEL_PIPELINE.md) and the provenance rules in [`../assets/ASSET_PROVENANCE.md`](../assets/ASSET_PROVENANCE.md).
+
 Before finishing, update only the facts affected by your work in those documents and append a short entry to [`HANDOFF.md`](HANDOFF.md). Keep each entry concise; link to deeper plan or code details instead of duplicating them.
 
 Never treat `.godot/` as source. It is generated editor/import cache and may describe deleted files.

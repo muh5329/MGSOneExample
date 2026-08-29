@@ -43,6 +43,7 @@ var _state_time_remaining: float = 0.0
 var _aim_provider: Node
 var _ammo_source: Object
 var _combat_owner: Node
+var _muzzle_provider: Node3D
 var _shot_sequence: int = 0
 var _random := RandomNumberGenerator.new()
 
@@ -86,6 +87,10 @@ func set_ammo_source(source: Object) -> void:
 
 func set_combat_owner(owner_node: Node) -> void:
 	_combat_owner = owner_node
+
+
+func set_muzzle_provider(provider: Node3D) -> void:
+	_muzzle_provider = provider
 
 
 func set_control_enabled(enabled: bool) -> void:
@@ -254,9 +259,6 @@ func _set_state(new_state: WeaponState, duration: float = 0.0) -> void:
 	_state_time_remaining = maxf(duration, 0.0)
 	if previous != state:
 		state_changed.emit(previous, state)
-	var placeholder_visual := get_node_or_null("PlaceholderPistol") as Node3D
-	if placeholder_visual != null:
-		placeholder_visual.visible = state not in [WeaponState.HOLSTERED, WeaponState.DISABLED]
 
 
 func _resolve_shot(aim_ray: Dictionary) -> void:
@@ -340,7 +342,9 @@ func _direction_with_spread(direction: Vector3) -> Vector3:
 func _query_muzzle_clearance(aim_origin: Vector3, aim_direction: Vector3) -> Dictionary:
 	if muzzle_clearance_mask == 0:
 		return {}
-	var muzzle := get_node_or_null(muzzle_path) as Node3D
+	var muzzle := _muzzle_provider if is_instance_valid(_muzzle_provider) else null
+	if muzzle == null:
+		muzzle = get_node_or_null(muzzle_path) as Node3D
 	if muzzle == null or muzzle.global_position.distance_squared_to(aim_origin) <= 0.000001:
 		return {}
 	var muzzle_distance := aim_origin.distance_to(muzzle.global_position)
