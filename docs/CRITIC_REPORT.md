@@ -1,5 +1,13 @@
 # Critic Report
 
+## 2026-08-29 — Build Step 09 implementation review
+
+- Scope review: one coordinator owns global alert truth, report/broadcast policy, recovery timers, shared-information expiry, feedback hooks, and reset; radar owns approved-map/contact transformation and restrictions. Local perception/decision logic, progression, mission phase, final HUD/audio/VFX, and reinforcement simulation remain outside this build.
+- Evidence: clean import/startup, all nine headless suites, and a 1280×720 rendered mission frame cover simultaneous/duplicate/invalid reports, reporter death, continuous sight, ALERT→EVASION→SEARCH→NORMAL, reacquisition, pause, expiry, checkpoint reset, north-up axes/facing, precise/coarse/intermittent contacts, clamp/cull boundaries, non-active non-leakage, approved geometry, and exact G1–G4 binding.
+- Findings: no automated contract blocker found. Alert cannot recover while a living guard sees the player; reports and public snapshots contain values only; shared positions expire; dead guards cannot refresh knowledge; radar restrictions share the authoritative phase; and alerts never gate D1, O1, D2, or X1.
+- Remaining risk: final alert audio/VFX/vibration and HUD styling remain Builds 11–12. Dynamic door depiction, hands-on recovery fairness, rapid camera-zone readability, multi-guard chase feel, and sustained 60 fps during full acceptance playthroughs remain Builds 12–14 work.
+- Disposition: Build Step 09 alert/radar/stealth-feedback contract complete with explicit presentation and integration-playtest follow-up; no final HUD, game-feel, or release milestone is claimed.
+
 ## 2026-08-29 — Build Step 08 implementation review
 
 - Scope review: guards own local movement, perception, suspicion/memory, decision recovery, health, combat requests, reports, value snapshots, and authored reset; global alert phases/radar, squad policy, cover tactics, final animation, and final feedback remain later builds.

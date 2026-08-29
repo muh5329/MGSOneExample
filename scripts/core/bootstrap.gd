@@ -39,6 +39,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			and debug_config.show_guard_perception
 		)
 		get_tree().call_group(&"guard_debug_visuals", &"set_debug_visible", _guard_debug_visible)
+		get_tree().call_group(&"alert_debug_visuals", &"set_debug_visible", _guard_debug_visible and debug_config.show_alert_radar)
 		get_viewport().set_input_as_handled()
 
 
@@ -84,3 +85,8 @@ func _update_debug_visibility() -> void:
 		and debug_config.show_guard_perception
 	)
 	get_tree().call_group(&"guard_debug_visuals", &"set_debug_visible", _guard_debug_visible)
+	get_tree().call_group(
+		&"alert_debug_visuals",
+		&"set_debug_visible",
+		_guard_debug_visible and debug_config.show_alert_radar
+	)

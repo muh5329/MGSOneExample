@@ -107,6 +107,8 @@ First-person aim roots translation and allows no strafing. It preserves standing
 
 Suspicion is readable before confirmation. Reacquiring the player during EVASION or SEARCH returns directly to ALERT. Pausing freezes every timer. Death/restart clears the global phase to NORMAL before actors resume.
 
+The tactical radar is player-centered north-up: world `-Z` remains screen-up across camera zones and first-person aim. NORMAL/SUSPICIOUS/SEARCH show exact living contacts and honest cones; ALERT hides cones and coarsens contacts, while EVASION pulses the same coarse contacts. Contacts outside the 22 m local radius clamp directionally and cull beyond 42 m. Jammed, disabled, or hidden radar exposes no tactical map/contact data. Shared guard knowledge contains only a validated last-known position/source/evidence record and expires 12 seconds after its last confirmed refresh.
+
 ## Tuning Targets
 
 These values are implementation targets stored in owning subsystem data/resources later; they are not constants to duplicate across scripts.

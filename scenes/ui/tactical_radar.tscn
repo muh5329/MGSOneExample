@@ -1,0 +1,45 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/tactical_radar.gd" id="1_radar"]
+
+[node name="TacticalRadar" type="Control"]
+custom_minimum_size = Vector2(248, 260)
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -272.0
+offset_top = 116.0
+offset_right = -24.0
+offset_bottom = 376.0
+grow_horizontal = 0
+mouse_filter = 2
+script = ExtResource("1_radar")
+
+[node name="StatusLabel" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 214.0
+offset_right = 248.0
+offset_bottom = 238.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 16
+text = "NORMAL  //  NORTH"
+horizontal_alignment = 1
+
+[node name="DebugLabel" type="Label" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 4.0
+offset_top = 240.0
+offset_right = 244.0
+offset_bottom = 284.0
+theme_override_colors/font_color = Color(0.58, 0.95, 0.74, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+horizontal_alignment = 1

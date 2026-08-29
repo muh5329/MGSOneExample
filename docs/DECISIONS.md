@@ -2,6 +2,13 @@
 
 Keep only decisions that affect more than one subsystem. Newest entries first.
 
+## 2026-08-29 — Facility Alert and Radar Authority
+
+- `AlertCoordinator` is the single facility-alert authority. DETECTED remains a feedback event; durable global phases are NORMAL, SUSPICIOUS, ALERT, EVASION, and SEARCH with 12-second ALERT minimum, 3-second contact-loss grace, 8-second EVASION, and 20-second SEARCH recovery.
+- Shared guard knowledge is value-only, validated, deduplicated, position-based, cadence-limited, and expires after 12 seconds. Reporter death cannot revoke already-heard evidence, dead guards cannot report, and neither broadcasts nor radar receive a player reference from the coordinator.
+- Tactical radar is player-centered north-up, independent of fixed-camera/player rotation. It consumes approved level segments and sanitized guard snapshots; ALERT/EVASION coarsen contacts and hide cones, distance rules clamp/cull contacts, and jammed/disabled/hidden modes expose no tactical arrays.
+- Alerts are transient pressure only: they never gate progression or enter checkpoint snapshots. The existing authored transient reset returns the coordinator to NORMAL, clears shared knowledge, and releases guards before play resumes.
+
 ## 2026-08-29 — Guard and Perception Integration Contract
 
 - Guards own authored-route navigation, local perception/suspicion/memory, local decision states, health/death, and telegraphed damage submission; they do not own the global alert phase, radar presentation, player/UI/camera state, or checkpoint serialization.

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/substation_6.gd" id="1_level"]
 [ext_resource type="PackedScene" path="res://scenes/actors/player.tscn" id="2_player"]
@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" path="res://scenes/components/interaction_focus_3d.tscn" id="4_focus"]
 [ext_resource type="PackedScene" path="res://scenes/components/mission_state_coordinator.tscn" id="5_mission_state"]
 [ext_resource type="PackedScene" path="res://scenes/ui/inventory_panels.tscn" id="6_inventory_panels"]
+[ext_resource type="PackedScene" path="res://scenes/components/alert_coordinator.tscn" id="7_alert"]
+[ext_resource type="PackedScene" path="res://scenes/ui/tactical_radar.tscn" id="8_radar"]
 
 [sub_resource type="StandardMaterial3D" id="SignMaterial"]
 albedo_color = Color(0.02, 0.55, 0.38, 1)
@@ -77,10 +79,16 @@ unique_name_in_owner = true
 [node name="MissionStateCoordinator" parent="." instance=ExtResource("5_mission_state")]
 unique_name_in_owner = true
 
+[node name="AlertCoordinator" parent="." instance=ExtResource("7_alert")]
+unique_name_in_owner = true
+
 [node name="InventoryPanels" parent="." instance=ExtResource("6_inventory_panels")]
 unique_name_in_owner = true
 
 [node name="Interface" type="CanvasLayer" parent="."]
+
+[node name="TacticalRadar" parent="Interface" instance=ExtResource("8_radar")]
+unique_name_in_owner = true
 
 [node name="MissionTitle" type="Label" parent="Interface"]
 offset_left = 24.0

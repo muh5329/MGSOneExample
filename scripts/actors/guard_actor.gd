@@ -56,6 +56,9 @@ var _stun_duration: float = 0.0
 var _authored_collision_layer: int
 var _authored_collision_mask: int
 var _search_offsets: Array[Vector3] = []
+var _has_shared_alert_knowledge: bool = false
+var _shared_alert_source_guard_id: StringName = &""
+var _shared_alert_position: Vector3 = Vector3.ZERO
 
 
 func _ready() -> void:
@@ -134,8 +137,42 @@ func receive_alert_broadcast(world_position: Vector3, source_guard_id: StringNam
 		return true
 	perception.last_known_position = world_position
 	perception.last_stimulus_position = world_position
+	if source_guard_id != guard_id:
+		_store_shared_alert_knowledge(world_position, source_guard_id)
 	_set_state(GuardState.ALERT_CHASE)
 	return true
+
+
+func receive_alert_search(world_position: Vector3, source_guard_id: StringName = &"") -> bool:
+	if state == GuardState.DEAD or not world_position.is_finite():
+		return false
+	perception.last_known_position = world_position
+	perception.last_stimulus_position = world_position
+	if source_guard_id != guard_id:
+		_store_shared_alert_knowledge(world_position, source_guard_id)
+	if perception.target_visible:
+		_set_state(GuardState.ALERT_CHASE)
+	else:
+		_set_state(GuardState.SEARCH)
+	return true
+
+
+func clear_alert_broadcast(source_guard_id: StringName = &"") -> void:
+	if state == GuardState.DEAD or not _has_shared_alert_knowledge:
+		return
+	if not source_guard_id.is_empty() and source_guard_id != _shared_alert_source_guard_id:
+		return
+	_has_shared_alert_knowledge = false
+	_shared_alert_source_guard_id = &""
+	if perception.target_visible:
+		return
+	if perception.last_known_position.distance_to(_shared_alert_position) <= 0.01:
+		perception.last_known_position = Vector3.ZERO
+	if perception.last_stimulus_position.distance_to(_shared_alert_position) <= 0.01:
+		perception.last_stimulus_position = Vector3.ZERO
+	_shared_alert_position = Vector3.ZERO
+	if state in [GuardState.ALERT_CHASE, GuardState.ATTACK, GuardState.SEARCH, GuardState.INVESTIGATE]:
+		_set_state(GuardState.SUSPICIOUS if perception.suspicion > 0.0 else GuardState.RETURN)
 
 
 func receive_damage(amount: float, context: HitContext3D = null) -> bool:
@@ -172,6 +209,9 @@ func reset_transient_state(_checkpoint_id: StringName) -> void:
 	_attack_sequence = 0
 	_search_index = 0
 	_stun_duration = 0.0
+	_has_shared_alert_knowledge = false
+	_shared_alert_source_guard_id = &""
+	_shared_alert_position = Vector3.ZERO
 	_set_state(GuardState.PATROL, true)
 	if patrol_route != null and patrol_route.get_point_count() > 0:
 		_set_destination(patrol_route.get_point_world_position(0))
@@ -497,6 +537,7 @@ func _on_suspicion_changed(previous: float, current: float) -> void:
 func _on_detection_confirmed(_observed: Node3D, world_position: Vector3, evidence: StringName) -> void:
 	if state == GuardState.DEAD:
 		return
+	_has_shared_alert_knowledge = false
 	detection_reported.emit(guard_id, world_position, evidence)
 	_set_state(GuardState.ALERT_CHASE)
 
@@ -512,8 +553,15 @@ func _on_noise_heard(
 		_occluded: bool
 ) -> void:
 	if state in [GuardState.PATROL, GuardState.RETURN, GuardState.SUSPICIOUS]:
+		_has_shared_alert_knowledge = false
 		perception.last_stimulus_position = world_position
 		_set_state(GuardState.SUSPICIOUS)
+
+
+func _store_shared_alert_knowledge(world_position: Vector3, source_guard_id: StringName) -> void:
+	_has_shared_alert_knowledge = true
+	_shared_alert_source_guard_id = source_guard_id
+	_shared_alert_position = world_position
 
 
 func _on_died(_context: HitContext3D) -> void:

@@ -9,6 +9,8 @@ Updated: 2026-08-29
 - `scenes/actors/player.tscn` + `scripts/actors/player_controller.gd` — reusable capsule player, camera-relative motor, stance, control locks, damage hitbox/health forwarding, animation outputs, and movement noise.
 - `scenes/actors/guard.tscn` + `scripts/actors/guard_actor.gd` — reusable guard body composing navigation, perception, health/damage, explicit local decision states, telegraphed damage requests, alert report/broadcast seams, snapshots, authored reset, and animation outputs.
 - `scripts/stealth/guard_perception_3d.gd`, `patrol_route_3d.gd`, and `guard_debug_draw_3d.gd` — cone/sample/raycast sight, typed-event hearing, suspicion/memory, patrol wait/look data, and toggleable cones/rays/path/state debug; tuning is `data/guards/default_guard_config.tres`.
+- `scenes/components/alert_coordinator.tscn` + `scripts/stealth/alert_coordinator.gd` — sole facility-alert authority, validated/deduplicated position reports, bounded shared knowledge, guard broadcasts, ALERT/EVASION/SEARCH recovery timers, feedback hooks, telemetry, and transient reset.
+- `scenes/ui/tactical_radar.tscn` + `scripts/ui/tactical_radar.gd` — player-centered north-up world conversion, approved wall segments, exact/coarse/intermittent guard contacts, cone restrictions, clamp/cull policy, disabled/jammed/hidden non-leakage, and debug telemetry.
 - `data/player/default_player_movement_config.tres` — player speed, acceleration, body, slope, gravity, and noise tuning.
 - `scenes/camera/gameplay_camera_rig.tscn` + `scripts/camera/gameplay_camera_rig.gd` — sole gameplay-camera owner, deterministic zone handoff/blending, contextual aim, aim rays, obstruction response, impulses, and debug output.
 - `scripts/camera/camera_zone_3d.gd` + `camera_zone_data.gd` — authored mathematical camera volumes and reusable framing/priority/blend data.
@@ -25,7 +27,7 @@ Updated: 2026-08-29
 - `scenes/levels/health_game_state_test_room.tscn` — integrated Build 07 lab over Substation 6 with live health, checkpoint, phase, ration, death/restart, objective, and extraction feedback.
 - `scenes/levels/enemy_ai_test_room.tscn` — focused Build 08 occlusion, noise-diversion, suspicion, pursuit/search, combat-telegraph, and debug lab.
 - `scenes/levels/camera_aim_test_room.tscn` — focused camera/aim regression lab; `locomotion_test_room.tscn` remains the movement lab and uses the shared rig.
-- `scenes/levels/substation_6.tscn` + `scripts/levels/substation_6.gd` — current bootstrap level; seven-room mission graybox, modular collision/occlusion geometry, ten camera zones, authored navigation, patrol/spawn markers, and exact mission-object placements.
+- `scenes/levels/substation_6.tscn` + `scripts/levels/substation_6.gd` — current bootstrap level; seven-room mission graybox, modular collision/occlusion geometry, approved radar segments, ten camera zones, authored navigation, patrol/spawn markers, exact mission-object placements, alert coordination, and tactical-radar binding.
 - `scenes/components/interactable_3d.tscn`, `interaction_focus_3d.tscn`, `door_3d.tscn`, and `mission_marker_3d.tscn` — reusable deterministic interaction, hold, door-state, and mission-event seams.
 - `scenes/levels/interaction_test_room.tscn` — isolated focus/access/door lab; camera and locomotion labs remain available for subsystem regression.
 - `scripts/core/game_state.gd` — explicit mission transition table and sole synchronized pause authority (`GameState` autoload).
@@ -39,6 +41,7 @@ Updated: 2026-08-29
 - `tests/inventory_items_menu_test.gd` — capacities, failures, duplicate/partial pickups, equipment/reload, ration/access, stable ordering, menu locks/repeat, pause/death, and exact snapshot checks.
 - `tests/health_game_state_test.gd` — health bounds/invulnerability/death, phase legality, pause consistency, stable-ID snapshots, repeated restarts, transient resets, objective ordering, and extraction checks.
 - `tests/enemy_ai_perception_test.gd` — cone/verticality, solid occlusion, step-independent suspicion, crouch range, event hearing, report/state recovery, attack telegraph, death/pause/reset, radar boundary, and exact mission-guard checks.
+- `tests/alert_radar_stealth_test.gd` — report validation/deduplication, simultaneous observers, reporter death, sight hold, recovery/reacquisition, pause/reset, shared-information expiry, north-up conversion, contact restrictions/bounds, radar non-leakage, and exact mission integration.
 - `docs/VERTICAL_SLICE.md` — authoritative mission flow, placements, tuning, and acceptance scripts.
 
 ## Layout

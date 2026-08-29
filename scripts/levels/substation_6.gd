@@ -18,7 +18,9 @@ const GAME_PHASE_NAMES := ["INITIALIZING", "PLAYING", "PAUSED", "PLAYER_DEAD", "
 @onready var interaction_focus: InteractionFocus3D = %InteractionFocus
 @onready var inventory: InventoryComponent = player.get_node("Inventory") as InventoryComponent
 @onready var mission_state: MissionStateCoordinator = %MissionStateCoordinator
+@onready var alert_coordinator: AlertCoordinator = %AlertCoordinator
 @onready var inventory_panels: InventoryPanels = %InventoryPanels
+@onready var tactical_radar: TacticalRadar = %TacticalRadar
 @onready var room_label: Label = %RoomLabel
 @onready var prompt_label: Label = %PromptLabel
 @onready var status_label: Label = %StatusLabel
@@ -29,6 +31,7 @@ var _navigation_rects: Array[Rect2] = []
 var _navigation_surfaces: Array[Dictionary] = []
 var _current_room: StringName = &"R0_DRAINAGE"
 var _last_prompt: String = ""
+var _radar_map_segments: Array[Dictionary] = []
 
 
 func _ready() -> void:
@@ -293,6 +296,13 @@ func _configure_runtime_contracts() -> void:
 	interaction_focus.prompt_changed.connect(_on_prompt_changed)
 	interaction_focus.hold_progressed.connect(_on_hold_progressed)
 	mission_state.status_changed.connect(_on_status_changed)
+	alert_coordinator.phase_changed.connect(_on_alert_phase_changed)
+	alert_coordinator.detection_announced.connect(_on_detection_announced)
+	var guards: Array = guard_root.get_children()
+	if not alert_coordinator.configure(guards):
+		push_error("Alert coordinator could not register the authored mission guards.")
+	if not tactical_radar.configure(player, alert_coordinator, guards, _radar_map_segments):
+		push_error("Tactical radar could not bind its approved mission sources.")
 	camera_rig.set_tracked_actor(player)
 	var weapon := player.get_node("VisualRoot/WeaponController") as WeaponController
 	inventory_panels.configure(inventory, player, camera_rig, weapon, interaction_focus, player)
@@ -339,11 +349,15 @@ func _add_wall_segment(room: Node3D, center: Vector2, size: Vector2, side: Strin
 	var position: Vector3
 	var wall_size: Vector3
 	if side == &"north" or side == &"south":
-		position = Vector3(center.x + midpoint, 1.5, center.y + (-size.y * 0.5 if side == &"north" else size.y * 0.5))
+		var z := center.y + (-size.y * 0.5 if side == &"north" else size.y * 0.5)
+		position = Vector3(center.x + midpoint, 1.5, z)
 		wall_size = Vector3(length, 3.0, 0.3)
+		_add_radar_segment(Vector3(center.x + start, 0.0, z), Vector3(center.x + end, 0.0, z))
 	else:
-		position = Vector3(center.x + (-size.x * 0.5 if side == &"west" else size.x * 0.5), 1.5, center.y + midpoint)
+		var x := center.x + (-size.x * 0.5 if side == &"west" else size.x * 0.5)
+		position = Vector3(x, 1.5, center.y + midpoint)
 		wall_size = Vector3(0.3, 3.0, length)
+		_add_radar_segment(Vector3(x, 0.0, center.y + start), Vector3(x, 0.0, center.y + end))
 	_add_box_visual_and_collision(room, StringName("%s_Wall" % side), position, wall_size, _materials[&"WALL"], 33)
 
 
@@ -355,9 +369,13 @@ func _add_corridor(corridor_id: StringName, center: Vector2, size: Vector2, navi
 	if size.x > size.y:
 		_add_box_visual_and_collision(corridor, &"NorthRail", Vector3(center.x, 0.65, center.y - size.y * 0.5), Vector3(size.x, 1.3, 0.25), _materials[&"WALL"], 33)
 		_add_box_visual_and_collision(corridor, &"SouthRail", Vector3(center.x, 0.65, center.y + size.y * 0.5), Vector3(size.x, 1.3, 0.25), _materials[&"WALL"], 33)
+		_add_radar_segment(Vector3(center.x - size.x * 0.5, 0.0, center.y - size.y * 0.5), Vector3(center.x + size.x * 0.5, 0.0, center.y - size.y * 0.5))
+		_add_radar_segment(Vector3(center.x - size.x * 0.5, 0.0, center.y + size.y * 0.5), Vector3(center.x + size.x * 0.5, 0.0, center.y + size.y * 0.5))
 	else:
 		_add_box_visual_and_collision(corridor, &"WestRail", Vector3(center.x - size.x * 0.5, 0.65, center.y), Vector3(0.25, 1.3, size.y), _materials[&"WALL"], 33)
 		_add_box_visual_and_collision(corridor, &"EastRail", Vector3(center.x + size.x * 0.5, 0.65, center.y), Vector3(0.25, 1.3, size.y), _materials[&"WALL"], 33)
+		_add_radar_segment(Vector3(center.x - size.x * 0.5, 0.0, center.y - size.y * 0.5), Vector3(center.x - size.x * 0.5, 0.0, center.y + size.y * 0.5))
+		_add_radar_segment(Vector3(center.x + size.x * 0.5, 0.0, center.y - size.y * 0.5), Vector3(center.x + size.x * 0.5, 0.0, center.y + size.y * 0.5))
 	if is_inf(navigation_gap):
 		_navigation_rects.append(Rect2(center - size * 0.5, size))
 	elif size.y >= size.x:
@@ -379,6 +397,7 @@ func _add_cover(cover_id: StringName, position: Vector3, size: Vector3, material
 		Vector2(size.x, size.z)
 	).grow(0.48)
 	cover.set_meta(&"navigation_footprint", footprint)
+	_add_radar_rectangle(position, size)
 	for surface in _navigation_surfaces:
 		var room_rect: Rect2 = surface.rect
 		if room_rect.has_point(Vector2(position.x, position.z)):
@@ -576,6 +595,23 @@ func _material(color: Color, emission: Color = Color.BLACK) -> StandardMaterial3
 	return material
 
 
+func _add_radar_rectangle(position: Vector3, size: Vector3) -> void:
+	var half_x := size.x * 0.5
+	var half_z := size.z * 0.5
+	var north_west := Vector3(position.x - half_x, 0.0, position.z - half_z)
+	var north_east := Vector3(position.x + half_x, 0.0, position.z - half_z)
+	var south_east := Vector3(position.x + half_x, 0.0, position.z + half_z)
+	var south_west := Vector3(position.x - half_x, 0.0, position.z + half_z)
+	_add_radar_segment(north_west, north_east)
+	_add_radar_segment(north_east, south_east)
+	_add_radar_segment(south_east, south_west)
+	_add_radar_segment(south_west, north_west)
+
+
+func _add_radar_segment(a: Vector3, b: Vector3) -> void:
+	_radar_map_segments.append({&"a": a, &"b": b})
+
+
 func _on_room_entered(room_id: StringName, _actor: Node3D) -> void:
 	_current_room = room_id
 
@@ -591,6 +627,26 @@ func _on_hold_progressed(target: Interactable3D, progress: float) -> void:
 
 func _on_status_changed(message: String) -> void:
 	status_label.text = message
+
+
+func _on_detection_announced(report: Dictionary) -> void:
+	status_label.text = "DETECTED BY %s  —  BREAK LINE OF SIGHT" % report.get(&"observer_id", &"UNKNOWN")
+
+
+func _on_alert_phase_changed(
+		_previous: AlertCoordinator.AlertPhase,
+		current: AlertCoordinator.AlertPhase,
+		_snapshot: Dictionary
+) -> void:
+	match current:
+		AlertCoordinator.AlertPhase.ALERT:
+			status_label.text = "FACILITY ALERT  —  BREAK CONTACT"
+		AlertCoordinator.AlertPhase.EVASION:
+			status_label.text = "EVASION  —  STAY OUT OF SIGHT"
+		AlertCoordinator.AlertPhase.SEARCH:
+			status_label.text = "SEARCH  —  GUARDS CHECKING LAST-KNOWN AREA"
+		AlertCoordinator.AlertPhase.NORMAL:
+			status_label.text = "FACILITY NORMAL  —  PATROLS RESUMING"
 
 
 func _on_door_state_changed(door_id: StringName, opened: bool, locked: bool) -> void:

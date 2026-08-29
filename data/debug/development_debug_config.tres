@@ -9,3 +9,4 @@ show_fps = true
 show_active_room = true
 show_input_hint = true
 show_guard_perception = true
+show_alert_radar = true

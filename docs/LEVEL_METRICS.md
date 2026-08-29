@@ -30,6 +30,7 @@ Room centers in X/Z meters: R0 `(-41, 0)`, R1 `(-10, 0)`, R2 `(-10, 24)`, R3 `(2
 - Checkpoint spawns: `CP0_INSERTION (-46, 0, 0)` and `CP1_SWITCH_ENTRY (20, 0, -16)`.
 - Debug spawns: one named `R*_DEBUG` marker in every room. All nine markers are in `debug_spawn_points` and expose `spawn_id`/`spawn_kind` metadata.
 - Guard route groups: `G1` yard clockwise, `G2` maintenance U-loop, `G3` switch perimeter, and `G4` transformer crossing. Wait metadata is 2.0 s on G1 P1 and 1.5 s on G2 P4.
+- Tactical radar map data is derived from the same authored wall partitions, corridor rails, and cover footprints used to build Substation 6. It is value-only, north-up, local to a 22 m radius, and intentionally omits dynamic door truth until a later HUD pass adds an approved dynamic-map seam.
 
 ## Navigation maintenance
 

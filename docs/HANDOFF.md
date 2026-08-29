@@ -2,6 +2,14 @@
 
 Append newest entries directly below this introduction. Keep each entry to six lines or fewer.
 
+### 2026-08-29 — Root task — Alert, radar, and stealth feedback
+
+- Delivered: sole facility phase authority, validated/deduplicated reports, bounded guard broadcasts, recoverable ALERT/EVASION/SEARCH, north-up tactical radar, state restrictions, feedback hooks, telemetry, and authored reset.
+- Contracts: phase table/timers, report/result shapes, shared-information cadence/expiry, radar conversion/map/contact/clamp/cull policy, non-active non-leakage, events, and reset are in `INTERFACES.md`.
+- Verified: clean import/startup, all nine headless suites, `git diff --check`, and a 1280×720 OpenGL mission render on Godot 4.7; simultaneous reports, death, sight/reacquisition, pause, expiry, restart, orientation, boundaries, restrictions, and G1–G4 integration pass.
+- Remaining: Builds 10–12 replace placeholder model/audio/HUD presentation; Builds 13–14 own broader debug, hands-on alert fairness/readability/performance, and full acceptance playthroughs.
+- Docs: updated root README, STATUS, CODE_MAP, INTERFACES, DECISIONS, VERTICAL_SLICE, LEVEL_METRICS, CRITIC_REPORT, and HANDOFF.
+
 ### 2026-08-29 — Root task — Enemy AI and perception
 
 - Delivered: reusable G1–G4 guard composition, authored patrol waits/looks, occlusion-aware sampled sight, typed-event hearing, suspicion/memory, explicit chase/attack/search recovery, health/reset, animation outputs, sanitized snapshots, and a focused lab/debug overlay.
