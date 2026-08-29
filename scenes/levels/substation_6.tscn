@@ -1,0 +1,149 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/substation_6.gd" id="1_level"]
+[ext_resource type="PackedScene" path="res://scenes/actors/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/camera/gameplay_camera_rig.tscn" id="3_camera"]
+[ext_resource type="PackedScene" path="res://scenes/components/interaction_focus_3d.tscn" id="4_focus"]
+[ext_resource type="Script" path="res://scripts/levels/graybox_mission_harness.gd" id="5_harness"]
+
+[sub_resource type="StandardMaterial3D" id="SignMaterial"]
+albedo_color = Color(0.02, 0.55, 0.38, 1)
+emission_enabled = true
+emission = Color(0.01, 0.24, 0.12, 1)
+
+[node name="Substation6" type="Node3D"]
+script = ExtResource("1_level")
+
+[node name="FacilitySun" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-58, -32, 0)
+light_color = Color(0.72, 0.84, 0.86, 1)
+light_energy = 1.05
+shadow_enabled = true
+directional_shadow_max_distance = 120.0
+
+[node name="YardFill" type="OmniLight3D" parent="."]
+position = Vector3(-10, 7, 0)
+light_color = Color(0.35, 0.58, 0.72, 1)
+light_energy = 9.0
+omni_range = 24.0
+shadow_enabled = true
+
+[node name="MaintenanceFill" type="OmniLight3D" parent="."]
+position = Vector3(20, 6, 22)
+light_color = Color(0.95, 0.65, 0.3, 1)
+light_energy = 7.0
+omni_range = 18.0
+
+[node name="SwitchFill" type="OmniLight3D" parent="."]
+position = Vector3(20, 7, -24)
+light_color = Color(0.9, 0.25, 0.15, 1)
+light_energy = 6.0
+omni_range = 20.0
+
+[node name="Geometry" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="Navigation" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="MissionObjects" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="CameraZones" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="PatrolRoutes" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="SpawnPoints" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+unique_name_in_owner = true
+position = Vector3(-46, 0.02, 0)
+
+[node name="GameplayCameraRig" parent="." instance=ExtResource("3_camera")]
+unique_name_in_owner = true
+fallback_camera_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 14, 12)
+fallback_look_target = Vector3(-41, 0.9, 0)
+
+[node name="InteractionFocus" parent="." instance=ExtResource("4_focus")]
+unique_name_in_owner = true
+
+[node name="GrayboxMissionHarness" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5_harness")
+
+[node name="Interface" type="CanvasLayer" parent="."]
+
+[node name="MissionTitle" type="Label" parent="Interface"]
+offset_left = 24.0
+offset_top = 52.0
+offset_right = 760.0
+offset_bottom = 86.0
+theme_override_colors/font_color = Color(0.55, 1, 0.78, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 23
+text = "SUBSTATION 6  //  GRAYBOX"
+
+[node name="RoomLabel" type="Label" parent="Interface"]
+unique_name_in_owner = true
+offset_left = 24.0
+offset_top = 88.0
+offset_right = 760.0
+offset_bottom = 116.0
+theme_override_colors/font_color = Color(0.78, 0.9, 0.86, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 16
+
+[node name="StatusLabel" type="Label" parent="Interface"]
+unique_name_in_owner = true
+offset_left = 24.0
+offset_top = 122.0
+offset_right = 1000.0
+offset_bottom = 150.0
+theme_override_colors/font_color = Color(1, 0.8, 0.42, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 15
+
+[node name="PromptLabel" type="Label" parent="Interface"]
+unique_name_in_owner = true
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -330.0
+offset_top = -82.0
+offset_right = 330.0
+offset_bottom = -38.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.88, 1, 0.93, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 1
+
+[node name="Controls" type="Label" parent="Interface"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -500.0
+offset_top = 56.0
+offset_right = -24.0
+offset_bottom = 108.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.65, 0.75, 0.72, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+text = "WASD / LEFT STICK  MOVE    C / L3  CROUCH\nF / A  INTERACT    RMB / LT  AIM AFTER PISTOL"
+horizontal_alignment = 2

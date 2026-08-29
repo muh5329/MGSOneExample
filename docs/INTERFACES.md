@@ -63,6 +63,16 @@ Canonical masks: player body `1|3`, enemy body `1|2`, hitscan `1|4`, interaction
 - `CameraAimSettings` owns `exploration_fov`, `aim_fov`, `aim_near_plane`, mouse/controller sensitivity, controller dead zone, horizontal/vertical inversion, yaw/pitch limits, near-wall distance, minimum zone hold, obstruction margin, and minimum camera distance. Build Step 12 may persist/modify this resource through a settings service without changing the rig API.
 - Authored angles are the primary obstruction solution. Runtime exploration rays may pull the camera toward its look target; first-person entry rejects a blocked origin and active aim reports near obstruction. No automatic transparency/cutaway policy exists.
 
+### Level and interaction
+
+- Mission entry point: `scenes/levels/substation_6.tscn`. Runtime room nodes expose the exact `R0_DRAINAGE`–`R6_CONTROL` IDs through the `mission_rooms` group and `room_id` metadata; `room_volumes` emit room entry without owning global mission state.
+- `Interactable3D` exposes `interaction_id`, `get_prompt(actor)`, `is_available(actor)`, `get_unavailable_reason(actor)`, `get_interaction_priority()`, `get_world_anchor()`, `hold_duration`, and `interact(actor)`. Optional callables supply availability, reason, and prompt decisions without coupling the component to inventory.
+- `InteractionFocus3D` queries only layers 5 and 7 inside 2.0 m. It resolves overlap by priority descending, anchor distance ascending, then lexical interaction ID; hold interactions emit normalized progress and apply only the player's `SCRIPTED` lock plus the camera interaction gate.
+- `Door3D` owns open/closed/locked state. `set_access_query(Callable)` supplies an external `(actor, access_level) -> bool` decision; `set_locked`/`set_open` synchronize visible state, world/perception collision, and the doorway `NavigationLink3D`. Locked interactions expose their reason rather than silently failing.
+- `MissionMarker3D` emits `mission_event(event_id, actor, payload)` for the placed pickup, objective, and extraction IDs. `MissionTrigger3D` emits checkpoint/room events. The level does not mutate inventory or complete mission phases.
+- `GrayboxMissionHarness` is a replaceable integration aid, not the accepted inventory/checkpoint implementation. It demonstrates K1 access, W1 aim enablement, objective-to-D2, and extraction availability solely through the public queries/events; Builds 06–07 replace it without changing level geometry.
+- Navigation uses edge-connected authored regions expanded for the 0.4 m player/guard radius, subtracts cover footprints with 0.48 m clearance, and splits every door corridor across a link. Closed doors occupy layers 1 and 6 and disable their link; open doors clear both effects. `Substation6.get_mission_navigation_map()` exposes the shared map RID for route validation.
+
 ## Accepted Subsystem Boundaries
 
 - Player movement exposes velocity, stance, movement-noise level, control-enabled state, and aim-mode requests.

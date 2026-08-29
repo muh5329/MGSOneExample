@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/interaction/interaction_focus_3d.gd" id="1_focus"]
+
+[node name="InteractionFocus3D" type="Node"]
+script = ExtResource("1_focus")

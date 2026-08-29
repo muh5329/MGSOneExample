@@ -2,6 +2,14 @@
 
 Append newest entries directly below this introduction. Keep each entry to six lines or fewer.
 
+### 2026-08-28 — Root task — Level geometry and interaction
+
+- Delivered: seven-room Substation 6 graybox, ten camera zones, cover-aware navigation, three stateful doors, exact mission placements, four patrol routes, nine spawn markers, reusable interaction components, and an isolated lab.
+- Contracts: deterministic `Interactable3D`/`InteractionFocus3D`, access-query `Door3D`, mission marker/trigger events, door navigation/occlusion consequences, and replaceable graybox harness are recorded in `INTERFACES.md`.
+- Verified: clean import/startup; smoke, movement, camera, and level tests; CP0-to-O1 navigation-server path; 1280×720 render; and `git diff --check` on Godot 4.7.
+- Remaining: final guard chase/search validation, controller focus feel, acceptance playthroughs, and camera/art polish depend on Builds 05–14.
+- Docs: added `LEVEL_METRICS.md`; updated README, STATUS, CODE_MAP, INTERFACES, DECISIONS, CRITIC_REPORT, and HANDOFF.
+
 ### 2026-08-28 — Root task — Camera and first-person aim
 
 - Delivered: reusable sole-owner rig, zone data/volumes, deterministic blends/fallback, rooted bounded aim, obstruction safeguards, settings/impulses/debug hooks, camera lab, and locomotion-lab integration.

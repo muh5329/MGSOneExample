@@ -1,0 +1,61 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/interaction/door_3d.gd" id="1_door"]
+[ext_resource type="PackedScene" path="res://scenes/components/interactable_3d.tscn" id="2_interactable"]
+
+[sub_resource type="BoxMesh" id="DoorPanelMesh"]
+size = Vector3(4, 3, 0.35)
+
+[sub_resource type="BoxShape3D" id="DoorPanelShape"]
+size = Vector3(4, 3, 0.35)
+
+[sub_resource type="BoxMesh" id="DoorHeaderMesh"]
+size = Vector3(4.8, 0.35, 0.65)
+
+[sub_resource type="StandardMaterial3D" id="DoorFrameMaterial"]
+albedo_color = Color(0.08, 0.11, 0.12, 1)
+metallic = 0.65
+roughness = 0.55
+
+[sub_resource type="BoxShape3D" id="InteractionShape"]
+size = Vector3(4.4, 2.8, 1.2)
+
+[node name="Door3D" type="Node3D"]
+script = ExtResource("1_door")
+
+[node name="DoorPanel" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+position = Vector3(0, 1.5, 0)
+mesh = SubResource("DoorPanelMesh")
+
+[node name="DoorHeader" type="MeshInstance3D" parent="."]
+position = Vector3(0, 3.15, 0)
+mesh = SubResource("DoorHeaderMesh")
+material_override = SubResource("DoorFrameMaterial")
+
+[node name="DoorBody" type="StaticBody3D" parent="."]
+unique_name_in_owner = true
+collision_layer = 33
+collision_mask = 0
+
+[node name="DoorCollision" type="CollisionShape3D" parent="DoorBody"]
+unique_name_in_owner = true
+position = Vector3(0, 1.5, 0)
+shape = SubResource("DoorPanelShape")
+
+[node name="Interactable" parent="." instance=ExtResource("2_interactable")]
+unique_name_in_owner = true
+position = Vector3(0, 1.35, 0)
+
+[node name="InteractionShape" parent="Interactable" index="0"]
+shape = SubResource("InteractionShape")
+
+[node name="NavigationLink" type="NavigationLink3D" parent="."]
+unique_name_in_owner = true
+enabled = false
+bidirectional = true
+start_position = Vector3(0, 0, -1.2)
+end_position = Vector3(0, 0, 1.2)
+enter_cost = 0.2
+
+[editable path="Interactable"]

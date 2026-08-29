@@ -1,5 +1,13 @@
 # Critic Report
 
+## 2026-08-28 — Build Step 04 implementation review
+
+- Scope review: the level owns geometry, placements, navigation/camera authoring, and generic interaction events; it does not implement final inventory, combat, guard AI, health/checkpoint snapshots, or presentation UI.
+- Evidence: clean import/startup; smoke, movement, camera, and level headless tests; a navigation-server route from CP0 to O1 with open links; 1280×720 rendered inspection; and `git diff --check`.
+- Findings: exact seven-room/ten-zone/three-door/six-marker/four-route budget is present; focus tie-breaking is stable; locked reasons are visible; D1/D2 consistently update collision, perception blocking, and navigation; every connection has camera coverage.
+- Remaining risk: final camera framing at traversal speed, controller focus feel, guard-radius chase behavior around dense R5 cover, and all three acceptance playthroughs require Builds 08–14 actors/systems and hands-on playtesting.
+- Disposition: Build Step 04 contract complete with integration playtest follow-up; no later-system behavior is claimed.
+
 ## 2026-08-28 — Build Step 03 implementation review
 
 - Scope review: the rig owns camera selection/modes/rays but not weapons, damage, final reticle UI, locomotion, inventory, or level art; consumers use documented setters, state, signals, and ray methods.

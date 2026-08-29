@@ -2,6 +2,13 @@
 
 Keep only decisions that affect more than one subsystem. Newest entries first.
 
+## 2026-08-28 — Level and Interaction Integration Contract
+
+- Substation 6 keeps the locked seven-room topology and exact content budget. Primitive room shells, cover footprints, camera zones, navigation surfaces, patrol markers, and mission placements are generated from one typed level owner so collision and scale do not drift from presentation.
+- Interaction decisions are injected through callables and events: the level never reads inventory dictionaries or completes mission phases. The temporary graybox harness proves the route and is explicitly replaceable by Builds 06–07.
+- Doors are the single state authority for their panel, layers 1/6 collision, and navigation link. Camera handoffs cover every connection and stay centered on authored opaque thresholds.
+- Navigation is authored as cover-subtracted walkable polygons with door gaps, not inferred from visible meshes. Future art may replace visuals but must preserve documented pivots, collision footprints, 4.0 m openings, and sightlines.
+
 ## 2026-08-28 — Camera and Aim Integration Contract
 
 - One `GameplayCameraRig` owns the current gameplay camera. Authored mathematical volumes select by priority, preserve the current equal-priority overlap, and use lexical zone ID only as a final deterministic tie-break.
