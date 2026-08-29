@@ -41,6 +41,17 @@ Canonical masks: player body `1|3`, enemy body `1|2`, hitscan `1|4`, interaction
 - `player` is the only global group with a current consumer. Add `guards`, `damageable`, `interactable`, `camera_zones`, or `checkpoint_targets` with the first real consumer rather than speculatively.
 - Commit Godot-generated `.uid` sidecars for source scripts/resources. Do not hand-author, copy, or renumber UIDs; resolve moves through the editor or update all path consumers in the same change.
 
+### Player movement
+
+- Entry point: `scenes/actors/player.tscn`; root type is `PlayerController` (`CharacterBody3D`) on layer 2 with mask `1|3`.
+- Camera owners call `set_camera_basis(Basis)`. A basis is latched from movement start until the stick/keys return to neutral, so a fixed-camera transition cannot reverse held input.
+- Modal owners call `set_control_lock(PlayerController.ControlLock.*, bool)` for `MENU`, `DEATH`, `SCRIPTED`, or `AIM`; locks compose and any active lock immediately clears planar velocity. `set_control_enabled(bool)` is the simple external gate.
+- Stance owners call `request_crouch(bool)` or `request_stance(Stance)` and inspect the returned success value. Standing is rejected when a shape query finds insufficient clearance.
+- Public state is inherited `velocity` plus `facing_direction`, `grounded`, `stance`, `speed_ratio`, `movement_noise_intensity`, and `control_enabled`.
+- Signals are `stance_changed`, `control_enabled_changed`, `movement_noise_changed`, `movement_noise_emitted(NoiseEvent3D)`, and model-independent `animation_parameters_updated(local_planar_velocity, speed_ratio, grounded, stance)`.
+- Movement noise is normalized from actual grounded planar speed, stance, and `surface_noise_multiplier`; periodic events use category `player_movement` and also route through `/root/EventBus` when present.
+- Default capsule is radius 0.4 m, 1.8 m standing and 1.2 m crouched. Default speed/acceleration/deceleration/turn are 4.5 m/s standing, 2.6 m/s crouched, 24/30 m/s², and 720°/s in `data/player/default_player_movement_config.tres`.
+
 ## Accepted Subsystem Boundaries
 
 - Player movement exposes velocity, stance, movement-noise level, control-enabled state, and aim-mode requests.

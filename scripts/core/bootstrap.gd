@@ -1,6 +1,6 @@
 extends Node
 
-const DEFAULT_LEVEL_PATH := "res://scenes/levels/foundation_test_room.tscn"
+const DEFAULT_LEVEL_PATH := "res://scenes/levels/locomotion_test_room.tscn"
 
 @export_file("*.tscn") var initial_level_path: String = DEFAULT_LEVEL_PATH
 @export var debug_config: DebugConfig
@@ -22,7 +22,10 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	if debug_label.visible:
-		debug_label.text = "DEBUG  FPS %d  ROOM foundation_test_room" % Engine.get_frames_per_second()
+		debug_label.text = "DEBUG  FPS %d  ROOM %s" % [
+			Engine.get_frames_per_second(),
+			initial_level_path.get_file().get_basename(),
+		]
 
 
 func _unhandled_input(event: InputEvent) -> void:

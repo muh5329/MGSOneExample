@@ -1,0 +1,282 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/locomotion_test_room.gd" id="1_room"]
+[ext_resource type="PackedScene" path="res://scenes/actors/player.tscn" id="2_player"]
+
+[sub_resource type="StandardMaterial3D" id="FloorMaterial"]
+albedo_color = Color(0.085, 0.14, 0.135, 1)
+roughness = 0.92
+
+[sub_resource type="StandardMaterial3D" id="WallMaterial"]
+albedo_color = Color(0.23, 0.31, 0.29, 1)
+roughness = 0.86
+
+[sub_resource type="StandardMaterial3D" id="ObstacleMaterial"]
+albedo_color = Color(0.29, 0.42, 0.36, 1)
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="CrouchMaterial"]
+albedo_color = Color(0.82, 0.3, 0.08, 1)
+emission_enabled = true
+emission = Color(0.18, 0.035, 0.005, 1)
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+size = Vector3(24, 0.2, 18)
+
+[sub_resource type="BoxShape3D" id="FloorShape"]
+size = Vector3(24, 0.2, 18)
+
+[sub_resource type="BoxMesh" id="WallLongMesh"]
+size = Vector3(24, 2.2, 0.4)
+
+[sub_resource type="BoxShape3D" id="WallLongShape"]
+size = Vector3(24, 2.2, 0.4)
+
+[sub_resource type="BoxMesh" id="WallShortMesh"]
+size = Vector3(0.4, 2.2, 18)
+
+[sub_resource type="BoxShape3D" id="WallShortShape"]
+size = Vector3(0.4, 2.2, 18)
+
+[sub_resource type="BoxMesh" id="ObstacleMesh"]
+size = Vector3(4, 1.2, 0.5)
+
+[sub_resource type="BoxShape3D" id="ObstacleShape"]
+size = Vector3(4, 1.2, 0.5)
+
+[sub_resource type="BoxMesh" id="CrouchRoofMesh"]
+size = Vector3(3.5, 0.2, 3.0)
+
+[sub_resource type="BoxShape3D" id="CrouchRoofShape"]
+size = Vector3(3.5, 0.2, 3.0)
+
+[node name="LocomotionTestRoom" type="Node3D"]
+script = ExtResource("1_room")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-58, -28, 0)
+light_energy = 1.15
+shadow_enabled = true
+
+[node name="Floor" type="StaticBody3D" parent="."]
+position = Vector3(0, -0.1, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("FloorMesh")
+material_override = SubResource("FloorMaterial")
+
+[node name="Collision" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("FloorShape")
+
+[node name="NorthWall" type="StaticBody3D" parent="."]
+position = Vector3(0, 1.1, -9)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="NorthWall"]
+mesh = SubResource("WallLongMesh")
+material_override = SubResource("WallMaterial")
+
+[node name="Collision" type="CollisionShape3D" parent="NorthWall"]
+shape = SubResource("WallLongShape")
+
+[node name="SouthWall" type="StaticBody3D" parent="."]
+position = Vector3(0, 1.1, 9)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="SouthWall"]
+mesh = SubResource("WallLongMesh")
+material_override = SubResource("WallMaterial")
+
+[node name="Collision" type="CollisionShape3D" parent="SouthWall"]
+shape = SubResource("WallLongShape")
+
+[node name="WestWall" type="StaticBody3D" parent="."]
+position = Vector3(-12, 1.1, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="WestWall"]
+mesh = SubResource("WallShortMesh")
+material_override = SubResource("WallMaterial")
+
+[node name="Collision" type="CollisionShape3D" parent="WestWall"]
+shape = SubResource("WallShortShape")
+
+[node name="EastWall" type="StaticBody3D" parent="."]
+position = Vector3(12, 1.1, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="EastWall"]
+mesh = SubResource("WallShortMesh")
+material_override = SubResource("WallMaterial")
+
+[node name="Collision" type="CollisionShape3D" parent="EastWall"]
+shape = SubResource("WallShortShape")
+
+[node name="CornerWallA" type="StaticBody3D" parent="."]
+position = Vector3(3.0, 0.6, 0.0)
+rotation_degrees = Vector3(0, -25, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="CornerWallA"]
+mesh = SubResource("ObstacleMesh")
+material_override = SubResource("ObstacleMaterial")
+
+[node name="Collision" type="CollisionShape3D" parent="CornerWallA"]
+shape = SubResource("ObstacleShape")
+
+[node name="CornerWallB" type="StaticBody3D" parent="."]
+position = Vector3(6.15, 0.6, -2.0)
+rotation_degrees = Vector3(0, 65, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="CornerWallB"]
+mesh = SubResource("ObstacleMesh")
+material_override = SubResource("ObstacleMaterial")
+
+[node name="Collision" type="CollisionShape3D" parent="CornerWallB"]
+shape = SubResource("ObstacleShape")
+
+[node name="NarrowWallA" type="StaticBody3D" parent="."]
+position = Vector3(-1.25, 0.6, -5.8)
+rotation_degrees = Vector3(0, 90, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="NarrowWallA"]
+mesh = SubResource("ObstacleMesh")
+material_override = SubResource("ObstacleMaterial")
+
+[node name="Collision" type="CollisionShape3D" parent="NarrowWallA"]
+shape = SubResource("ObstacleShape")
+
+[node name="NarrowWallB" type="StaticBody3D" parent="."]
+position = Vector3(0.25, 0.6, -5.8)
+rotation_degrees = Vector3(0, 90, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="NarrowWallB"]
+mesh = SubResource("ObstacleMesh")
+material_override = SubResource("ObstacleMaterial")
+
+[node name="Collision" type="CollisionShape3D" parent="NarrowWallB"]
+shape = SubResource("ObstacleShape")
+
+[node name="CrouchRoof" type="StaticBody3D" parent="."]
+position = Vector3(-7.0, 1.45, -3.5)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="CrouchRoof"]
+mesh = SubResource("CrouchRoofMesh")
+material_override = SubResource("CrouchMaterial")
+
+[node name="Collision" type="CollisionShape3D" parent="CrouchRoof"]
+shape = SubResource("CrouchRoofShape")
+
+[node name="CrouchPostA" type="StaticBody3D" parent="."]
+position = Vector3(-8.7, 0.65, -3.5)
+scale = Vector3(0.2, 1.0, 1.0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="CrouchPostA"]
+mesh = SubResource("ObstacleMesh")
+material_override = SubResource("CrouchMaterial")
+
+[node name="Collision" type="CollisionShape3D" parent="CrouchPostA"]
+shape = SubResource("ObstacleShape")
+
+[node name="CrouchPostB" type="StaticBody3D" parent="."]
+position = Vector3(-5.3, 0.65, -3.5)
+scale = Vector3(0.2, 1.0, 1.0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="CrouchPostB"]
+mesh = SubResource("ObstacleMesh")
+material_override = SubResource("CrouchMaterial")
+
+[node name="Collision" type="CollisionShape3D" parent="CrouchPostB"]
+shape = SubResource("ObstacleShape")
+
+[node name="Ramp" type="StaticBody3D" parent="."]
+position = Vector3(7.5, 0.4, 4.0)
+rotation_degrees = Vector3(0, 0, -10)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Ramp"]
+mesh = SubResource("ObstacleMesh")
+material_override = SubResource("ObstacleMaterial")
+
+[node name="Collision" type="CollisionShape3D" parent="Ramp"]
+shape = SubResource("ObstacleShape")
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+unique_name_in_owner = true
+position = Vector3(0, 0.02, 5.5)
+
+[node name="CameraSouthEast" type="Camera3D" parent="."]
+unique_name_in_owner = true
+position = Vector3(12, 15, 16)
+current = true
+fov = 54.0
+
+[node name="CameraNorthWest" type="Camera3D" parent="."]
+unique_name_in_owner = true
+position = Vector3(-14, 13, -14)
+fov = 54.0
+
+[node name="Interface" type="CanvasLayer" parent="."]
+
+[node name="Title" type="Label" parent="Interface"]
+offset_left = 24.0
+offset_top = 52.0
+offset_right = 960.0
+offset_bottom = 84.0
+theme_override_colors/font_color = Color(0.72, 1, 0.82, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 22
+text = "LOCOMOTION LAB"
+
+[node name="Diagnostics" type="Label" parent="Interface"]
+unique_name_in_owner = true
+offset_left = 24.0
+offset_top = 88.0
+offset_right = 1120.0
+offset_bottom = 150.0
+theme_override_colors/font_color = Color(0.88, 0.95, 0.9, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 16
+
+[node name="Instructions" type="Label" parent="Interface"]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -58.0
+offset_right = -24.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.84, 0.94, 0.88, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 17
+text = "Move: WASD / left stick   Crouch: C / L3   Swap fixed camera: F / A   Pause: Esc / Start"
+horizontal_alignment = 1

@@ -1,0 +1,62 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/actors/player_controller.gd" id="1_controller"]
+[ext_resource type="Resource" path="res://data/player/default_player_movement_config.tres" id="2_config"]
+
+[sub_resource type="CapsuleShape3D" id="PlayerShape"]
+resource_local_to_scene = true
+radius = 0.4
+height = 1.8
+
+[sub_resource type="CapsuleMesh" id="PlayerMesh"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="PlayerMaterial"]
+albedo_color = Color(0.52, 0.78, 0.62, 1)
+roughness = 0.78
+
+[sub_resource type="BoxMesh" id="FacingMesh"]
+size = Vector3(0.18, 0.16, 0.42)
+
+[sub_resource type="StandardMaterial3D" id="FacingMaterial"]
+albedo_color = Color(1, 0.42, 0.18, 1)
+emission_enabled = true
+emission = Color(0.35, 0.07, 0.01, 1)
+
+[node name="Player" type="CharacterBody3D" groups=["player"]]
+collision_layer = 2
+collision_mask = 5
+safe_margin = 0.02
+script = ExtResource("1_controller")
+config = ExtResource("2_config")
+
+[node name="BodyOrigin" type="Marker3D" parent="."]
+unique_name_in_owner = true
+position = Vector3(0, 0.9, 0)
+
+[node name="BodyCollision" type="CollisionShape3D" parent="."]
+unique_name_in_owner = true
+position = Vector3(0, 0.9, 0)
+shape = SubResource("PlayerShape")
+
+[node name="VisualRoot" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="BodyMesh" type="MeshInstance3D" parent="VisualRoot"]
+position = Vector3(0, 0.9, 0)
+mesh = SubResource("PlayerMesh")
+material_override = SubResource("PlayerMaterial")
+
+[node name="FacingMarker" type="MeshInstance3D" parent="VisualRoot"]
+position = Vector3(0, 1.0, -0.48)
+mesh = SubResource("FacingMesh")
+material_override = SubResource("FacingMaterial")
+
+[node name="InteractionOrigin" type="Marker3D" parent="."]
+unique_name_in_owner = true
+position = Vector3(0, 1.296, 0)
+
+[node name="AimOrigin" type="Marker3D" parent="."]
+unique_name_in_owner = true
+position = Vector3(0, 1.512, -0.12)

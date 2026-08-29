@@ -2,6 +2,13 @@
 
 Keep only decisions that affect more than one subsystem. Newest entries first.
 
+## 2026-08-28 — Player Movement Integration Contract
+
+- Camera-relative direction latches the supplied camera basis while movement input remains held; camera transitions affect the next input gesture after neutral, avoiding an involuntary reversal.
+- Movement locks are a composable bitmask owned by the player motor. Aim, menus, death, and scripted consumers set and clear only their own reason.
+- Hearing receives normalized, periodic `NoiseEvent3D` events derived from actual grounded speed, stance, and a surface multiplier; input presses alone never produce noise.
+- Player body origin stays at the feet with a 0.4 m capsule radius, 1.8 m standing height, and 1.2 m crouched height so level and camera owners can author consistent clearances.
+
 ## 2026-08-28 — Vertical Slice Locked
 
 - The authoritative mission is the seven-room `Substation 6` route in `VERTICAL_SLICE.md`, with four guards, one pistol, one ration, one access level, ten camera zones, and two checkpoints.

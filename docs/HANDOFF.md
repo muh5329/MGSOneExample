@@ -2,6 +2,14 @@
 
 Append newest entries directly below this introduction. Keep each entry to six lines or fewer.
 
+### 2026-08-28 — Root task — Player movement
+
+- Delivered: reusable player/config, camera-relative locomotion, crouch clearance, composable locks, animation/noise outputs, and locomotion lab.
+- Contracts: `PlayerController` API/signals and 0.4 m radius, 1.8/1.2 m stance dimensions are recorded in `INTERFACES.md`.
+- Verified: clean import/startup, foundation smoke test, movement headless test, and `git diff --check` pass on Godot 4.7.
+- Remaining: keyboard/controller feel, slope/corner tuning, and actual mission clearances need hands-on integration playtesting; no camera/aim implementation is included.
+- Docs: updated README, STATUS, CODE_MAP, INTERFACES, DECISIONS, CRITIC_REPORT, and HANDOFF.
+
 ### 2026-08-28 — Root task — Vertical slice design
 
 - Delivered: authoritative seven-room mission, exact entities/camera zones, tuning budget, exclusions, and three playthroughs in `docs/VERTICAL_SLICE.md`.

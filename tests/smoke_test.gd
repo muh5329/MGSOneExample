@@ -13,6 +13,9 @@ const REQUIRED_RESOURCES: Array[String] = [
 	"res://scenes/core/bootstrap.tscn",
 	"res://scenes/core/default_environment.tres",
 	"res://scenes/levels/foundation_test_room.tscn",
+	"res://scenes/levels/locomotion_test_room.tscn",
+	"res://scenes/actors/player.tscn",
+	"res://data/player/default_player_movement_config.tres",
 	"res://data/debug/development_debug_config.tres",
 	"res://data/debug/release_debug_config.tres",
 ]
@@ -85,7 +88,12 @@ func _validate_project_settings() -> void:
 
 
 func _validate_scene_instantiation() -> void:
-	for path in ["res://scenes/core/bootstrap.tscn", "res://scenes/levels/foundation_test_room.tscn"]:
+	for path in [
+		"res://scenes/core/bootstrap.tscn",
+		"res://scenes/levels/foundation_test_room.tscn",
+		"res://scenes/levels/locomotion_test_room.tscn",
+		"res://scenes/actors/player.tscn",
+	]:
 		var resource := load(path) as PackedScene
 		if resource == null:
 			failures.append("Could not load scene '%s'." % path)

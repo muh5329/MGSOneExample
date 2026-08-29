@@ -1,6 +1,6 @@
 # Shadow Circuit
 
-An original Godot 4 stealth-action vertical slice. The current foundation boots into a disposable movement room; the authoritative mission target is in [`docs/VERTICAL_SLICE.md`](docs/VERTICAL_SLICE.md).
+An original Godot 4 stealth-action vertical slice. The current build boots into the player locomotion lab; the authoritative mission target is in [`docs/VERTICAL_SLICE.md`](docs/VERTICAL_SLICE.md).
 
 ## Requirements
 
@@ -26,6 +26,7 @@ On macOS, when Godot is not on `PATH`:
 ```sh
 godot --headless --path . --editor --quit-after 2
 godot --headless --path . --script res://tests/smoke_test.gd
+godot --headless --path . --script res://tests/player_movement_test.gd
 godot --headless --path . --quit-after 3
 ```
 

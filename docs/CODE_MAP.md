@@ -6,11 +6,14 @@ Updated: 2026-08-28
 
 - `project.godot` — project configuration, semantic inputs, autoloads, and collision-layer names.
 - `scenes/core/bootstrap.tscn` + `scripts/core/bootstrap.gd` — main entry point and explicit initial-level failure reporting.
-- `scenes/levels/foundation_test_room.tscn` — disposable movement/controller/pause verification room; replace its content, not the bootstrap contract.
+- `scenes/actors/player.tscn` + `scripts/actors/player_controller.gd` — reusable capsule player, camera-relative motor, stance, control locks, animation outputs, and movement noise.
+- `data/player/default_player_movement_config.tres` — player speed, acceleration, body, slope, gravity, and noise tuning.
+- `scenes/levels/locomotion_test_room.tscn` — current bootstrap level and focused movement regression lab; `foundation_test_room.tscn` remains a foundation fixture only.
 - `scripts/core/game_state.gd` — mission-phase and pause-authority skeleton (`GameState` autoload).
 - `scripts/core/event_bus.gd` + `noise_event.gd` — typed global noise-routing seam (`EventBus` autoload).
 - `data/debug/*.tres` — debug-on development and debug-off release configurations.
-- `tests/smoke_test.gd` — headless contract/startup validation.
+- `tests/smoke_test.gd` — headless foundation contract/startup validation.
+- `tests/player_movement_test.gd` — player direction, camera-basis, lock, noise, collider, and blocked-uncrouch checks.
 - `docs/VERTICAL_SLICE.md` — authoritative mission flow, placements, tuning, and acceptance scripts.
 
 ## Layout

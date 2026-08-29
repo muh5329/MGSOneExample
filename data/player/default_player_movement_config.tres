@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="PlayerMovementConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/actors/player_movement_config.gd" id="1_config"]
+
+[resource]
+script = ExtResource("1_config")
+standing_speed = 4.5
+crouch_speed = 2.6
+acceleration = 24.0
+deceleration = 30.0
+turn_speed_degrees = 720.0
+gravity = 24.0
+floor_snap_length = 0.3
+maximum_slope_degrees = 46.0
+capsule_radius = 0.4
+standing_height = 1.8
+crouch_height = 1.2
+clearance_margin = 0.03
+standing_noise_multiplier = 1.0
+crouch_noise_multiplier = 0.3
+noise_event_interval = 0.25
+minimum_noise_event = 0.02
