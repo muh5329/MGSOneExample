@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/weapon_controller.gd" id="1_controller"]
+
+[sub_resource type="BoxMesh" id="PistolMesh"]
+size = Vector3(0.14, 0.18, 0.42)
+
+[sub_resource type="StandardMaterial3D" id="PistolMaterial"]
+albedo_color = Color(0.16, 0.19, 0.2, 1)
+metallic = 0.55
+roughness = 0.38
+
+[node name="WeaponController" type="Node3D"]
+unique_name_in_owner = true
+script = ExtResource("1_controller")
+
+[node name="PlaceholderPistol" type="MeshInstance3D" parent="."]
+visible = false
+position = Vector3(0.24, 1.38, -0.32)
+mesh = SubResource("PistolMesh")
+material_override = SubResource("PistolMaterial")
+
+[node name="Muzzle" type="Marker3D" parent="."]
+position = Vector3(0.24, 1.43, -0.56)

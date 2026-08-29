@@ -2,6 +2,14 @@
 
 Append newest entries directly below this introduction. Keep each entry to six lines or fewer.
 
+### 2026-08-28 — Root task — Weapons and combat
+
+- Delivered: W1 definition, reusable six-state weapon runtime, ammo transactions, camera-ray hitscan, owner/muzzle-wall safety, typed hit context, feedback/noise hooks, mission pickup integration, and static/moving receiver sandbox.
+- Contracts: `WeaponDefinition`, `WeaponController`, `HitContext3D`, `receive_damage`, ammo source methods, signals, masks, cancellation, and snapshot rules are recorded in `INTERFACES.md`.
+- Verified: clean import; smoke, movement, camera, level, and combat headless tests; 1280×720 sandbox render; and `git diff --check` on Godot 4.7.
+- Remaining: Build 06 replaces harness ammo, Build 07 supplies production health, and Builds 08/11/14 add guard use, presentation, controller feel, and mission playtesting.
+- Docs: updated README, STATUS, CODE_MAP, INTERFACES, DECISIONS, CRITIC_REPORT, and HANDOFF.
+
 ### 2026-08-28 — Root task — Level geometry and interaction
 
 - Delivered: seven-room Substation 6 graybox, ten camera zones, cover-aware navigation, three stateful doors, exact mission placements, four patrol routes, nine spawn markers, reusable interaction components, and an isolated lab.

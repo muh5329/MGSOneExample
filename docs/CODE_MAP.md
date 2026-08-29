@@ -11,6 +11,9 @@ Updated: 2026-08-28
 - `scenes/camera/gameplay_camera_rig.tscn` + `scripts/camera/gameplay_camera_rig.gd` — sole gameplay-camera owner, deterministic zone handoff/blending, contextual aim, aim rays, obstruction response, impulses, and debug output.
 - `scripts/camera/camera_zone_3d.gd` + `camera_zone_data.gd` — authored mathematical camera volumes and reusable framing/priority/blend data.
 - `data/camera/default_camera_aim_settings.tres` — mouse/controller look, inversion, limits, FOV, zone hysteresis, and obstruction tuning.
+- `scenes/components/weapon_controller.tscn` + `scripts/combat/weapon_controller.gd` — data-driven firearm runtime, explicit equip/fire/reload states, ammo transactions, camera-ray hitscan, owner/wall safety, damage submissions, snapshots, and feedback events.
+- `scripts/combat/weapon_definition.gd` + `hit_context_3d.gd` — immutable firearm tuning/display data and the shared typed damage-submission context; W1 data is `data/weapons/w1_service_pistol.tres`.
+- `scenes/levels/combat_test_room.tscn` — focused static/moving receiver sandbox with loaded W1, 12 reserve rounds, cover, diagnostics, reticle, and event-driven camera impulse.
 - `scenes/levels/camera_aim_test_room.tscn` — focused camera/aim regression lab; `locomotion_test_room.tscn` remains the movement lab and uses the shared rig.
 - `scenes/levels/substation_6.tscn` + `scripts/levels/substation_6.gd` — current bootstrap level; seven-room mission graybox, modular collision/occlusion geometry, ten camera zones, authored navigation, patrol/spawn markers, and exact mission-object placements.
 - `scenes/components/interactable_3d.tscn`, `interaction_focus_3d.tscn`, `door_3d.tscn`, and `mission_marker_3d.tscn` — reusable deterministic interaction, hold, door-state, and mission-event seams.
@@ -22,6 +25,7 @@ Updated: 2026-08-28
 - `tests/player_movement_test.gd` — player direction, camera-basis, lock, noise, collider, and blocked-uncrouch checks.
 - `tests/camera_aim_test.gd` — zone priority/hysteresis, blend/defer behavior, aim gates/locks/limits, center ray, pause, fallback, and camera ownership checks.
 - `tests/level_interaction_test.gd` — exact mission budget/IDs, camera coverage, occlusion layers, navigation route/link behavior, deterministic focus, access denial, and graybox progression seams.
+- `tests/weapon_combat_test.gd` — definition, state/cadence, aim direction, owner exclusion, near-wall, damage context/death, feedback/noise, dry fire, reload cancellation/transaction, pause, and restore checks.
 - `docs/VERTICAL_SLICE.md` — authoritative mission flow, placements, tuning, and acceptance scripts.
 
 ## Layout

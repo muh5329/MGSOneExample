@@ -1,0 +1,161 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/combat_test_room.gd" id="1_room"]
+[ext_resource type="PackedScene" path="res://scenes/actors/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/camera/gameplay_camera_rig.tscn" id="3_camera"]
+[ext_resource type="Script" path="res://scripts/combat/combat_test_ammo_source.gd" id="4_ammo"]
+[ext_resource type="PackedScene" path="res://scenes/components/combat_test_receiver_3d.tscn" id="5_receiver"]
+
+[sub_resource type="BoxShape3D" id="FloorShape"]
+size = Vector3(24, 0.2, 28)
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+size = Vector3(24, 0.2, 28)
+
+[sub_resource type="StandardMaterial3D" id="FloorMaterial"]
+albedo_color = Color(0.08, 0.12, 0.14, 1)
+roughness = 0.9
+
+[sub_resource type="BoxShape3D" id="WallShape"]
+size = Vector3(2.4, 2.5, 0.24)
+
+[sub_resource type="BoxMesh" id="WallMesh"]
+size = Vector3(2.4, 2.5, 0.24)
+
+[sub_resource type="StandardMaterial3D" id="WallMaterial"]
+albedo_color = Color(0.45, 0.31, 0.12, 1)
+roughness = 0.75
+
+[sub_resource type="StyleBoxFlat" id="ReticleLine"]
+bg_color = Color(0.8, 1, 0.88, 0.94)
+
+[node name="CombatTestRoom" type="Node3D"]
+script = ExtResource("1_room")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-55, -25, 0)
+light_energy = 1.2
+shadow_enabled = true
+
+[node name="Floor" type="StaticBody3D" parent="."]
+position = Vector3(0, -0.1, -8)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("FloorShape")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("FloorMesh")
+material_override = SubResource("FloorMaterial")
+
+[node name="NearWall" type="StaticBody3D" parent="."]
+unique_name_in_owner = true
+position = Vector3(5, 1.25, -2)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NearWall"]
+shape = SubResource("WallShape")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NearWall"]
+mesh = SubResource("WallMesh")
+material_override = SubResource("WallMaterial")
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+unique_name_in_owner = true
+
+[node name="GameplayCameraRig" parent="." instance=ExtResource("3_camera")]
+unique_name_in_owner = true
+fallback_camera_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 8, 8)
+fallback_look_target = Vector3(0, 0.9, -5)
+
+[node name="AmmoSource" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("4_ammo")
+pistol_rounds = 12
+
+[node name="StaticTarget" parent="." instance=ExtResource("5_receiver")]
+unique_name_in_owner = true
+position = Vector3(0, 0.9, -10)
+
+[node name="MovingTarget" parent="." instance=ExtResource("5_receiver")]
+unique_name_in_owner = true
+position = Vector3(0, 0.9, -15)
+moves = true
+
+[node name="Interface" type="CanvasLayer" parent="."]
+
+[node name="Title" type="Label" parent="Interface"]
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 780.0
+offset_bottom = 58.0
+theme_override_colors/font_color = Color(0.55, 1, 0.78, 1)
+theme_override_font_sizes/font_size = 24
+text = "COMBAT SANDBOX  //  SERVICE PISTOL"
+
+[node name="Diagnostics" type="Label" parent="Interface"]
+unique_name_in_owner = true
+offset_left = 24.0
+offset_top = 66.0
+offset_right = 900.0
+offset_bottom = 96.0
+theme_override_colors/font_color = Color(0.84, 0.92, 0.88, 1)
+theme_override_font_sizes/font_size = 17
+
+[node name="Feedback" type="Label" parent="Interface"]
+unique_name_in_owner = true
+offset_left = 24.0
+offset_top = 102.0
+offset_right = 900.0
+offset_bottom = 132.0
+theme_override_colors/font_color = Color(1, 0.76, 0.32, 1)
+theme_override_font_sizes/font_size = 16
+
+[node name="Controls" type="Label" parent="Interface"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -500.0
+offset_top = 28.0
+offset_right = -24.0
+offset_bottom = 86.0
+grow_horizontal = 0
+text = "HOLD RMB / LT  AIM    LMB / RT  FIRE\nR / X  RELOAD    USE GOLD WALL TO TEST COVER"
+horizontal_alignment = 2
+
+[node name="Reticle" type="Control" parent="Interface"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Horizontal" type="Panel" parent="Interface/Reticle"]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -1.0
+offset_right = 10.0
+offset_bottom = 1.0
+theme_override_styles/panel = SubResource("ReticleLine")
+
+[node name="Vertical" type="Panel" parent="Interface/Reticle"]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1.0
+offset_top = -10.0
+offset_right = 1.0
+offset_bottom = 10.0
+theme_override_styles/panel = SubResource("ReticleLine")

@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scripts/actors/player_controller.gd" id="1_controller"]
 [ext_resource type="Resource" path="res://data/player/default_player_movement_config.tres" id="2_config"]
+[ext_resource type="PackedScene" path="res://scenes/components/weapon_controller.tscn" id="3_weapon"]
 
 [sub_resource type="CapsuleShape3D" id="PlayerShape"]
 resource_local_to_scene = true
@@ -60,3 +61,5 @@ position = Vector3(0, 1.296, 0)
 [node name="AimOrigin" type="Marker3D" parent="."]
 unique_name_in_owner = true
 position = Vector3(0, 1.512, -0.12)
+
+[node name="WeaponController" parent="VisualRoot" instance=ExtResource("3_weapon")]

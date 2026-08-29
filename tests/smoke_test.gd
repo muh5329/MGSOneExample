@@ -17,14 +17,18 @@ const REQUIRED_RESOURCES: Array[String] = [
 	"res://scenes/levels/camera_aim_test_room.tscn",
 	"res://scenes/levels/substation_6.tscn",
 	"res://scenes/levels/interaction_test_room.tscn",
+	"res://scenes/levels/combat_test_room.tscn",
 	"res://scenes/components/interactable_3d.tscn",
 	"res://scenes/components/interaction_focus_3d.tscn",
 	"res://scenes/components/door_3d.tscn",
 	"res://scenes/components/mission_marker_3d.tscn",
+	"res://scenes/components/weapon_controller.tscn",
+	"res://scenes/components/combat_test_receiver_3d.tscn",
 	"res://scenes/actors/player.tscn",
 	"res://scenes/camera/gameplay_camera_rig.tscn",
 	"res://data/player/default_player_movement_config.tres",
 	"res://data/camera/default_camera_aim_settings.tres",
+	"res://data/weapons/w1_service_pistol.tres",
 	"res://data/debug/development_debug_config.tres",
 	"res://data/debug/release_debug_config.tres",
 ]
@@ -104,8 +108,11 @@ func _validate_scene_instantiation() -> void:
 		"res://scenes/levels/camera_aim_test_room.tscn",
 		"res://scenes/levels/substation_6.tscn",
 		"res://scenes/levels/interaction_test_room.tscn",
+		"res://scenes/levels/combat_test_room.tscn",
 		"res://scenes/actors/player.tscn",
 		"res://scenes/camera/gameplay_camera_rig.tscn",
+		"res://scenes/components/weapon_controller.tscn",
+		"res://scenes/components/combat_test_receiver_3d.tscn",
 	]:
 		var resource := load(path) as PackedScene
 		if resource == null:

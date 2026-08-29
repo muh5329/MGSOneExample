@@ -2,6 +2,14 @@
 
 Keep only decisions that affect more than one subsystem. Newest entries first.
 
+## 2026-08-28 — Weapons and Combat Integration Contract
+
+- `WeaponDefinition` resources are immutable tuning/display inputs; `WeaponController` alone owns per-instance magazine, timed state, shot sequence, and checkpoint snapshot state.
+- Reloading uses the narrow `get_ammo_count`/`take_ammo` transaction boundary and consumes reserve only when the reload completes. Equipment changes, control loss, pause, and checkpoint restore cancel without speculative consumption.
+- Player hitscan uses the camera-owned aim ray, canonical layers 1/4, recursive owner exclusion, and a separate world-only aim-origin-to-muzzle clearance query. Damage is submitted only through `receive_damage(amount, HitContext3D)`.
+- Combat presentation is event-driven through definition-owned feedback IDs; the weapon does not locate HUD, audio, animation, VFX, vibration, or camera nodes. Gunshots additionally publish typed global noise.
+- The graybox harness temporarily supplies W1/A1 transactions only to prove mission integration. Build 06 replaces that source through the same ammo interface, and Build 07 adopts the hit-context receiver contract.
+
 ## 2026-08-28 — Level and Interaction Integration Contract
 
 - Substation 6 keeps the locked seven-room topology and exact content budget. Primitive room shells, cover footprints, camera zones, navigation surfaces, patrol markers, and mission placements are generated from one typed level owner so collision and scale do not drift from presentation.

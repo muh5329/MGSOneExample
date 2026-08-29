@@ -122,8 +122,11 @@ func _validate_progression_seams(level: Substation6) -> void:
 	var d1 := level.mission_root.get_node("D1_ACCESS") as Door3D
 	var d2 := level.mission_root.get_node("D2_SHORTCUT") as Door3D
 	var card := level.mission_root.get_node("K1_LEVEL_1_CARD") as MissionMarker3D
+	var pistol := level.mission_root.get_node("W1_PISTOL") as MissionMarker3D
+	var pistol_ammo := level.mission_root.get_node("A1_PISTOL_AMMO") as MissionMarker3D
 	var objective := level.mission_root.get_node("O1_RELAY_TERMINAL") as MissionMarker3D
 	var extraction := level.mission_root.get_node("X1_DRAINAGE_GATE") as MissionMarker3D
+	var weapon := level.player.get_node("VisualRoot/WeaponController") as WeaponController
 	if d1.interactable.is_available(level.player):
 		failures.append("D1 is available before the LEVEL_1 access query succeeds.")
 	if d1.interactable.get_unavailable_reason(level.player) != &"LEVEL_1_REQUIRED":
@@ -132,6 +135,15 @@ func _validate_progression_seams(level: Substation6) -> void:
 		failures.append("Extraction is available before the objective event.")
 	if extraction.get_unavailable_reason(level.player) != &"OBJECTIVE_INCOMPLETE":
 		failures.append("Extraction does not expose OBJECTIVE_INCOMPLETE.")
+	if weapon.state != WeaponController.WeaponState.HOLSTERED:
+		failures.append("Mission pistol is not holstered before the W1 pickup event.")
+	if not pistol.interact(level.player):
+		failures.append("W1 pickup did not emit its mission event.")
+	weapon.advance_runtime(1.0)
+	if weapon.definition == null or weapon.definition.weapon_id != &"W1_PISTOL" or weapon.magazine != 8:
+		failures.append("W1 pickup did not equip the real loaded pistol runtime.")
+	if not pistol_ammo.interact(level.player) or level.harness.pistol_reserve != 12:
+		failures.append("A1 pickup did not reach the temporary ammo transaction source.")
 	if not card.interact(level.player) or not level.harness.has_level_1:
 		failures.append("K1 event did not reach the replaceable mission harness.")
 	if not d1.interactable.is_available(level.player):

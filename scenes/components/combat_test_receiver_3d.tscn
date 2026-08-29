@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/combat_test_receiver_3d.gd" id="1_receiver"]
+
+[sub_resource type="CapsuleShape3D" id="ReceiverShape"]
+radius = 0.55
+height = 1.8
+
+[sub_resource type="CapsuleMesh" id="ReceiverMesh"]
+radius = 0.55
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="ReceiverMaterial"]
+albedo_color = Color(0.82, 0.24, 0.16, 1)
+roughness = 0.72
+
+[node name="CombatTestReceiver3D" type="AnimatableBody3D"]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("1_receiver")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("ReceiverShape")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("ReceiverMesh")
+material_override = SubResource("ReceiverMaterial")
+
+[node name="HealthLabel" type="Label3D" parent="."]
+position = Vector3(0, 1.35, 0)
+text = "100"
+font_size = 48
+outline_size = 8
+billboard = 1
+no_depth_test = true

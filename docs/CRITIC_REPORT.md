@@ -1,5 +1,13 @@
 # Critic Report
 
+## 2026-08-28 — Build Step 05 implementation review
+
+- Scope review: combat owns definition/runtime split, ammunition transaction requests, aim-ray hitscan, typed damage submission, snapshots, and presentation events; it does not own inventory dictionaries, health fields, UI, guard AI, or final feedback.
+- Evidence: clean import; all five headless suites; exact direction/owner exclusion/near-wall/low-frame spam/dry-fire/reload interruption/pause/restore assertions; W1/A1 mission integration; and a 1280×720 sandbox render with static/moving targets.
+- Findings: no automated contract blocker found. Reserve changes only at reload completion, every accepted trigger spends exactly one magazine round and emits one gunshot event, and solid cover wins before a receiver behind it.
+- Remaining risk: hands-on mouse/controller trigger feel, recoil/reticle/audio timing, production damage receivers, guard combat, checkpoint integration, and full mission acceptance playthroughs depend on Builds 06–14.
+- Disposition: Build Step 05 contract complete with later-system integration and feel follow-up; no inventory, health, AI, or presentation milestone is claimed.
+
 ## 2026-08-28 — Build Step 04 implementation review
 
 - Scope review: the level owns geometry, placements, navigation/camera authoring, and generic interaction events; it does not implement final inventory, combat, guard AI, health/checkpoint snapshots, or presentation UI.

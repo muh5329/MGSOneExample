@@ -239,7 +239,8 @@ func _build_mission_objects() -> void:
 		harness.register_marker(marker)
 	harness.register_trigger(cp0)
 	harness.register_trigger(cp1)
-	harness.configure(access_door, shortcut_door, extraction, camera_rig)
+	var weapon := player.get_node("VisualRoot/WeaponController") as WeaponController
+	harness.configure(access_door, shortcut_door, extraction, camera_rig, weapon, player)
 	supply_door.state_changed.connect(_on_door_state_changed)
 	access_door.state_changed.connect(_on_door_state_changed)
 	shortcut_door.state_changed.connect(_on_door_state_changed)
