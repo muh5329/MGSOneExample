@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="InventoryEntryDefinition" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/inventory/inventory_entry_definition.gd" id="1_definition"]
+[ext_resource type="Resource" path="res://data/weapons/w1_service_pistol.tres" id="2_weapon"]
+
+[resource]
+script = ExtResource("1_definition")
+entry_id = &"W1_PISTOL"
+display_name = "Service Pistol"
+description = "Compact 8-round sidearm."
+kind = 0
+panel = 1
+selection_order = 10
+maximum_quantity = 1
+weapon_definition = ExtResource("2_weapon")

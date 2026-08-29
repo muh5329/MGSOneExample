@@ -3,6 +3,7 @@ extends Node3D
 
 const DOOR_SCENE := preload("res://scenes/components/door_3d.tscn")
 const MARKER_SCENE := preload("res://scenes/components/mission_marker_3d.tscn")
+const PICKUP_SCENE := preload("res://scenes/components/inventory_pickup_3d.tscn")
 
 @onready var geometry_root: Node3D = %Geometry
 @onready var mission_root: Node3D = %MissionObjects
@@ -12,7 +13,9 @@ const MARKER_SCENE := preload("res://scenes/components/mission_marker_3d.tscn")
 @onready var player: PlayerController = %Player
 @onready var camera_rig: GameplayCameraRig = %GameplayCameraRig
 @onready var interaction_focus: InteractionFocus3D = %InteractionFocus
+@onready var inventory: InventoryComponent = player.get_node("Inventory") as InventoryComponent
 @onready var harness: GrayboxMissionHarness = %GrayboxMissionHarness
+@onready var inventory_panels: InventoryPanels = %InventoryPanels
 @onready var room_label: Label = %RoomLabel
 @onready var prompt_label: Label = %PromptLabel
 @onready var status_label: Label = %StatusLabel
@@ -213,10 +216,10 @@ func _build_mission_objects() -> void:
 	var shortcut_door := _add_door(&"D2_SHORTCUT", Vector3(-10.0, 0.0, -15.5), true, &"")
 	shortcut_door.locked_reason = &"OBJECTIVE_INCOMPLETE"
 
-	var pistol := _add_marker(&"W1_PISTOL", Vector3(-14.0, 0.0, 25.5), MissionMarker3D.MarkerKind.PICKUP, "Take pistol", 0.0, {&"magazine": 8})
-	var ammo := _add_marker(&"A1_PISTOL_AMMO", Vector3(-10.0, 0.0, 26.5), MissionMarker3D.MarkerKind.PICKUP, "Take pistol ammo", 0.0, {&"quantity": 12})
-	var ration := _add_marker(&"I1_RATION", Vector3(-6.0, 0.0, 25.5), MissionMarker3D.MarkerKind.PICKUP, "Take ration", 0.0, {&"quantity": 1})
-	var access_card := _add_marker(&"K1_LEVEL_1_CARD", Vector3(20.0, 0.0, 29.5), MissionMarker3D.MarkerKind.PICKUP, "Take Level 1 card", 0.0, {&"access_level": &"LEVEL_1"})
+	var pistol := _add_inventory_pickup(&"W1_PISTOL", Vector3(-14.0, 0.0, 25.5), "Take pistol", 1, 8, true, {&"magazine": 8})
+	var ammo := _add_inventory_pickup(&"A1_PISTOL_AMMO", Vector3(-10.0, 0.0, 26.5), "Take pistol ammo", 12, -1, false, {&"quantity": 12})
+	var ration := _add_inventory_pickup(&"I1_RATION", Vector3(-6.0, 0.0, 25.5), "Take ration", 1, -1, false, {&"quantity": 1})
+	var access_card := _add_inventory_pickup(&"K1_LEVEL_1_CARD", Vector3(20.0, 0.0, 29.5), "Take Level 1 card", 1, -1, false, {&"access_level": &"LEVEL_1"})
 	var objective := _add_marker(&"O1_RELAY_TERMINAL", Vector3(-10.0, 0.0, -31.8), MissionMarker3D.MarkerKind.OBJECTIVE, "Copy relay manifest", 1.25, {})
 	objective.scale = Vector3(1.3, 1.3, 1.3)
 	var extraction := _add_marker(&"X1_DRAINAGE_GATE", Vector3(-47.0, 0.0, 4.0), MissionMarker3D.MarkerKind.EXTRACTION, "Extract through drainage gate", 0.0, {})
@@ -239,8 +242,7 @@ func _build_mission_objects() -> void:
 		harness.register_marker(marker)
 	harness.register_trigger(cp0)
 	harness.register_trigger(cp1)
-	var weapon := player.get_node("VisualRoot/WeaponController") as WeaponController
-	harness.configure(access_door, shortcut_door, extraction, camera_rig, weapon, player)
+	harness.configure(access_door, shortcut_door, extraction, camera_rig, inventory, player)
 	supply_door.state_changed.connect(_on_door_state_changed)
 	access_door.state_changed.connect(_on_door_state_changed)
 	shortcut_door.state_changed.connect(_on_door_state_changed)
@@ -253,6 +255,8 @@ func _configure_runtime_contracts() -> void:
 	interaction_focus.hold_progressed.connect(_on_hold_progressed)
 	harness.status_changed.connect(_on_status_changed)
 	camera_rig.set_tracked_actor(player)
+	var weapon := player.get_node("VisualRoot/WeaponController") as WeaponController
+	inventory_panels.configure(inventory, player, camera_rig, weapon, interaction_focus, player)
 	camera_rig.refresh_zones()
 	camera_rig.reset_camera_state()
 	status_label.text = "INFILTRATE SUBSTATION 6 — FIND THE RELAY TERMINAL"
@@ -446,6 +450,32 @@ func _add_marker(id: StringName, position: Vector3, kind: MissionMarker3D.Marker
 	marker.interaction_priority = 10 if kind == MissionMarker3D.MarkerKind.PICKUP else 30
 	mission_root.add_child(marker)
 	return marker
+
+
+func _add_inventory_pickup(
+	id: StringName,
+	position: Vector3,
+	prompt: String,
+	quantity: int,
+	initial_magazine: int,
+	auto_equip: bool,
+	payload: Dictionary
+) -> InventoryPickup3D:
+	var pickup := PICKUP_SCENE.instantiate() as InventoryPickup3D
+	pickup.name = String(id)
+	pickup.interaction_id = id
+	pickup.event_id = id
+	pickup.inventory_entry_id = id
+	pickup.position = position
+	pickup.prompt_text = prompt
+	pickup.quantity = quantity
+	pickup.initial_magazine = initial_magazine
+	pickup.auto_equip = auto_equip
+	pickup.payload = payload
+	pickup.interaction_priority = 10
+	pickup.set_inventory(inventory)
+	mission_root.add_child(pickup)
+	return pickup
 
 
 func _add_trigger(id: StringName, kind: MissionTrigger3D.TriggerKind, position: Vector3, size: Vector3, one_shot: bool) -> MissionTrigger3D:

@@ -1,0 +1,12 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/inventory/inventory_component.gd" id="1_inventory"]
+[ext_resource type="Resource" path="res://data/inventory/w1_pistol_entry.tres" id="2_w1"]
+[ext_resource type="Resource" path="res://data/inventory/a1_pistol_ammo_entry.tres" id="3_a1"]
+[ext_resource type="Resource" path="res://data/inventory/i1_ration_entry.tres" id="4_i1"]
+[ext_resource type="Resource" path="res://data/inventory/k1_level_1_card_entry.tres" id="5_k1"]
+[ext_resource type="Script" path="res://scripts/inventory/inventory_entry_definition.gd" id="6_definition"]
+
+[node name="Inventory" type="Node"]
+script = ExtResource("1_inventory")
+definitions = Array[ExtResource("6_definition")]([ExtResource("2_w1"), ExtResource("3_a1"), ExtResource("4_i1"), ExtResource("5_k1")])

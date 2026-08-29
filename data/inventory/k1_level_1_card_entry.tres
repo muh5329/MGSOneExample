@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="InventoryEntryDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/inventory/inventory_entry_definition.gd" id="1_definition"]
+
+[resource]
+script = ExtResource("1_definition")
+entry_id = &"K1_LEVEL_1_CARD"
+display_name = "Level 1 Card"
+description = "Persistent access credential for Level 1 doors."
+kind = 3
+panel = 2
+selection_order = 20
+maximum_quantity = 1
+selectable = false
+access_level = &"LEVEL_1"

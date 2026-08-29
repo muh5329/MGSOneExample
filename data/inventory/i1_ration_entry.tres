@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="InventoryEntryDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/inventory/inventory_entry_definition.gd" id="1_definition"]
+
+[resource]
+script = ExtResource("1_definition")
+entry_id = &"I1_RATION"
+display_name = "Field Ration"
+description = "Restores 50 health through the recipient health contract."
+kind = 2
+panel = 2
+selection_order = 10
+maximum_quantity = 1
+effect_id = &"heal"
+effect_amount = 50.0

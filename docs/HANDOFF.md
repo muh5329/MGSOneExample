@@ -2,6 +2,14 @@
 
 Append newest entries directly below this introduction. Keep each entry to six lines or fewer.
 
+### 2026-08-28 — Root task — Inventory, items, and menus
+
+- Delivered: immutable W1/A1/I1/K1 data, authoritative quantity/equipment transactions, success-only pickups, ammo/access/item-effect seams, dual hold panels, snapshots, mission integration, and inventory lab.
+- Contracts: transaction codes/results, capacities, equipment/ammo/use/access APIs, signals, selection order, panel gates/controls, and checkpoint shape are recorded in `INTERFACES.md`.
+- Verified: clean import/startup; smoke, movement, camera, level, combat, and inventory headless tests; 1280×720 panel render; and `git diff --check` on Godot 4.7.
+- Remaining: Build 07 supplies production health and snapshot timing/restart behavior; Builds 12/14 own final panel art, hands-on controller feel, and mission playtesting.
+- Docs: updated README, STATUS, CODE_MAP, INTERFACES, DECISIONS, CRITIC_REPORT, and HANDOFF.
+
 ### 2026-08-28 — Root task — Weapons and combat
 
 - Delivered: W1 definition, reusable six-state weapon runtime, ammo transactions, camera-ray hitscan, owner/muzzle-wall safety, typed hit context, feedback/noise hooks, mission pickup integration, and static/moving receiver sandbox.

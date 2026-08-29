@@ -2,6 +2,13 @@
 
 Keep only decisions that affect more than one subsystem. Newest entries first.
 
+## 2026-08-28 — Inventory and Equipment Integration Contract
+
+- Per-player `InventoryComponent` is the single authority for registered quantities and equipped entry IDs; immutable definitions preserve selection order even at zero quantity. Weapon magazine/timers remain combat-owned and are composed into inventory checkpoint snapshots rather than duplicated.
+- Pickups transact before changing world state, retain any partial-capacity remainder, and emit mission compatibility events only for accepted quantities. K1 is a non-consuming access query and I1 consumes only after an explicitly supplied effect recipient accepts healing.
+- Hold panels are presentation/request clients: opening exits aim and applies only the `MENU`/weapon/interaction gates; releasing commits selection, while cancel, pause, death, completion, and restart close without committing.
+- Build 07 owns production health and snapshot timing through the accepted item-effect and inventory snapshot interfaces; Build 12 may replace the panel visuals without changing transaction authority or controls.
+
 ## 2026-08-28 — Weapons and Combat Integration Contract
 
 - `WeaponDefinition` resources are immutable tuning/display inputs; `WeaponController` alone owns per-instance magazine, timed state, shot sequence, and checkpoint snapshot state.

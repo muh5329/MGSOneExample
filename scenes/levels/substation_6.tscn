@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/substation_6.gd" id="1_level"]
 [ext_resource type="PackedScene" path="res://scenes/actors/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://scenes/camera/gameplay_camera_rig.tscn" id="3_camera"]
 [ext_resource type="PackedScene" path="res://scenes/components/interaction_focus_3d.tscn" id="4_focus"]
 [ext_resource type="Script" path="res://scripts/levels/graybox_mission_harness.gd" id="5_harness"]
+[ext_resource type="PackedScene" path="res://scenes/ui/inventory_panels.tscn" id="6_inventory_panels"]
 
 [sub_resource type="StandardMaterial3D" id="SignMaterial"]
 albedo_color = Color(0.02, 0.55, 0.38, 1)
@@ -73,6 +74,9 @@ unique_name_in_owner = true
 [node name="GrayboxMissionHarness" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("5_harness")
+
+[node name="InventoryPanels" parent="." instance=ExtResource("6_inventory_panels")]
+unique_name_in_owner = true
 
 [node name="Interface" type="CanvasLayer" parent="."]
 
@@ -145,5 +149,5 @@ theme_override_colors/font_color = Color(0.65, 0.75, 0.72, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
-text = "WASD / LEFT STICK  MOVE    C / L3  CROUCH\nF / A  INTERACT    RMB / LT  AIM AFTER PISTOL"
+text = "WASD / LEFT STICK  MOVE    C / L3  CROUCH\nF / A  INTERACT    Q / LB  WEAPON    E / RB  ITEM    G / Y  USE"
 horizontal_alignment = 2

@@ -1,0 +1,102 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/inventory_panels.gd" id="1_panels"]
+
+[sub_resource type="StyleBoxFlat" id="PanelStyle"]
+bg_color = Color(0.025, 0.09, 0.085, 0.94)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.25, 0.9, 0.63, 0.9)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxEmpty" id="MarginStyle"]
+content_margin_left = 18.0
+content_margin_top = 16.0
+content_margin_right = 18.0
+content_margin_bottom = 16.0
+
+[node name="InventoryPanels" type="CanvasLayer"]
+layer = 20
+script = ExtResource("1_panels")
+
+[node name="WeaponPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+offset_left = 24.0
+offset_top = 206.0
+offset_right = 410.0
+offset_bottom = 424.0
+theme_override_styles/panel = SubResource("PanelStyle")
+
+[node name="Margin" type="MarginContainer" parent="WeaponPanel"]
+theme_override_styles/panel = SubResource("MarginStyle")
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 16
+
+[node name="Content" type="VBoxContainer" parent="WeaponPanel/Margin"]
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="WeaponPanel/Margin/Content"]
+theme_override_colors/font_color = Color(0.55, 1, 0.78, 1)
+theme_override_font_sizes/font_size = 22
+text = "WEAPONS"
+
+[node name="WeaponList" type="Label" parent="WeaponPanel/Margin/Content"]
+unique_name_in_owner = true
+theme_override_font_sizes/font_size = 18
+
+[node name="ItemPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -410.0
+offset_top = 206.0
+offset_right = -24.0
+offset_bottom = 424.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("PanelStyle")
+
+[node name="Margin" type="MarginContainer" parent="ItemPanel"]
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 16
+
+[node name="Content" type="VBoxContainer" parent="ItemPanel/Margin"]
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="ItemPanel/Margin/Content"]
+theme_override_colors/font_color = Color(0.55, 1, 0.78, 1)
+theme_override_font_sizes/font_size = 22
+text = "ITEMS / ACCESS"
+
+[node name="ItemList" type="Label" parent="ItemPanel/Margin/Content"]
+unique_name_in_owner = true
+theme_override_font_sizes/font_size = 18
+
+[node name="InventoryHelp" type="Label" parent="."]
+unique_name_in_owner = true
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -124.0
+offset_right = 300.0
+offset_bottom = -92.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.75, 0.9, 0.84, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+text = "UP / DOWN SELECT  •  RELEASE PANEL BUTTON TO EQUIP  •  ESC / B CANCEL"
+horizontal_alignment = 1

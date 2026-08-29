@@ -127,6 +127,7 @@ func _validate_progression_seams(level: Substation6) -> void:
 	var objective := level.mission_root.get_node("O1_RELAY_TERMINAL") as MissionMarker3D
 	var extraction := level.mission_root.get_node("X1_DRAINAGE_GATE") as MissionMarker3D
 	var weapon := level.player.get_node("VisualRoot/WeaponController") as WeaponController
+	var inventory := level.player.get_node("Inventory") as InventoryComponent
 	if d1.interactable.is_available(level.player):
 		failures.append("D1 is available before the LEVEL_1 access query succeeds.")
 	if d1.interactable.get_unavailable_reason(level.player) != &"LEVEL_1_REQUIRED":
@@ -142,10 +143,10 @@ func _validate_progression_seams(level: Substation6) -> void:
 	weapon.advance_runtime(1.0)
 	if weapon.definition == null or weapon.definition.weapon_id != &"W1_PISTOL" or weapon.magazine != 8:
 		failures.append("W1 pickup did not equip the real loaded pistol runtime.")
-	if not pistol_ammo.interact(level.player) or level.harness.pistol_reserve != 12:
-		failures.append("A1 pickup did not reach the temporary ammo transaction source.")
-	if not card.interact(level.player) or not level.harness.has_level_1:
-		failures.append("K1 event did not reach the replaceable mission harness.")
+	if not pistol_ammo.interact(level.player) or inventory.get_ammo_count(&"pistol_round") != 12:
+		failures.append("A1 pickup did not reach the authoritative inventory ammo source.")
+	if not card.interact(level.player) or not inventory.has_access_level(&"LEVEL_1"):
+		failures.append("K1 pickup did not reach the authoritative access inventory.")
 	if not d1.interactable.is_available(level.player):
 		failures.append("D1 did not become available after K1 acquisition.")
 	if not d1.interactable.interact(level.player) or not d1.is_open or d1.is_locked:

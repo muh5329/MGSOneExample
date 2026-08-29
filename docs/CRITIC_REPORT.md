@@ -1,5 +1,13 @@
 # Critic Report
 
+## 2026-08-28 — Build Step 06 implementation review
+
+- Scope review: inventory owns quantities, definitions, equipment IDs, pickup transactions, access/use requests, panel interaction, and snapshot composition; it does not own weapon magazines, health arithmetic, door state, mission restart timing, or final UI art.
+- Evidence: clean import/startup; all six headless suites; capacity/negative/duplicate/partial pickup, reload switch, full-health, access, selection repeat, rapid close, pause/death, immutable display, and exact restore assertions; Substation 6 W1/A1/K1 integration; and a 1280×720 panel render.
+- Findings: no automated contract blocker found. Failed pickup/use operations preserve both world and inventory state, zero-quantity definitions retain deterministic order, pause/death never commit a highlighted change, and reload reserve is consumed only by combat completion.
+- Remaining risk: hands-on controller panel feel, production player health wiring, checkpoint timing/pickup respawn orchestration, pause-menu visuals, and final HUD readability depend on Builds 07, 12, and 14.
+- Disposition: Build Step 06 contract complete with later health/checkpoint/presentation integration follow-up; no health, game-state, or final UI milestone is claimed.
+
 ## 2026-08-28 — Build Step 05 implementation review
 
 - Scope review: combat owns definition/runtime split, ammunition transaction requests, aim-ray hitscan, typed damage submission, snapshots, and presentation events; it does not own inventory dictionaries, health fields, UI, guard AI, or final feedback.

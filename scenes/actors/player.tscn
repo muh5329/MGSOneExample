@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://scripts/actors/player_controller.gd" id="1_controller"]
 [ext_resource type="Resource" path="res://data/player/default_player_movement_config.tres" id="2_config"]
 [ext_resource type="PackedScene" path="res://scenes/components/weapon_controller.tscn" id="3_weapon"]
+[ext_resource type="PackedScene" path="res://scenes/components/inventory_component.tscn" id="4_inventory"]
 
 [sub_resource type="CapsuleShape3D" id="PlayerShape"]
 resource_local_to_scene = true
@@ -63,3 +64,6 @@ unique_name_in_owner = true
 position = Vector3(0, 1.512, -0.12)
 
 [node name="WeaponController" parent="VisualRoot" instance=ExtResource("3_weapon")]
+
+[node name="Inventory" parent="." instance=ExtResource("4_inventory")]
+unique_name_in_owner = true

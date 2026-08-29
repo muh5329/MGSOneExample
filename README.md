@@ -1,6 +1,6 @@
 # Shadow Circuit
 
-An original Godot 4 stealth-action vertical slice. The current build boots into the playable seven-room Substation 6 graybox with a functional optional pistol; the authoritative mission target is in [`docs/VERTICAL_SLICE.md`](docs/VERTICAL_SLICE.md).
+An original Godot 4 stealth-action vertical slice. The current build boots into the playable seven-room Substation 6 graybox with a functional optional pistol, transactional pickups, and keyboard/controller equipment panels; the authoritative mission target is in [`docs/VERTICAL_SLICE.md`](docs/VERTICAL_SLICE.md).
 
 ## Requirements
 
@@ -30,6 +30,7 @@ godot --headless --path . --script res://tests/player_movement_test.gd
 godot --headless --path . --script res://tests/camera_aim_test.gd
 godot --headless --path . --script res://tests/level_interaction_test.gd
 godot --headless --path . --script res://tests/weapon_combat_test.gd
+godot --headless --path . --script res://tests/inventory_items_menu_test.gd
 godot --headless --path . --quit-after 3
 ```
 
