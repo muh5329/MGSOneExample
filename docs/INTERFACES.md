@@ -1,6 +1,6 @@
 # Subsystem Interfaces
 
-Updated: 2026-08-29
+Updated: 2026-08-31
 
 This is the shared contract ledger. Foundation names below are accepted. Agents may refine signatures, but must update all consumers and this file in the same change.
 
@@ -143,6 +143,31 @@ Canonical masks: player body `1|3`, enemy body `1|2`, hitscan `1|4`, interaction
 - Radar is player-centered and north-up: world `+X` maps right, world `-Z` maps up, and camera/player rotation never changes that mapping. `world_to_radar`, `facing_to_radar`, and `project_contact` are the only tested conversion/boundary path. Substation 6 supplies value-only authored wall/cover segments; radar reads only player position, the public alert snapshot, approved segments, and `GuardActor.get_radar_snapshot()`.
 - NORMAL/SUSPICIOUS/SEARCH show precise living contacts and honest cones. ALERT hides cones and snaps contacts to a 4 m world grid; EVASION uses the same coarse contacts on a 1.5-second pulse; contacts beyond the 22 m local radius clamp directionally, contacts beyond 42 m cull, and clamped contacts never show cones. Dead contacts are omitted. `ACTIVE`, `JAMMED`, `DISABLED`, and `HIDDEN` modes are authoritative; every non-active mode returns empty wall/contact render arrays so another visual layer cannot leak information.
 
+### Audio, VFX, impulses, and screen treatment
+
+- Entry point: `scenes/components/feedback_manager.tscn`; focused stress lab: `scenes/levels/presentation_stress_test_room.tscn`. Gameplay and UI emit semantic IDs/payload values; `FeedbackManager.request_feedback(event_id, payload)` alone maps them to audio, VFX, screen cues, camera impulse, and vibration.
+- Stable audio buses are `Master`, `Music`, `Effects`, `UI`, and `Ambience` in `default_bus_layout.tres`. Current streams are original PCM tones generated and cached at runtime; no sampled third-party audio ships. Spatial events use inverse-distance `AudioStreamPlayer3D` defaults while UI/mission cues remain non-spatial.
+- Active audio is capped at 12 voices across 2D/3D pools. Event definitions carry priority and cooldown; higher-priority requests may preempt lower-priority voices, otherwise overflow emits `feedback_suppressed`. VFX are capped at 24, replace oldest at capacity, and have 0.05–1.0 second lifetimes.
+- Public signals are `feedback_played`, `feedback_suppressed`, `camera_impulse_requested`, and `vibration_requested`; `get_feedback_snapshot` exposes only capacities/counts/telemetry. Camera impulses route through `GameplayCameraRig.add_camera_impulse`, are clamped to 1.5°, and are scaled by settings. Vibration is capped at 0.65 strength/0.22 seconds.
+- Pause suspends active voices while always-processing UI remains audible. `reset_transient_state(checkpoint_id)` stops all voices, frees all VFX, clears cooldowns/flashes, and joins the existing checkpoint-reset contract. Disabling sound, VFX, shake, vibration, flashes, or retro treatment never changes simulation.
+- The authoritative mapping, provenance, and cue distinctions are in `FEEDBACK_EVENT_MATRIX.md` and `assets/metadata/internal_feedback_primitives.json`.
+
+### HUD, pause, settings, accessibility, and remapping
+
+- `SettingsService` is the sole settings persistence owner and third autoload. It stores clamped keys plus custom alternate bindings at `user://shadow_circuit_settings.cfg`, applies bus volumes, and projects aim sensitivity/inversion into the camera's existing `CameraAimSettings` resource.
+- `get_setting`, `get_settings_snapshot`, `set_setting`, `reset_defaults`, `save_settings`, `load_settings`, `apply_audio_settings`, `apply_camera_settings`, `glyph_for`, `find_conflict`, and `remap_action` are the public service boundary. Signals are `setting_changed`, `settings_reset`, `input_family_changed`, `remap_rejected`, and `remap_applied`.
+- Remapping adds alternate events only. It detects conflicts across semantic actions before mutation and never removes default `ui_accept`/`ui_cancel`/directional navigation, so every menu retains an escape path. Input family switches stably between `KEYBOARD_MOUSE` and `CONTROLLER` from actual events.
+- `MissionHUD.configure(player, inventory, weapon, alert, focus, mission, camera)` binds public sources and renders health, gear/ammo, objective, alert/suspicion, prompt/hold, aim reticle, death/restart, and completion. `get_display_snapshot` is value-only; the HUD never writes gameplay state. Alerts use explicit `(?)`, `(!)`, `[EVADE]`, and `[SEARCH]` text in addition to color.
+- `PauseSettingsMenu` owns focus and settings widgets while `GameState` remains the sole pause owner. It uses `PROCESS_MODE_ALWAYS`; `ui_cancel` backs out settings, then resumes. Mode precedence remains death/completed > pause > inventory > interaction > aim > exploration.
+- Supported reference/minimum viewport is 1280×720 with anchored safe layouts. HUD text scale is 0.8–1.5. High contrast, reduced flash, retro, shake, vibration, audio, sensitivity, inversion, and alternate-binding controls are persisted as documented in `SETTINGS_AND_ACCESSIBILITY.md`.
+
+### Test, debug, stress, and release
+
+- `tests/run_all.sh` is the one-command runner and stops on the first nonzero suite. Tests consume public snapshots or explicit runtime-advance seams; failures name the owning subsystem in their prefix and state the violated contract.
+- F3 presentation requires both `OS.is_debug_build()` and enabled `DebugConfig`. `DebugOverlay` reads `Substation6.get_debug_snapshot()` values for performance, room/zone/checkpoint, player/camera/aim, alert timers, feedback pools, and sanitized guard state; it cannot mutate production systems. Guard cone/ray/path views share the same gate.
+- Release configuration uses `release_debug_config.tres` with every debug flag false. The macOS preset excludes tests, labs, plans/docs, and progress captures. `integration_release_test.gd` verifies the integrated presentation sources, release gating, bounded cleanup, and export metadata.
+- Exact commands, deterministic limitations, named performance hardware/evidence, release exclusions, known gaps, and the remaining manual canonical-playthrough checklist live in `TESTING_AND_RELEASE.md`.
+
 ## Accepted Subsystem Boundaries
 
 - Player movement exposes velocity, stance, movement-noise level, control-enabled state, and aim-mode requests.
@@ -156,6 +181,9 @@ Canonical masks: player body `1|3`, enemy body `1|2`, hitscan `1|4`, interaction
 - Alert coordinator exposes a single authoritative phase and phase changes.
 - Radar reads public guard/perception snapshots and alert restrictions; it never reaches into guard state-machine internals.
 - Game-state/checkpoint service owns mission phase, pause/death transitions, and checkpoint snapshots.
+- Feedback maps semantic events to bounded presentation only; settings scale or disable requests without changing outcomes.
+- HUD and menus consume public snapshots/signals, while SettingsService alone persists preferences/remaps and GameState alone pauses.
+- Debug/test tooling consumes read-only snapshots or explicit test seams and is gated out of release presentation.
 
 ## Contract Change Rule
 

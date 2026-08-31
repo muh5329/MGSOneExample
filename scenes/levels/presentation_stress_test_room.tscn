@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/presentation_stress_test_room.gd" id="1_room"]
+[ext_resource type="PackedScene" path="res://scenes/components/feedback_manager.tscn" id="2_feedback"]
+
+[node name="PresentationStressTestRoom" type="Node3D"]
+script = ExtResource("1_room")
+
+[node name="FeedbackManager" parent="." instance=ExtResource("2_feedback")]
+unique_name_in_owner = true
+
+[node name="Interface" type="CanvasLayer" parent="."]
+
+[node name="ResultLabel" type="Label" parent="Interface"]
+unique_name_in_owner = true
+offset_left = 36.0
+offset_top = 36.0
+offset_right = 900.0
+offset_bottom = 140.0
+theme_override_colors/font_color = Color(0.4, 1, 0.68, 1)
+theme_override_font_sizes/font_size = 20

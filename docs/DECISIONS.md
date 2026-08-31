@@ -2,6 +2,14 @@
 
 Keep only decisions that affect more than one subsystem. Newest entries first.
 
+## 2026-08-31 — Presentation, Settings, Debug, and Release Boundary
+
+- `FeedbackManager` is the sole event-to-audio/VFX/impulse/vibration mapper. It may suppress, pool, scale, or replace presentation but never decides gameplay; its active voice/effect counts are hard-bounded and checkpoint reset clears all transients.
+- Current feedback assets are project-owned procedural tones, primitive meshes, and code-drawn overlays. Master/Music/Effects/UI/Ambience are the stable bus names, and crucial suspicion/detection/outcome cues always combine text/shape/timing with color.
+- `SettingsService` is the sole `user://shadow_circuit_settings.cfg` persistence owner. UI controls submit keys/remap requests; default navigation/back bindings are preserved, conflicts fail before mutation, and camera/audio/effect consumers retain their existing ownership.
+- `MissionHUD` observes public snapshots/signals only. `GameState` remains the pause authority; `PauseSettingsMenu` owns focus/modal presentation. F3 debug telemetry is read-only, requires debug build plus `DebugConfig`, and is disabled by the release configuration.
+- The release preset excludes tests, labs, planning/docs, and progress captures. Automated contracts and export-pack generation are reproducible; canonical hands-on playthroughs, rendered 60 fps evidence, ultrawide inspection, and signed/notarized app validation remain explicit manual gates.
+
 ## 2026-08-29 — Actor Visual and External Model Boundary
 
 - Actor roots retain identity scale and own collision, navigation, perception, health, inventory, and combat. `VisualRoot/ModelRoot/ModelPayload` is the only swappable model/rig payload; locomotion stays gameplay-driven and in-place.

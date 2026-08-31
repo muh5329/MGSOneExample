@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/substation_6.gd" id="1_level"]
 [ext_resource type="PackedScene" path="res://scenes/actors/player.tscn" id="2_player"]
@@ -8,6 +8,8 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/inventory_panels.tscn" id="6_inventory_panels"]
 [ext_resource type="PackedScene" path="res://scenes/components/alert_coordinator.tscn" id="7_alert"]
 [ext_resource type="PackedScene" path="res://scenes/ui/tactical_radar.tscn" id="8_radar"]
+[ext_resource type="PackedScene" path="res://scenes/components/feedback_manager.tscn" id="9_feedback"]
+[ext_resource type="PackedScene" path="res://scenes/ui/mission_hud.tscn" id="10_hud"]
 
 [sub_resource type="StandardMaterial3D" id="SignMaterial"]
 albedo_color = Color(0.02, 0.55, 0.38, 1)
@@ -85,12 +87,19 @@ unique_name_in_owner = true
 [node name="InventoryPanels" parent="." instance=ExtResource("6_inventory_panels")]
 unique_name_in_owner = true
 
+[node name="FeedbackManager" parent="." instance=ExtResource("9_feedback")]
+unique_name_in_owner = true
+
+[node name="MissionHUD" parent="." instance=ExtResource("10_hud")]
+unique_name_in_owner = true
+
 [node name="Interface" type="CanvasLayer" parent="."]
 
 [node name="TacticalRadar" parent="Interface" instance=ExtResource("8_radar")]
 unique_name_in_owner = true
 
 [node name="MissionTitle" type="Label" parent="Interface"]
+visible = false
 offset_left = 24.0
 offset_top = 52.0
 offset_right = 760.0
@@ -104,6 +113,7 @@ text = "SUBSTATION 6  //  GRAYBOX"
 
 [node name="RoomLabel" type="Label" parent="Interface"]
 unique_name_in_owner = true
+visible = false
 offset_left = 24.0
 offset_top = 88.0
 offset_right = 760.0
@@ -116,6 +126,7 @@ theme_override_font_sizes/font_size = 16
 
 [node name="StatusLabel" type="Label" parent="Interface"]
 unique_name_in_owner = true
+visible = false
 offset_left = 24.0
 offset_top = 122.0
 offset_right = 1000.0
@@ -128,6 +139,7 @@ theme_override_font_sizes/font_size = 15
 
 [node name="HealthLabel" type="Label" parent="Interface"]
 unique_name_in_owner = true
+visible = false
 offset_left = 24.0
 offset_top = 152.0
 offset_right = 1000.0
@@ -140,6 +152,7 @@ theme_override_font_sizes/font_size = 14
 
 [node name="PromptLabel" type="Label" parent="Interface"]
 unique_name_in_owner = true
+visible = false
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -159,6 +172,7 @@ theme_override_font_sizes/font_size = 18
 horizontal_alignment = 1
 
 [node name="Controls" type="Label" parent="Interface"]
+visible = false
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0

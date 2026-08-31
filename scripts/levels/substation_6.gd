@@ -21,6 +21,8 @@ const GAME_PHASE_NAMES := ["INITIALIZING", "PLAYING", "PAUSED", "PLAYER_DEAD", "
 @onready var alert_coordinator: AlertCoordinator = %AlertCoordinator
 @onready var inventory_panels: InventoryPanels = %InventoryPanels
 @onready var tactical_radar: TacticalRadar = %TacticalRadar
+@onready var feedback_manager: FeedbackManager = %FeedbackManager
+@onready var mission_hud: MissionHUD = %MissionHUD
 @onready var room_label: Label = %RoomLabel
 @onready var prompt_label: Label = %PromptLabel
 @onready var status_label: Label = %StatusLabel
@@ -64,6 +66,44 @@ func _process(_delta: float) -> void:
 		mission_state.active_checkpoint_id,
 		GAME_PHASE_NAMES[int(get_node("/root/GameState").phase)],
 	]
+
+
+func get_debug_snapshot() -> Dictionary:
+	var weapon := player.get_node_or_null("WeaponController") as WeaponController
+	var guards: Array[Dictionary] = []
+	for guard_value in guard_root.get_children():
+		var guard := guard_value as GuardActor
+		if guard == null:
+			continue
+		var guard_snapshot := guard.get_radar_snapshot()
+		guards.append({
+			&"guard_id": guard_snapshot.get(&"guard_id", &""),
+			&"state": guard_snapshot.get(&"state", &"UNKNOWN"),
+			&"suspicion": guard_snapshot.get(&"suspicion", 0.0),
+			&"visible": guard_snapshot.get(&"target_visible", false),
+		})
+	return {
+		&"room": _current_room,
+		&"checkpoint": mission_state.active_checkpoint_id,
+		&"player": {
+			&"position": player.global_position,
+			&"stance": player.stance,
+			&"speed": Vector2(player.velocity.x, player.velocity.z).length(),
+			&"noise": player.movement_noise_intensity,
+			&"control_enabled": player.control_enabled,
+			&"weapon_state": weapon.state if weapon != null else -1,
+		},
+		&"camera": {
+			&"zone": camera_rig.active_zone.get_zone_id() if camera_rig.active_zone != null else &"FALLBACK",
+			&"mode": camera_rig.mode,
+			&"transitioning": camera_rig.is_transitioning,
+			&"obstructed": camera_rig.aim_is_obstructed,
+			&"aim_direction": camera_rig.get_aim_direction(),
+		},
+		&"alert": alert_coordinator.get_alert_snapshot(),
+		&"feedback": feedback_manager.get_feedback_snapshot(),
+		&"guards": guards,
+	}
 
 
 func _create_materials() -> void:
@@ -306,6 +346,17 @@ func _configure_runtime_contracts() -> void:
 	camera_rig.set_tracked_actor(player)
 	var weapon := player.get_node("WeaponController") as WeaponController
 	inventory_panels.configure(inventory, player, camera_rig, weapon, interaction_focus, player)
+	feedback_manager.configure(camera_rig)
+	var doors: Array = []
+	var pickups: Array = []
+	for child in mission_root.get_children():
+		if child is Door3D:
+			doors.append(child)
+		elif child is InventoryPickup3D:
+			pickups.append(child)
+	feedback_manager.bind_runtime(player, weapon, inventory, inventory_panels, alert_coordinator, mission_state, guards, doors, pickups)
+	mission_hud.configure(player, inventory, weapon, alert_coordinator, interaction_focus, mission_state, camera_rig)
+	get_node("/root/SettingsService").call(&"apply_camera_settings", camera_rig)
 	camera_rig.refresh_zones()
 	camera_rig.reset_camera_state()
 	status_label.text = "INFILTRATE SUBSTATION 6 — FIND THE RELAY TERMINAL"

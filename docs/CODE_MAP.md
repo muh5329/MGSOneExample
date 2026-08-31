@@ -1,6 +1,6 @@
 # Code Map
 
-Updated: 2026-08-29
+Updated: 2026-08-31
 
 ## Runtime entry points
 
@@ -9,6 +9,9 @@ Updated: 2026-08-29
 - `scenes/actors/player.tscn` + `scripts/actors/player_controller.gd` — reusable capsule player, camera-relative motor, stance/aim semantics, control locks, root-owned combat/health, damage hitbox forwarding, animation outputs, and movement noise.
 - `scenes/actors/guard.tscn` + `scripts/actors/guard_actor.gd` — reusable guard body composing navigation, perception, health/damage, explicit local decision states, telegraphed damage requests, alert report/broadcast seams, snapshots, authored reset, and model-independent animation outputs.
 - `scripts/visual/actor_visual_adapter_3d.gd` + `scenes/visuals/*.tscn` — semantic player/guard presentation adapter, procedural placeholder poses, stable weapon/muzzle/head/eyes/effect sockets, required/optional animation validation, swappable model payloads, and the original proof-swap guard.
+- `scenes/components/feedback_manager.tscn` + `scripts/presentation/` — event-to-feedback matrix, original runtime-synthesized tones, bounded 2D/3D voice pools, capped priority/cooldown policy, lifetime-bounded VFX, camera/vibration requests, pause/restart cleanup, and optional readable retro screen treatment.
+- `scripts/core/settings_service.gd` + `default_bus_layout.tres` — sole persistent settings/remapping owner and Master/Music/Effects/UI/Ambience buses; user data lives at `user://shadow_circuit_settings.cfg`.
+- `scenes/ui/mission_hud.tscn`, `pause_settings_menu.tscn`, and `debug_overlay.tscn` — snapshot-driven health/gear/ammo/objective/alert/prompt/outcome HUD, controller-focus settings/remap flow, accessibility controls, and debug-build-only read-only telemetry.
 - `docs/MODEL_PIPELINE.md` + `assets/metadata/` — Blender/glTF/import/reimport rules, root-motion decision, clip/material/texture/LOD budgets, socket checklist, and source/license provenance records.
 - `scripts/stealth/guard_perception_3d.gd`, `patrol_route_3d.gd`, and `guard_debug_draw_3d.gd` — cone/sample/raycast sight, typed-event hearing, suspicion/memory, patrol wait/look data, and toggleable cones/rays/path/state debug; tuning is `data/guards/default_guard_config.tres`.
 - `scenes/components/alert_coordinator.tscn` + `scripts/stealth/alert_coordinator.gd` — sole facility-alert authority, validated/deduplicated position reports, bounded shared knowledge, guard broadcasts, ALERT/EVASION/SEARCH recovery timers, feedback hooks, telemetry, and transient reset.
@@ -45,6 +48,9 @@ Updated: 2026-08-29
 - `tests/enemy_ai_perception_test.gd` — cone/verticality, solid occlusion, step-independent suspicion, crouch range, event hearing, report/state recovery, attack telegraph, death/pause/reset, radar boundary, and exact mission-guard checks.
 - `tests/alert_radar_stealth_test.gd` — report validation/deduplication, simultaneous observers, reporter death, sight hold, recovery/reacquisition, pause/reset, shared-information expiry, north-up conversion, contact restrictions/bounds, radar non-leakage, and exact mission integration.
 - `tests/animation_model_pipeline_test.gd` — semantic presentation inputs, procedural state readability, stable sockets, optional fallback/required errors, proof model swap, and visual-removal gameplay isolation.
+- `tests/presentation_settings_test.gd` + `integration_release_test.gd` — feedback pool/cleanup, settings bounds/remap conflicts, safe anchors/focus, integrated mission sources, release gating, and export contract coverage.
+- `tests/run_all.sh` + `scenes/levels/presentation_stress_test_room.tscn` — one-command 12-suite runner and repeated high-event presentation stress lab.
+- `docs/FEEDBACK_EVENT_MATRIX.md`, `SETTINGS_AND_ACCESSIBILITY.md`, and `TESTING_AND_RELEASE.md` — presentation mapping, persisted keys/focus/remap policy, exact commands, performance evidence, and remaining manual release checklist.
 - `docs/VERTICAL_SLICE.md` — authoritative mission flow, placements, tuning, and acceptance scripts.
 
 ## Layout

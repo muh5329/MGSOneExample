@@ -30,7 +30,12 @@ const REQUIRED_RESOURCES: Array[String] = [
 	"res://scenes/components/inventory_pickup_3d.tscn",
 	"res://scenes/components/health_component.tscn",
 	"res://scenes/components/mission_state_coordinator.tscn",
+	"res://scenes/components/feedback_manager.tscn",
 	"res://scenes/ui/inventory_panels.tscn",
+	"res://scenes/ui/mission_hud.tscn",
+	"res://scenes/ui/pause_settings_menu.tscn",
+	"res://scenes/ui/debug_overlay.tscn",
+	"res://scenes/levels/presentation_stress_test_room.tscn",
 	"res://scenes/actors/player.tscn",
 	"res://scenes/actors/guard.tscn",
 	"res://scenes/visuals/player_visual_root.tscn",
@@ -112,7 +117,7 @@ func _validate_project_settings() -> void:
 		var key := "layer_names/3d_physics/layer_%d" % layer_number
 		if String(ProjectSettings.get_setting(key, "")).is_empty():
 			failures.append("Collision layer %d has no canonical name." % layer_number)
-	for autoload_name in [&"GameState", &"EventBus"]:
+	for autoload_name in [&"GameState", &"EventBus", &"SettingsService"]:
 		if not ProjectSettings.has_setting("autoload/%s" % autoload_name):
 			failures.append("Missing required autoload '%s'." % autoload_name)
 
@@ -140,7 +145,12 @@ func _validate_scene_instantiation() -> void:
 		"res://scenes/components/inventory_pickup_3d.tscn",
 		"res://scenes/components/health_component.tscn",
 		"res://scenes/components/mission_state_coordinator.tscn",
+		"res://scenes/components/feedback_manager.tscn",
 		"res://scenes/ui/inventory_panels.tscn",
+		"res://scenes/ui/mission_hud.tscn",
+		"res://scenes/ui/pause_settings_menu.tscn",
+		"res://scenes/ui/debug_overlay.tscn",
+		"res://scenes/levels/presentation_stress_test_room.tscn",
 	]:
 		var resource := load(path) as PackedScene
 		if resource == null:

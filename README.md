@@ -1,6 +1,6 @@
 # Shadow Circuit
 
-An original Godot 4 stealth-action vertical slice. The current build boots into the playable seven-room Substation 6 graybox with four coordinated patrol/search/combat guards, recoverable facility alerts, a north-up tactical radar, cone-and-hearing perception, health/ration recovery, deterministic checkpoints and restart, objective-gated extraction, a functional optional pistol, transactional pickups, keyboard/controller equipment panels, and replaceable procedural actor visuals with stable attachment sockets; the authoritative mission target is in [`docs/VERTICAL_SLICE.md`](docs/VERTICAL_SLICE.md).
+An original Godot 4 stealth-action vertical slice. The current release candidate boots into the playable seven-room Substation 6 mission with coordinated patrol/search/combat guards, recoverable alerts, tactical radar, contextual aim and combat, inventory/health/checkpoint outcomes, replaceable actor visuals, bounded original procedural audio/VFX, an authoritative-snapshot HUD, persistent accessibility/settings/remapping, keyboard/controller menu focus, and debug-off release presentation. The mission contract is in [`docs/VERTICAL_SLICE.md`](docs/VERTICAL_SLICE.md); exact test and remaining manual release gates are in [`docs/TESTING_AND_RELEASE.md`](docs/TESTING_AND_RELEASE.md).
 
 ## Requirements
 
@@ -24,21 +24,12 @@ On macOS, when Godot is not on `PATH`:
 ## Validate a clean checkout
 
 ```sh
-godot --headless --path . --editor --quit-after 2
-godot --headless --path . --script res://tests/smoke_test.gd
-godot --headless --path . --script res://tests/player_movement_test.gd
-godot --headless --path . --script res://tests/camera_aim_test.gd
-godot --headless --path . --script res://tests/level_interaction_test.gd
-godot --headless --path . --script res://tests/weapon_combat_test.gd
-godot --headless --path . --script res://tests/inventory_items_menu_test.gd
-godot --headless --path . --script res://tests/health_game_state_test.gd
-godot --headless --path . --script res://tests/enemy_ai_perception_test.gd
-godot --headless --path . --script res://tests/alert_radar_stealth_test.gd
-godot --headless --path . --script res://tests/animation_model_pipeline_test.gd
+godot --headless --path . --editor --quit-after 3
+tests/run_all.sh
 godot --headless --path . --quit-after 3
 ```
 
-The smoke test exits nonzero when a required input, collision name, autoload, scene, or shared resource is missing.
+The runner executes all 12 contract suites and exits nonzero on the first failure. Set `GODOT_BIN` when Godot is not on `PATH`.
 
 ## Export
 
@@ -46,6 +37,7 @@ Install matching Godot export templates, then use the checked-in macOS preset:
 
 ```sh
 godot --headless --path . --export-debug "macOS" build/ShadowCircuit.dmg
+godot --headless --path . --export-pack "macOS" build/ShadowCircuit.pck
 ```
 
 `build/`, `exports/`, and `.godot/` are intentionally ignored.

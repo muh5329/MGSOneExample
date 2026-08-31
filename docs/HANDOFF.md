@@ -2,6 +2,14 @@
 
 Append newest entries directly below this introduction. Keep each entry to six lines or fewer.
 
+### 2026-08-31 — Root task — Builds 11–14 presentation, tooling, and release candidate
+
+- Delivered: bounded procedural audio/spatial feedback/VFX, readable retro effects, persistent settings/remapping, authoritative-snapshot HUD, pause/accessibility UI, debug overlay, stress lab, one-command 12-suite runner, integrated mission wiring, and release exclusions.
+- Contracts: event matrix/pools/cleanup, stable buses, settings keys/file, modal/focus/remap rules, HUD adapters, debug snapshots, commands, performance evidence, and release checklist are in `INTERFACES.md` plus the three new focused docs.
+- Verified: clean runtime compile, all 12 headless suites in 4.08 s on Apple M4 Pro, repeated feedback/reset bounds, release debug gating, `git diff --check`, and successful macOS export pack on Godot 4.7.
+- Remaining: record the three hands-on canonical playthroughs, controller-only/ultrawide and 1.5× text inspection, rendered worst-encounter 60 fps capture, independent human critic pass, and signed/notarized `.app`/`.dmg` launch.
+- Docs: updated README, STATUS, CODE_MAP, INTERFACES, DECISIONS, CRITIC_REPORT, HANDOFF, asset provenance; added FEEDBACK_EVENT_MATRIX, SETTINGS_AND_ACCESSIBILITY, and TESTING_AND_RELEASE.
+
 ### 2026-08-29 — Root task — Animation and external model pipeline
 
 - Delivered: replaceable player/guard model payloads, procedural state-readable shells, semantic adapter, stable attachment sockets, root-owned weapon runtime, explicit validation, original proof swap, and provenance records.

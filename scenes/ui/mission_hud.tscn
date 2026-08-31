@@ -1,0 +1,233 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/mission_hud.gd" id="1_hud"]
+
+[sub_resource type="StyleBoxFlat" id="Panel"]
+bg_color = Color(0.012, 0.035, 0.035, 0.88)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.2, 0.86, 0.58, 0.78)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="BarBackground"]
+bg_color = Color(0.02, 0.08, 0.07, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.15, 0.5, 0.35, 0.8)
+
+[node name="MissionHUD" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_hud")
+
+[node name="HUDRoot" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="VitalPanel" type="PanelContainer" parent="HUDRoot"]
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 430.0
+offset_bottom = 172.0
+theme_override_styles/panel = SubResource("Panel")
+
+[node name="Margin" type="MarginContainer" parent="HUDRoot/VitalPanel"]
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 10
+
+[node name="Rows" type="VBoxContainer" parent="HUDRoot/VitalPanel/Margin"]
+theme_override_constants/separation = 5
+
+[node name="HealthRow" type="HBoxContainer" parent="HUDRoot/VitalPanel/Margin/Rows"]
+
+[node name="Title" type="Label" parent="HUDRoot/VitalPanel/Margin/Rows/HealthRow"]
+theme_override_colors/font_color = Color(0.52, 1, 0.72, 1)
+theme_override_font_sizes/font_size = 15
+text = "VITAL"
+
+[node name="HealthBar" type="ProgressBar" parent="HUDRoot/VitalPanel/Margin/Rows/HealthRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(245, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+value = 100.0
+show_percentage = false
+theme_override_styles/background = SubResource("BarBackground")
+
+[node name="HealthValue" type="Label" parent="HUDRoot/VitalPanel/Margin/Rows/HealthRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 0)
+text = "100 / 100"
+horizontal_alignment = 2
+
+[node name="WeaponLabel" type="Label" parent="HUDRoot/VitalPanel/Margin/Rows"]
+unique_name_in_owner = true
+theme_override_font_sizes/font_size = 15
+text = "WEAPON  —  NONE"
+
+[node name="ItemLabel" type="Label" parent="HUDRoot/VitalPanel/Margin/Rows"]
+unique_name_in_owner = true
+theme_override_font_sizes/font_size = 15
+text = "ITEM  —  NONE"
+
+[node name="ObjectiveLabel" type="Label" parent="HUDRoot/VitalPanel/Margin/Rows"]
+unique_name_in_owner = true
+theme_override_colors/font_color = Color(1, 0.83, 0.38, 1)
+theme_override_font_sizes/font_size = 14
+text = "OBJECTIVE  COPY THE RELAY MANIFEST"
+
+[node name="AlertPanel" type="PanelContainer" parent="HUDRoot"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 390.0
+offset_top = 24.0
+offset_right = -390.0
+offset_bottom = 94.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("Panel")
+
+[node name="AlertRows" type="VBoxContainer" parent="HUDRoot/AlertPanel"]
+theme_override_constants/separation = 2
+
+[node name="AlertLabel" type="Label" parent="HUDRoot/AlertPanel/AlertRows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "PATROL STATUS: NORMAL"
+horizontal_alignment = 1
+
+[node name="SuspicionBar" type="ProgressBar" parent="HUDRoot/AlertPanel/AlertRows"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+show_percentage = false
+theme_override_styles/background = SubResource("BarBackground")
+
+[node name="PromptPanel" type="PanelContainer" parent="HUDRoot"]
+unique_name_in_owner = true
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -340.0
+offset_top = -106.0
+offset_right = 340.0
+offset_bottom = -32.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("Panel")
+
+[node name="PromptRows" type="VBoxContainer" parent="HUDRoot/PromptPanel"]
+
+[node name="PromptLabel" type="Label" parent="HUDRoot/PromptPanel/PromptRows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 1
+
+[node name="HoldBar" type="ProgressBar" parent="HUDRoot/PromptPanel/PromptRows"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+show_percentage = false
+
+[node name="BannerLabel" type="Label" parent="HUDRoot"]
+unique_name_in_owner = true
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 270.0
+offset_top = 190.0
+offset_right = -270.0
+offset_bottom = 242.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.86, 0.38, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 3
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 1
+
+[node name="Reticle" type="Control" parent="HUDRoot"]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Horizontal" type="ColorRect" parent="HUDRoot/Reticle"]
+offset_left = 1.0
+offset_top = 9.0
+offset_right = 19.0
+offset_bottom = 11.0
+color = Color(0.75, 1, 0.86, 0.9)
+
+[node name="Vertical" type="ColorRect" parent="HUDRoot/Reticle"]
+offset_left = 9.0
+offset_top = 1.0
+offset_right = 11.0
+offset_bottom = 19.0
+color = Color(0.75, 1, 0.86, 0.9)
+
+[node name="OutcomePanel" type="ColorRect" parent="HUDRoot"]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.005, 0.01, 0.012, 0.78)
+
+[node name="OutcomeTitle" type="Label" parent="HUDRoot/OutcomePanel"]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -360.0
+offset_top = -65.0
+offset_right = 360.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.65, 1, 0.8, 1)
+theme_override_font_sizes/font_size = 34
+horizontal_alignment = 1
+
+[node name="OutcomeDetail" type="Label" parent="HUDRoot/OutcomePanel"]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -420.0
+offset_top = 0.0
+offset_right = 420.0
+offset_bottom = 42.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 1

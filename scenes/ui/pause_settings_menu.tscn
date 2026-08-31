@@ -1,0 +1,206 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/pause_settings_menu.gd" id="1_menu"]
+
+[sub_resource type="StyleBoxFlat" id="Panel"]
+bg_color = Color(0.018, 0.055, 0.052, 0.97)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.28, 0.92, 0.64, 0.9)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="PauseSettingsMenu" type="CanvasLayer"]
+script = ExtResource("1_menu")
+
+[node name="Overlay" type="ColorRect" parent="."]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.003, 0.009, 0.01, 0.88)
+
+[node name="MainPanel" type="PanelContainer" parent="Overlay"]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -190.0
+offset_top = -170.0
+offset_right = 190.0
+offset_bottom = 170.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("Panel")
+
+[node name="Rows" type="VBoxContainer" parent="Overlay/MainPanel"]
+theme_override_constants/separation = 18
+
+[node name="Title" type="Label" parent="Overlay/MainPanel/Rows"]
+theme_override_colors/font_color = Color(0.58, 1, 0.78, 1)
+theme_override_font_sizes/font_size = 32
+text = "SHADOW CIRCUIT"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="Overlay/MainPanel/Rows"]
+theme_override_colors/font_color = Color(1, 0.82, 0.36, 1)
+theme_override_font_sizes/font_size = 17
+text = "MISSION PAUSED"
+horizontal_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="Overlay/MainPanel/Rows"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+theme_override_font_sizes/font_size = 19
+text = "Resume"
+
+[node name="SettingsButton" type="Button" parent="Overlay/MainPanel/Rows"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+theme_override_font_sizes/font_size = 19
+text = "Settings & Accessibility"
+
+[node name="Hint" type="Label" parent="Overlay/MainPanel/Rows"]
+text = "ENTER / A select     ESC / B resume"
+horizontal_alignment = 1
+
+[node name="SettingsPanel" type="PanelContainer" parent="Overlay"]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -470.0
+offset_top = -330.0
+offset_right = 470.0
+offset_bottom = 330.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("Panel")
+
+[node name="Rows" type="VBoxContainer" parent="Overlay/SettingsPanel"]
+theme_override_constants/separation = 6
+
+[node name="Title" type="Label" parent="Overlay/SettingsPanel/Rows"]
+theme_override_colors/font_color = Color(0.58, 1, 0.78, 1)
+theme_override_font_sizes/font_size = 27
+text = "SETTINGS & ACCESSIBILITY"
+horizontal_alignment = 1
+
+[node name="Columns" type="HBoxContainer" parent="Overlay/SettingsPanel/Rows"]
+theme_override_constants/separation = 22
+
+[node name="Left" type="VBoxContainer" parent="Overlay/SettingsPanel/Rows/Columns"]
+custom_minimum_size = Vector2(430, 0)
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="AudioTitle" type="Label" parent="Overlay/SettingsPanel/Rows/Columns/Left"]
+theme_override_colors/font_color = Color(1, 0.83, 0.38, 1)
+text = "AUDIO"
+
+[node name="MasterText" type="Label" parent="Overlay/SettingsPanel/Rows/Columns/Left"]
+text = "Master"
+[node name="MasterSlider" type="HSlider" parent="Overlay/SettingsPanel/Rows/Columns/Left"]
+unique_name_in_owner = true
+max_value = 1.0
+step = 0.05
+[node name="MusicText" type="Label" parent="Overlay/SettingsPanel/Rows/Columns/Left"]
+text = "Music"
+[node name="MusicSlider" type="HSlider" parent="Overlay/SettingsPanel/Rows/Columns/Left"]
+unique_name_in_owner = true
+max_value = 1.0
+step = 0.05
+[node name="EffectsText" type="Label" parent="Overlay/SettingsPanel/Rows/Columns/Left"]
+text = "Effects"
+[node name="EffectsSlider" type="HSlider" parent="Overlay/SettingsPanel/Rows/Columns/Left"]
+unique_name_in_owner = true
+max_value = 1.0
+step = 0.05
+[node name="UIText" type="Label" parent="Overlay/SettingsPanel/Rows/Columns/Left"]
+text = "Interface"
+[node name="UISlider" type="HSlider" parent="Overlay/SettingsPanel/Rows/Columns/Left"]
+unique_name_in_owner = true
+max_value = 1.0
+step = 0.05
+
+[node name="ControlTitle" type="Label" parent="Overlay/SettingsPanel/Rows/Columns/Left"]
+theme_override_colors/font_color = Color(1, 0.83, 0.38, 1)
+text = "CONTROL"
+[node name="SensitivityText" type="Label" parent="Overlay/SettingsPanel/Rows/Columns/Left"]
+text = "Controller look sensitivity"
+[node name="SensitivitySlider" type="HSlider" parent="Overlay/SettingsPanel/Rows/Columns/Left"]
+unique_name_in_owner = true
+min_value = 30.0
+max_value = 360.0
+step = 5.0
+[node name="InvertVerticalToggle" type="CheckButton" parent="Overlay/SettingsPanel/Rows/Columns/Left"]
+unique_name_in_owner = true
+text = "Invert vertical aim"
+
+[node name="Right" type="VBoxContainer" parent="Overlay/SettingsPanel/Rows/Columns"]
+custom_minimum_size = Vector2(430, 0)
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="AccessTitle" type="Label" parent="Overlay/SettingsPanel/Rows/Columns/Right"]
+theme_override_colors/font_color = Color(1, 0.83, 0.38, 1)
+text = "READABILITY & MOTION"
+[node name="TextScaleText" type="Label" parent="Overlay/SettingsPanel/Rows/Columns/Right"]
+text = "HUD text scale"
+[node name="TextScaleSlider" type="HSlider" parent="Overlay/SettingsPanel/Rows/Columns/Right"]
+unique_name_in_owner = true
+min_value = 0.8
+max_value = 1.5
+step = 0.1
+[node name="RetroToggle" type="CheckButton" parent="Overlay/SettingsPanel/Rows/Columns/Right"]
+unique_name_in_owner = true
+text = "Retro scanline treatment"
+[node name="ShakeToggle" type="CheckButton" parent="Overlay/SettingsPanel/Rows/Columns/Right"]
+unique_name_in_owner = true
+text = "Camera shake"
+[node name="VibrationToggle" type="CheckButton" parent="Overlay/SettingsPanel/Rows/Columns/Right"]
+unique_name_in_owner = true
+text = "Controller vibration"
+[node name="ReducedFlashToggle" type="CheckButton" parent="Overlay/SettingsPanel/Rows/Columns/Right"]
+unique_name_in_owner = true
+text = "Reduced flashes"
+[node name="HighContrastToggle" type="CheckButton" parent="Overlay/SettingsPanel/Rows/Columns/Right"]
+unique_name_in_owner = true
+text = "High contrast HUD"
+
+[node name="RemapTitle" type="Label" parent="Overlay/SettingsPanel/Rows/Columns/Right"]
+theme_override_colors/font_color = Color(1, 0.83, 0.38, 1)
+text = "ALTERNATE BINDING"
+[node name="RemapAction" type="OptionButton" parent="Overlay/SettingsPanel/Rows/Columns/Right"]
+unique_name_in_owner = true
+[node name="RemapButton" type="Button" parent="Overlay/SettingsPanel/Rows/Columns/Right"]
+unique_name_in_owner = true
+text = "Add key / controller button"
+[node name="RemapStatus" type="Label" parent="Overlay/SettingsPanel/Rows/Columns/Right"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+text = "Select an action, then add an alternate key or controller button."
+autowrap_mode = 2
+
+[node name="Actions" type="HBoxContainer" parent="Overlay/SettingsPanel/Rows"]
+alignment = 1
+theme_override_constants/separation = 12
+
+[node name="BackButton" type="Button" parent="Overlay/SettingsPanel/Rows/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(190, 44)
+text = "Back"
+[node name="ResetButton" type="Button" parent="Overlay/SettingsPanel/Rows/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(190, 44)
+text = "Reset Settings"

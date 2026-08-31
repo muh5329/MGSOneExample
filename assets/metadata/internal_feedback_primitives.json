@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "asset_ids": [
+    "INTERNAL_PROCEDURAL_TONES_V1",
+    "INTERNAL_FEEDBACK_VFX_V1",
+    "INTERNAL_RETRO_OVERLAY_V1"
+  ],
+  "title": "Shadow Circuit procedural feedback tones, primitive VFX, and screen overlay",
+  "creator": "Shadow Circuit project",
+  "source": "Original wave synthesis, primitive meshes, colors, and drawing code authored in this repository",
+  "acquired_or_created": "2026-08-31",
+  "license": "Project-owned original content",
+  "redistribution_allowed": true,
+  "derivatives_allowed": true,
+  "attribution_required": false,
+  "external_dependencies": [],
+  "modifications": "Runtime-generated PCM tones, bounded sphere flashes, scanlines, border cues, and color/shape feedback",
+  "consumers": [
+    "scripts/presentation/feedback_manager.gd",
+    "scripts/presentation/screen_effects.gd",
+    "scenes/components/feedback_manager.tscn"
+  ]
+}

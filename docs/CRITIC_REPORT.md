@@ -1,5 +1,14 @@
 # Critic Report
 
+## 2026-08-31 — Builds 11–14 implementation and release-candidate review
+
+- Scope review: presentation consumes semantic events/public snapshots and settings requests without taking gameplay authority; the settings service alone persists user preferences; debug reads sanitized state; release exclusions remove tests/labs/docs. No final soundtrack, sampled commercial audio, major feature, or signed distribution artifact is claimed.
+- Evidence: clean runtime compile, 12 headless suites, 30-loop high-event stress, zero feedback voices/effects after reset, controller focus/remap conflict checks, exact four-guard mission binding, release-debug assertions, 4.08-second suite run on Mac16,8 Apple M4 Pro/24 GB, `git diff --check`, and a successful macOS `.pck` export.
+- Findings: no automated blocker or major was found. Active voices/effects are bounded with priority/cooldown cleanup; pause/restart policy is explicit; DETECTED/suspicion/outcomes do not rely on color; HUD reads authoritative health/inventory/weapon/alert/interaction/mission sources; alternate bindings preserve navigation; current presentation assets are original and recorded.
+- Minor/deferred: settings UX adds alternates rather than replacing/removing defaults; localization, narrated menus, and future-voice subtitles are absent; existing older level/AI test exits still report known ObjectDB resource warnings even though repeated production feedback cleanup remains at zero.
+- Release risk: this review is implementation-adjacent rather than an independent human playtest. Canonical A/B/C hands-on runs, controller-only/ultrawide/1.5× UI inspection, rendered worst-encounter 60 fps/frame-pacing evidence, and signed/notarized exported-app launch remain explicit gates in `TESTING_AND_RELEASE.md`.
+- Disposition: feature-complete release candidate with automated contracts and export-pack generation green; no blocker/major is open, but final distribution approval waits on the recorded manual gates above.
+
 ## 2026-08-29 — Build Step 10 implementation review
 
 - Scope review: visual adapters translate existing semantic signals and own only model/animation presentation, stable sockets, configuration validation, and import/provenance rules. Actor roots retain physics, navigation, perception, health, inventory, weapon timing/ammunition/damage, AI, and mission authority; no final external art, audio/VFX, or root motion is claimed.
